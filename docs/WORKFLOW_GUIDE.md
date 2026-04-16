@@ -1,145 +1,145 @@
-# 完整的安装前帮助可以看这里
+# Hướng dẫn cài đặt chi tiết có thể xem tại đây
 https://kvodb27hf3.feishu.cn/wiki/JjSmwf173iN3fqkjXakcGbvTnEf?from=from_copylink
 
-# 🎬 魔因漫创 — 基本工作流教程
+# 🎬 Moyin Creator (Mạng Nhân Mạn Sáng) — Hướng dẫn quy trình làm việc cơ bản
 
-> 从剧本到成片的完整创作流程指南
+> Hướng dẫn quy trình sáng tạo hoàn chỉnh từ Kịch bản đến thành phẩm
 
-魔因漫创内置了多种工作流，各板块可以自由组合、独立使用，满足不同创作场景的需求。**本教程介绍的是最常用的基础工作流，推荐新用户从这里开始。**
+Moyin Creator tích hợp nhiều quy trình làm việc khác nhau, các module có thể kết hợp tự do hoặc sử dụng độc lập, đáp ứng nhu cầu của nhiều tình huống sáng tạo khác nhau. **Hướng dẫn này giới thiệu quy trình làm việc cơ bản thường dùng nhất, khuyến nghị người dùng mới bắt đầu từ đây.**
 
 ---
 
-## 📋 流程总览
+## 📋 Tổng quan quy trình
 
 ```
-⚙️ 准备工作 → 📝 剧本 → 🔧 AI校准 → 🌄 场景/🎭 角色（可选） → 🎬 导演 / ⭐ S级 → 🎥 生成视频
+⚙️ Chuẩn bị → 📝 Kịch bản → 🔧 AI Hiệu chỉnh → 🌄 Bối cảnh/🎭 Nhân vật (tùy chọn) → 🎬 Đạo diễn / ⭐ S-Class → 🎥 Tạo video
 ```
 
 ---
 
-## 准备工作：环境配置
+## Chuẩn bị: Cấu hình môi trường
 
-在开始创作前，需要先完成以下配置：
+Trước khi bắt đầu sáng tạo, cần hoàn thành các cấu hình sau:
 
-### 1. 添加 API 服务商
+### 1. Thêm nhà cung cấp API
 
-进入 **设置 → API 配置 → 添加服务商**，配置你的 AI 服务商账号。
+Vào **Cài đặt → Cấu hình API → Thêm nhà cung cấp**, cấu hình tài khoản nhà cung cấp dịch vụ AI của bạn.
 
-- 建议添加 **尽可能多的 API Key**，系统支持多 Key 轮询负载均衡
-- Key 越多，**并发线程数越高**，批量生成速度越快
-- 支持的服务商：memefast、RunningHub 等
+- Nên thêm **càng nhiều API Key càng tốt**, hệ thống hỗ trợ cân bằng tải xoay vòng đa Key
+- Càng nhiều Key, **số luồng xử lý đồng thời càng cao**, tốc độ tạo hàng loạt càng nhanh
+- Nhà cung cấp được hỗ trợ: memefast, RunningHub, v.v.
 
-### 2. 服务映射
+### 2. Ánh xạ dịch vụ
 
-进入 **设置 → 服务映射**，为各功能选择对应的 AI 模型：
+Vào **Cài đặt → Ánh xạ dịch vụ**, chọn mô hình AI tương ứng cho từng chức năng:
 
-- 为「文生图」「图生视频」「文生视频」等功能分别指定模型
-- 根据你的服务商和需求选择合适的模型
+- Chỉ định mô hình riêng cho các chức năng như "Tạo ảnh từ văn bản", "Tạo video từ ảnh", "Tạo video từ văn bản"
+- Chọn mô hình phù hợp dựa trên nhà cung cấp và nhu cầu của bạn
 
-> 💡 **新手推荐**：测试时建议先用以下模型：
-> - **图片生成**：`gemini-3-pro-image-preview`
-> - **视频生成**：`doubao-seedance-1-5-pro-251215`
+> 💡 **Khuyến nghị cho người mới**: Khi thử nghiệm, nên bắt đầu với các mô hình sau:
+> - **Tạo ảnh**: `gemini-3-pro-image-preview`
+> - **Tạo video**: `doubao-seedance-1-5-pro-251215`
 
-### 3. 图床配置
+### 3. Cấu hình Máy chủ ảnh
 
-进入 **设置 → 图床配置**，配置图片托管服务：
+Vào **Cài đặt → Cấu hình Máy chủ ảnh**, cấu hình dịch vụ lưu trữ hình ảnh:
 
-- 申请一个图床服务（用于上传参考图、首帧图等素材）
-- 同样建议配置 **多个 Key**，提升并发上传速度
+- Đăng ký một dịch vụ Máy chủ ảnh (dùng để tải lên ảnh tham chiếu, ảnh Khung đầu và các Tư liệu khác)
+- Cũng nên cấu hình **nhiều Key** để tăng tốc độ tải lên đồng thời
 
-> ✅ 以上配置完成后，就可以开始创作了。
-
----
-
-## 第一步：剧本板块
-
-进入 **剧本板块**，有两种方式开始：
-
-- **A. 导入剧本** — 将已有的完整剧本粘贴或导入到编辑区
-- **B. AI 创作** — 使用 AI 辅助从零创作剧本
-
-> 📄 **剧本格式参考**：查看 [剧本导入格式示例](./SCRIPT_FORMAT_EXAMPLE.md)，了解标准的场景头、对白、舞台指示等写法。
-
-系统会自动对剧本进行结构化分析，拆解为场景、分镜、角色、对白等元素。
+> ✅ Sau khi hoàn thành các cấu hình trên, bạn có thể bắt đầu sáng tạo.
 
 ---
 
-## 第二步：AI 二次校准
+## Bước 1: Module Kịch bản
 
-系统自动分析完成后，依次点击以下三个校准按钮进行 **二次深化**：
+Vào **module Kịch bản**, có hai cách để bắt đầu:
 
-1. **AI 场景校准** — 优化每个场景的环境描述、氛围、光影等细节
-2. **API 校准分镜** — 精确校准每个分镜的镜头语言、景别、构图
-3. **AI 角色校准** — 深化角色外观描述、表情、动作等一致性锚点
+- **A. Nhập Kịch bản** — Dán hoặc nhập Kịch bản hoàn chỉnh có sẵn vào vùng chỉnh sửa
+- **B. Sáng tác bằng AI** — Sử dụng AI hỗ trợ sáng tác Kịch bản từ đầu
 
-> 校准后，系统会自动为每一步生成更精细、更专业的提示词，大幅提升后续生图/生视频的质量。
+> 📄 **Tham khảo định dạng Kịch bản**: Xem [Ví dụ định dạng nhập Kịch bản](./SCRIPT_FORMAT_EXAMPLE.md) để tìm hiểu cách viết tiêu chuẩn cho tiêu đề cảnh, lời thoại, chỉ dẫn sân khấu, v.v.
 
----
-
-## 第三步：生成素材（可选）
-
-校准完成后，可以选择性地预先生成素材：
-
-- **A. 生成场景** — 根据校准后的场景描述批量生成场景参考图
-- **B. 生成角色** — 根据校准后的角色描述生成角色参考图
-
-> 这一步是可选的。如果直接进入导演/S级板块，系统也会自动调用相关素材。
+Hệ thống sẽ tự động phân tích cấu trúc Kịch bản, tách thành các yếu tố như Bối cảnh, Phân cảnh, Nhân vật, lời thoại, v.v.
 
 ---
 
-## 第四步：进入导演板块 / S级板块
+## Bước 2: AI Hiệu chỉnh lần hai
 
-切换到 **导演板块** 或 **⭐ S级板块**：
+Sau khi hệ thống phân tích tự động hoàn tất, lần lượt nhấn ba nút Hiệu chỉnh sau để **tinh chỉnh sâu hơn**:
 
-1. 点击 **右边栏「加载剧本分镜」** — 将剧本中的所有分镜导入当前板块
-2. **左边栏** 会自动为每个分镜填写：
-   - 首帧提示词
-   - 尾帧提示词
-   - 视频提示词
-3. 所有参数均可根据个人喜好 **自由微调**（如镜头运动、时长、风格等）
+1. **AI Hiệu chỉnh Bối cảnh** — Tối ưu hóa mô tả môi trường, không khí, ánh sáng và chi tiết của từng Bối cảnh
+2. **API Hiệu chỉnh Phân cảnh** — Hiệu chỉnh chính xác ngôn ngữ ống kính, Cỡ cảnh, bố cục của từng Phân cảnh
+3. **AI Hiệu chỉnh Nhân vật** — Làm sâu thêm mô tả ngoại hình, biểu cảm, hành động và các điểm neo nhất quán của Nhân vật
 
----
-
-## 第五步：生成图片与视频
-
-在导演板块 / S级板块的 **分镜编辑** 中（左边栏）：
-
-### 生图方式（二选一）
-
-- **A. 单镜生成** — 逐个分镜单独生成图片
-- **B. 合并生成（推荐）** — 将多个分镜合并批量生成
-
-> 💡 **推荐使用「合并生成」**，生成后的图片会自动分配到对应的每一个分镜上。
-
-### 生成视频
-
-图片分配完成后，点击 **「生成视频」** 即可开始批量生成分镜视频。
+> Sau khi Hiệu chỉnh, hệ thống sẽ tự động tạo prompt chi tiết và chuyên nghiệp hơn cho từng bước, nâng cao đáng kể chất lượng tạo ảnh/video sau này.
 
 ---
 
-## 第六步：S级板块 — Seedance 2.0 进阶
+## Bước 3: Tạo Tư liệu (tùy chọn)
 
-S级板块支持 **Seedance 2.0** 的多镜头合并叙事功能：
+Sau khi Hiệu chỉnh hoàn tất, bạn có thể chọn tạo trước Tư liệu:
 
-1. 导入剧本后，可以自由选择 **视频分组长短**：
-   - 1 个镜头 → 15 秒短片
-   - 多个镜头合并 → 15 秒叙事片段
-   - 根据需要灵活调整分组
-2. 系统自动收集 @Image / @Video / @Audio 多模态引用
-3. 点击 **「生成视频」** 即可
+- **A. Tạo Bối cảnh** — Tạo hàng loạt ảnh tham chiếu Bối cảnh dựa trên mô tả đã Hiệu chỉnh
+- **B. Tạo Nhân vật** — Tạo ảnh tham chiếu Nhân vật dựa trên mô tả đã Hiệu chỉnh
 
-> S级板块会自动处理首帧图拼接、提示词三层融合（动作 + 镜头语言 + 对白唇形同步）、参数约束校验等。
+> Bước này là tùy chọn. Nếu bạn chuyển thẳng sang module Đạo diễn/S-Class, hệ thống cũng sẽ tự động gọi các Tư liệu liên quan.
 
 ---
 
-## 💡 小贴士
+## Bước 4: Vào module Đạo diễn / module S-Class
 
-- **先校准，再生成** — 二次校准能显著提升输出质量，不要跳过
-- **合并生成优先** — 合并生成比单镜生成效率更高，风格更统一
-- **参数可调** — 每个分镜的提示词、首帧、尾帧都支持手动微调
-- **S级板块适合** — 需要多镜头连贯叙事的场景（短剧、番剧预告等）
-- **导演板块适合** — 逐镜头精细控制的场景
+Chuyển sang **module Đạo diễn** hoặc **⭐ module S-Class**:
+
+1. Nhấn **"Tải Phân cảnh từ Kịch bản" ở thanh bên phải** — Nhập tất cả Phân cảnh từ Kịch bản vào module hiện tại
+2. **Thanh bên trái** sẽ tự động điền cho từng Phân cảnh:
+   - Prompt Khung đầu
+   - Prompt Khung cuối
+   - Prompt video
+3. Tất cả thông số đều có thể **tùy chỉnh tự do** theo sở thích cá nhân (như chuyển động ống kính, thời lượng, phong cách, v.v.)
 
 ---
 
-> 📧 有问题？联系 [memecalculate@gmail.com](mailto:memecalculate@gmail.com) 或查看 [README](../README.md)
+## Bước 5: Tạo ảnh và video
+
+Trong phần **chỉnh sửa Phân cảnh** của module Đạo diễn / module S-Class (thanh bên trái):
+
+### Cách tạo ảnh (chọn một trong hai)
+
+- **A. Tạo từng cảnh** — Tạo ảnh riêng lẻ cho từng Phân cảnh
+- **B. Tạo gộp (khuyến nghị)** — Gộp nhiều Phân cảnh để tạo ảnh hàng loạt
+
+> 💡 **Khuyến nghị sử dụng "Tạo gộp"**, ảnh được tạo sẽ tự động phân bổ vào từng Phân cảnh tương ứng.
+
+### Tạo video
+
+Sau khi phân bổ ảnh hoàn tất, nhấn **"Tạo video"** để bắt đầu tạo video Phân cảnh hàng loạt.
+
+---
+
+## Bước 6: Module S-Class — Nâng cao với Seedance 2.0
+
+Module S-Class hỗ trợ tính năng kết hợp đa cảnh quay tường thuật của **Seedance 2.0**:
+
+1. Sau khi nhập Kịch bản, bạn có thể tự do chọn **độ dài nhóm video**:
+   - 1 cảnh quay → đoạn phim ngắn 15 giây
+   - Gộp nhiều cảnh quay → đoạn tường thuật 15 giây
+   - Linh hoạt điều chỉnh phân nhóm theo nhu cầu
+2. Hệ thống tự động thu thập tham chiếu đa phương thức @Image / @Video / @Audio
+3. Nhấn **"Tạo video"** là xong
+
+> Module S-Class sẽ tự động xử lý ghép ảnh Khung đầu, hợp nhất ba tầng prompt (hành động + ngôn ngữ ống kính + đồng bộ khẩu hình lời thoại), kiểm tra ràng buộc thông số, v.v.
+
+---
+
+## 💡 Mẹo nhỏ
+
+- **Hiệu chỉnh trước, Tạo sau** — Hiệu chỉnh lần hai giúp nâng cao đáng kể chất lượng đầu ra, đừng bỏ qua
+- **Ưu tiên Tạo gộp** — Tạo gộp hiệu quả hơn tạo từng cảnh, phong cách cũng thống nhất hơn
+- **Thông số có thể điều chỉnh** — Prompt, Khung đầu, Khung cuối của mỗi Phân cảnh đều hỗ trợ chỉnh sửa thủ công
+- **Module S-Class phù hợp cho** — Các tình huống cần tường thuật liên tục đa cảnh quay (phim ngắn, trailer anime, v.v.)
+- **Module Đạo diễn phù hợp cho** — Các tình huống cần kiểm soát chi tiết từng cảnh quay
+
+---
+
+> 📧 Có câu hỏi? Liên hệ [memecalculate@gmail.com](mailto:memecalculate@gmail.com) hoặc xem [README](../README.md)

@@ -5,7 +5,7 @@
 
 /**
  * 分镜卡片组件 (Split Scene Card Component)
- * 显示单个分镜的所有信息，包括首帧/尾帧图片、视频预览、提示词编辑等
+ * 显示单个分镜的所有信息，包括Khung đầu/Khung cuối图片、Video预览、Prompt编辑等
  * 用于 SplitScene 类型（与 scene-card.tsx 中的 AIScene 类型不同）
  */
 
@@ -85,9 +85,9 @@ import { useResolvedImageUrl } from "@/hooks/use-resolved-image-url";
 
 export interface SplitSceneCardProps {
   scene: SplitScene;
-  /** 提示词语言设置（来自剧本面板），决定编辑/显示哪个语言字段 */
+  /** Prompt语言设置（来自Kịch bản面板），决定编辑/显示哪个语言字段 */
   promptLanguage?: PromptLanguage;
-  // 三层提示词更新回调
+  // 三层Prompt更新回调
   onUpdateImagePrompt: (id: number, prompt: string, promptZh?: string) => void;
   onUpdateVideoPrompt: (id: number, prompt: string, promptZh?: string) => void;
   onUpdateEndFramePrompt: (id: number, prompt: string, promptZh?: string) => void;
@@ -114,11 +114,11 @@ export interface SplitSceneCardProps {
   onUpdateField?: (sceneId: number, field: keyof SplitScene, value: any) => void;
   // 角度切换回调
   onAngleSwitch?: (sceneId: number, type: "start" | "end") => void;
-  // 四宫格回调
+  // Lưới 4 ô回调
   onQuadGrid?: (sceneId: number, type: "start" | "end") => void;
-  // 提取视频最后一帧回调
+  // 提取Video最后一帧回调
   onExtractVideoLastFrame?: (sceneId: number) => void;
-  // 停止生成回调
+  // Dừng tạo回调
   onStopImageGeneration?: (sceneId: number) => void;
   onStopVideoGeneration?: (sceneId: number) => void;
   onStopEndFrameGeneration?: (sceneId: number) => void;
@@ -183,7 +183,7 @@ export function SplitSceneCard({
   const resolvedImageUrl = useResolvedImageUrl(effectiveImageUrl);
   const resolvedEndFrameUrl = useResolvedImageUrl(effectiveEndFrameUrl);
 
-  // 根据语言设置获取对应的提示词字段值
+  // 根据语言设置获取对应的Prompt字段值
   const getPromptByLanguage = (zh: string | undefined, en: string | undefined): string => {
     if (promptLanguage === 'en') return en || '';
     if (promptLanguage === 'zh') return zh || '';
@@ -191,7 +191,7 @@ export function SplitSceneCard({
     return zh || en || '';
   };
 
-  // 开始编辑某个提示词（根据语言选择对应字段）
+  // 开始编辑某个Prompt（根据语言选择对应字段）
   const startEditing = (type: 'image' | 'video' | 'endFrame') => {
     if (type === 'image') {
       setEditPromptValue(getPromptByLanguage(scene.imagePromptZh, scene.imagePrompt));
@@ -203,9 +203,9 @@ export function SplitSceneCard({
     setEditingPrompt(type);
   };
 
-  // 保存提示词（根据语言设置只更新对应字段，不覆盖另一种语言）
+  // LưuPrompt（根据语言设置只更新对应字段，不覆盖另一种语言）
   const handleSavePrompt = () => {
-    const langLabel = promptLanguage === 'en' ? '英文' : '中文';
+    const langLabel = promptLanguage === 'en' ? 'tiếng Anh' : 'tiếng Trung';
 
     if (editingPrompt === 'image') {
       if (promptLanguage === 'en') {
@@ -215,21 +215,21 @@ export function SplitSceneCard({
         // 中文 / 中英文：更新 promptZh，保留 prompt 不变
         onUpdateImagePrompt(scene.id, scene.imagePrompt, editPromptValue);
       }
-      toast.success(`分镜 ${scene.id + 1} 首帧${langLabel}提示词已更新`);
+      toast.success(`Phân cảnh ${scene.id + 1} Prompt khung đầu ${langLabel} đã cập nhật`);
     } else if (editingPrompt === 'video') {
       if (promptLanguage === 'en') {
         onUpdateVideoPrompt(scene.id, editPromptValue, scene.videoPromptZh);
       } else {
         onUpdateVideoPrompt(scene.id, scene.videoPrompt, editPromptValue);
       }
-      toast.success(`分镜 ${scene.id + 1} 视频${langLabel}提示词已更新`);
+      toast.success(`Phân cảnh ${scene.id + 1} Prompt video ${langLabel} đã cập nhật`);
     } else if (editingPrompt === 'endFrame') {
       if (promptLanguage === 'en') {
         onUpdateEndFramePrompt(scene.id, editPromptValue, scene.endFramePromptZh);
       } else {
         onUpdateEndFramePrompt(scene.id, scene.endFramePrompt, editPromptValue);
       }
-      toast.success(`分镜 ${scene.id + 1} 尾帧${langLabel}提示词已更新`);
+      toast.success(`Phân cảnh ${scene.id + 1} Prompt khung cuối ${langLabel} đã cập nhật`);
     }
     setEditingPrompt('none');
   };
@@ -239,7 +239,7 @@ export function SplitSceneCard({
     setEditPromptValue('');
   };
 
-  // 处理首帧图片上传
+  // 处理Khung đầu图片Tải lên
   const handleFirstFrameUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -248,13 +248,13 @@ export function SplitSceneCard({
     reader.onload = (event) => {
       const dataUrl = event.target?.result as string;
       onUploadImage?.(scene.id, dataUrl);
-      toast.success(`分镜 ${scene.id + 1} 首帧已上传`);
+      toast.success(`Phân cảnh ${scene.id + 1} Đã tải lên khung đầu`);
     };
     reader.readAsDataURL(file);
     e.target.value = '';
   };
 
-  // 处理尾帧图片上传
+  // 处理Khung cuối图片Tải lên
   const handleEndFrameUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -263,26 +263,26 @@ export function SplitSceneCard({
     reader.onload = (event) => {
       const dataUrl = event.target?.result as string;
       onUpdateEndFrame(scene.id, dataUrl);
-      // 上传尾帧时自动启用 needsEndFrame，确保视频生成时会使用尾帧参考
+      // Tải lênKhung cuối时自动启用 needsEndFrame，确保Video生成时会使用Khung cuối参考
       if (!scene.needsEndFrame) {
         onUpdateNeedsEndFrame(scene.id, true);
       }
-      toast.success(`分镜 ${scene.id + 1} 尾帧已上传`);
+      toast.success(`Phân cảnh ${scene.id + 1} Đã tải lên khung cuối`);
     };
     reader.readAsDataURL(file);
     e.target.value = '';
   };
 
-  // 移除尾帧
+  // 移除Khung cuối
   const handleRemoveEndFrame = () => {
     onUpdateEndFrame(scene.id, null);
-    toast.success(`分镜 ${scene.id + 1} 尾帧已移除`);
+    toast.success(`Phân cảnh ${scene.id + 1} Đã xóa khung cuối`);
   };
 
-  // 移除首帧
+  // 移除Khung đầu
   const handleRemoveImage = () => {
     onRemoveImage?.(scene.id);
-    toast.success(`分镜 ${scene.id + 1} 首帧已移除`);
+    toast.success(`Phân cảnh ${scene.id + 1} Đã xóa khung đầu`);
   };
 
   // 下载图片
@@ -292,7 +292,7 @@ export function SplitSceneCard({
       if (imageUrl.startsWith('local-image://')) {
         // Electron 自定义协议：通过 IPC 读取为 base64 再转 blob
         const base64 = await readImageAsBase64(imageUrl);
-        if (!base64) throw new Error('无法读取本地图片');
+        if (!base64) throw new Error('Không thể đọc ảnh cục bộ');
         const res = await fetch(base64);
         blob = await res.blob();
       } else {
@@ -309,10 +309,10 @@ export function SplitSceneCard({
       link.click();
       document.body.removeChild(link);
       URL.revokeObjectURL(url);
-      toast.success(`${filename} 下载完成`);
+      toast.success(`${filename} Tải xuống hoàn tất`);
     } catch (err) {
       console.error('Download failed:', err);
-      toast.error('下载失败');
+      toast.error('Tải xuống thất bại');
     }
   };
 
@@ -333,7 +333,7 @@ export function SplitSceneCard({
     const dragData = {
       id: scene.videoMediaId || `scene-${scene.id}-video`,
       type: 'video',
-      name: `分镜 ${scene.id + 1} - AI视频`,
+      name: `Phân cảnh ${scene.id + 1} - AIVideo`,
       url: scene.videoUrl,
       thumbnailUrl: scene.imageDataUrl,
       duration: 5,
@@ -344,7 +344,7 @@ export function SplitSceneCard({
     
     const dragImage = document.createElement('div');
     dragImage.className = 'bg-primary text-white px-2 py-1 rounded text-xs';
-    dragImage.textContent = `分镜 ${scene.id + 1} 视频`;
+    dragImage.textContent = `Phân cảnh ${scene.id + 1} Video`;
     dragImage.style.position = 'absolute';
     dragImage.style.top = '-1000px';
     document.body.appendChild(dragImage);
@@ -352,7 +352,7 @@ export function SplitSceneCard({
     setTimeout(() => document.body.removeChild(dragImage), 0);
   };
 
-  // 隐藏的文件上传 input
+  // 隐藏的文件Tải lên input
   const firstFrameInput = (
     <input
       ref={firstFrameInputRef}
@@ -378,7 +378,7 @@ export function SplitSceneCard({
       {/* 分镜编号和控制栏 */}
       <div className="flex items-center justify-between px-3 py-1.5 bg-muted/30 border-b">
         <div className="flex items-center gap-2">
-          <span className="text-sm font-bold text-muted-foreground">分镜 #{scene.id + 1}</span>
+          <span className="text-sm font-bold text-muted-foreground">Phân cảnh #{scene.id + 1}</span>
           {(scene.sceneName || scene.sceneLocation) && (
             <TooltipProvider>
               <Tooltip>
@@ -390,8 +390,8 @@ export function SplitSceneCard({
                 </TooltipTrigger>
                 <TooltipContent>
                   <div className="text-xs">
-                    {scene.sceneName && <p>场景: {scene.sceneName}</p>}
-                    {scene.sceneLocation && <p>地点: {scene.sceneLocation}</p>}
+                    {scene.sceneName && <p>Bối cảnh: {scene.sceneName}</p>}
+                    {scene.sceneLocation && <p>Địa điểm: {scene.sceneLocation}</p>}
                   </div>
                 </TooltipContent>
               </Tooltip>
@@ -413,18 +413,18 @@ export function SplitSceneCard({
             </AlertDialogTrigger>
             <AlertDialogContent>
               <AlertDialogHeader>
-                <AlertDialogTitle>删除分镜 #{scene.id + 1}？</AlertDialogTitle>
+                <AlertDialogTitle>Xóa phân cảnh #{scene.id + 1}?</AlertDialogTitle>
                 <AlertDialogDescription>
-                  此操作将删除该分镜的所有内容，无法撤销。
+                  Thao tác này sẽ xóa toàn bộ nội dung phân cảnh, không thể hoàn tác.
                 </AlertDialogDescription>
               </AlertDialogHeader>
               <AlertDialogFooter>
-                <AlertDialogCancel>取消</AlertDialogCancel>
+                <AlertDialogCancel>Hủy</AlertDialogCancel>
                 <AlertDialogAction
                   onClick={() => onDelete(scene.id)}
                   className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
                 >
-                  删除
+                  Xóa
                 </AlertDialogAction>
               </AlertDialogFooter>
             </AlertDialogContent>
@@ -432,10 +432,10 @@ export function SplitSceneCard({
         )}
       </div>
 
-      {/* 第一排：首帧图片 + 尾帧图片 + 角色库选择 */}
+      {/* 第一排：Khung đầu图片 + Khung cuối图片 + 角色库选择 */}
       <div className="p-2 space-y-2">
         <div className="flex gap-2">
-          {/* 首帧图片 */}
+          {/* Khung đầu图片 */}
           <div className="flex-1">
             <div className="flex items-center justify-between mb-1">
               <button
@@ -447,7 +447,7 @@ export function SplitSceneCard({
                     : "text-muted-foreground hover:text-foreground"
                 )}
               >
-                首帧
+                Khung đầu
               </button>
               {hasImage && (
                 <div className="flex items-center gap-1">
@@ -457,7 +457,7 @@ export function SplitSceneCard({
                     className="text-[9px] px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-600 hover:bg-amber-500/30 disabled:opacity-50 flex items-center gap-0.5"
                   >
                     <RotateCw className="h-2.5 w-2.5" />
-                    视角
+                    Góc nhìn
                   </button>
                   <button
                     onClick={(e) => { e.stopPropagation(); onQuadGrid?.(scene.id, "start"); }}
@@ -465,7 +465,7 @@ export function SplitSceneCard({
                     className="text-[9px] px-1.5 py-0.5 rounded bg-cyan-500/20 text-cyan-600 hover:bg-cyan-500/30 disabled:opacity-50 flex items-center gap-0.5"
                   >
                     <Grid2X2 className="h-2.5 w-2.5" />
-                    四宫格
+                    Lưới 4 ô
                   </button>
                 </div>
               )}
@@ -480,7 +480,7 @@ export function SplitSceneCard({
               onClick={() => {
                 setSelectedFrameTarget('start');
                 if (hasImage && resolvedImageUrl) {
-                  setPreviewItem({ type: 'image', url: resolvedImageUrl, name: `分镜 ${scene.id + 1} 首帧` });
+                  setPreviewItem({ type: 'image', url: resolvedImageUrl, name: `Phân cảnh ${scene.id + 1} Khung đầu` });
                 } else {
                   firstFrameInputRef.current?.click();
                 }
@@ -490,7 +490,7 @@ export function SplitSceneCard({
                 <>
                   <img
                     src={resolvedImageUrl || ''}
-                    alt={`分镜 ${scene.id + 1} 首帧`}
+                    alt={`Phân cảnh ${scene.id + 1} Khung đầu`}
                     className="w-full h-full object-cover"
                     loading="lazy"
                     decoding="async"
@@ -501,7 +501,7 @@ export function SplitSceneCard({
                       onClick={(e) => { e.stopPropagation(); e.preventDefault(); onAngleSwitch?.(scene.id, "start"); }}
                       disabled={isAngleSwitching}
                       className="p-0.5 rounded bg-black/50 text-white hover:bg-amber-600 disabled:opacity-50"
-                      title="切换视角"
+                      title="Chuyển góc nhìn"
                     >
                       <RotateCw className="h-3 w-3" />
                     </button>
@@ -510,15 +510,15 @@ export function SplitSceneCard({
                       onClick={(e) => { e.stopPropagation(); e.preventDefault(); onQuadGrid?.(scene.id, "start"); }}
                       disabled={isQuadGridGenerating}
                       className="p-0.5 rounded bg-black/50 text-white hover:bg-cyan-600 disabled:opacity-50"
-                      title="四宫格生成"
+                      title="Tạo lưới 4 ô"
                     >
                       <Grid2X2 className="h-3 w-3" />
                     </button>
                     <button
                       type="button"
-                      onClick={(e) => { e.stopPropagation(); e.preventDefault(); handleDownloadImage(resolvedImageUrl || scene.imageDataUrl, `分镜${scene.id + 1}_首帧.png`); }}
+                      onClick={(e) => { e.stopPropagation(); e.preventDefault(); handleDownloadImage(resolvedImageUrl || scene.imageDataUrl, `Phân cảnh ${scene.id + 1}_Khung đầu.png`); }}
                       className="p-0.5 rounded bg-black/50 text-white hover:bg-blue-600"
-                      title="下载首帧"
+                      title="Tải Khung đầu"
                     >
                       <Download className="h-3 w-3" />
                     </button>
@@ -526,7 +526,7 @@ export function SplitSceneCard({
                       type="button"
                       onClick={(e) => { e.stopPropagation(); e.preventDefault(); handleRemoveImage(); }}
                       className="p-0.5 rounded bg-black/50 text-white hover:bg-red-600"
-                      title="删除首帧"
+                      title="Xóa Khung đầu"
                     >
                       <X className="h-3 w-3" />
                     </button>
@@ -538,19 +538,19 @@ export function SplitSceneCard({
               ) : (
                 <div className="w-full h-full flex flex-col items-center justify-center gap-1">
                   <Upload className="h-4 w-4 text-muted-foreground/50" />
-                  <span className="text-[10px] text-muted-foreground/50">上传</span>
+                  <span className="text-[10px] text-muted-foreground/50">Tải lên</span>
                 </div>
               )}
               {isImageGenerating && (
                 <div className="absolute inset-0 bg-black/60 flex flex-col items-center justify-center gap-1">
                   <Loader2 className="h-4 w-4 text-white animate-spin" />
-                  <span className="text-[10px] text-white">生成中 {scene.imageProgress}%</span>
+                  <span className="text-[10px] text-white">Đang tạo {scene.imageProgress}%</span>
                   <button
                     onClick={(e) => { e.stopPropagation(); onStopImageGeneration?.(scene.id); }}
                     className="mt-1 px-2 py-0.5 rounded bg-red-600/80 hover:bg-red-600 text-white text-[9px] flex items-center gap-0.5 transition-colors"
-                    title="停止生成"
+                    title="Dừng tạo"
                   >
-                    <Square className="h-2.5 w-2.5" />停止
+                    <Square className="h-2.5 w-2.5" />Dừng
                   </button>
                 </div>
               )}
@@ -558,7 +558,7 @@ export function SplitSceneCard({
             {firstFrameInput}
           </div>
 
-          {/* 尾帧图片 */}
+          {/* Khung cuối图片 */}
           <div className="flex-1">
             <div className="flex items-center justify-between mb-1">
               <div className="flex items-center gap-1">
@@ -571,7 +571,7 @@ export function SplitSceneCard({
                       : "text-muted-foreground hover:text-foreground"
                   )}
                 >
-                  尾帧
+                  Khung cuối
                 </button>
                 <button
                   onClick={() => onUpdateNeedsEndFrame(scene.id, !scene.needsEndFrame)}
@@ -583,7 +583,7 @@ export function SplitSceneCard({
                       : "bg-muted text-muted-foreground/60 hover:bg-muted/80"
                   )}
                 >
-                  {scene.needsEndFrame ? '需要' : '可选'}
+                  {scene.needsEndFrame ? 'Cần' : 'Tùy chọn'}
                 </button>
               </div>
               <div className="flex items-center gap-1">
@@ -595,7 +595,7 @@ export function SplitSceneCard({
                       className="text-[9px] px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-600 hover:bg-amber-500/30 disabled:opacity-50 flex items-center gap-0.5"
                     >
                       <RotateCw className="h-2.5 w-2.5" />
-                      视角
+                      Góc nhìn
                     </button>
                     <button
                       onClick={(e) => { e.stopPropagation(); onQuadGrid?.(scene.id, "end"); }}
@@ -603,11 +603,11 @@ export function SplitSceneCard({
                       className="text-[9px] px-1.5 py-0.5 rounded bg-cyan-500/20 text-cyan-600 hover:bg-cyan-500/30 disabled:opacity-50 flex items-center gap-0.5"
                     >
                       <Grid2X2 className="h-2.5 w-2.5" />
-                      四宫格
+                      Lưới 4 ô
                     </button>
                   </>
                 )}
-              {/* 尾帧AI生成按钮：无论是“需要尾帧”还是“可选尾帧”都可以生成 */}
+              {/* Khung cuốiAI tạo按钮：无论是“Cần khung cuối”还是“Tùy chọnKhung cuối”都可以生成 */}
                 {!hasEndFrame && (
                   <button
                     onClick={(e) => { e.stopPropagation(); onGenerateEndFrame?.(scene.id); }}
@@ -622,7 +622,7 @@ export function SplitSceneCard({
                     {scene.endFrameStatus === 'generating' ? (
                       <span className="flex items-center gap-0.5"><Loader2 className="h-2.5 w-2.5 animate-spin" />{scene.endFrameProgress}%</span>
                     ) : (
-                      <span className="flex items-center gap-0.5"><Sparkles className="h-2.5 w-2.5" />AI生成</span>
+                      <span className="flex items-center gap-0.5"><Sparkles className="h-2.5 w-2.5" />AI tạo</span>
                     )}
                   </button>
                 )}
@@ -640,7 +640,7 @@ export function SplitSceneCard({
               onClick={() => {
                 setSelectedFrameTarget('end');
                 if (hasEndFrame && resolvedEndFrameUrl) {
-                  setPreviewItem({ type: 'image', url: resolvedEndFrameUrl, name: `分镜 ${scene.id + 1} 尾帧` });
+                  setPreviewItem({ type: 'image', url: resolvedEndFrameUrl, name: `Phân cảnh ${scene.id + 1} Khung cuối` });
                 } else {
                   endFrameInputRef.current?.click();
                 }
@@ -650,7 +650,7 @@ export function SplitSceneCard({
                 <>
                   <img
                     src={resolvedEndFrameUrl || ''}
-                    alt={`分镜 ${scene.id + 1} 尾帧`}
+                    alt={`Phân cảnh ${scene.id + 1} Khung cuối`}
                     className="w-full h-full object-cover"
                     loading="lazy"
                     decoding="async"
@@ -661,7 +661,7 @@ export function SplitSceneCard({
                       onClick={(e) => { e.stopPropagation(); e.preventDefault(); onAngleSwitch?.(scene.id, "end"); }}
                       disabled={isAngleSwitching}
                       className="p-0.5 rounded bg-black/50 text-white hover:bg-amber-600 disabled:opacity-50"
-                      title="切换视角"
+                      title="Chuyển góc nhìn"
                     >
                       <RotateCw className="h-3 w-3" />
                     </button>
@@ -670,15 +670,15 @@ export function SplitSceneCard({
                       onClick={(e) => { e.stopPropagation(); e.preventDefault(); onQuadGrid?.(scene.id, "end"); }}
                       disabled={isQuadGridGenerating}
                       className="p-0.5 rounded bg-black/50 text-white hover:bg-cyan-600 disabled:opacity-50"
-                      title="四宫格生成"
+                      title="Tạo lưới 4 ô"
                     >
                       <Grid2X2 className="h-3 w-3" />
                     </button>
                     <button
                       type="button"
-                      onClick={(e) => { e.stopPropagation(); e.preventDefault(); handleDownloadImage(resolvedEndFrameUrl || scene.endFrameImageUrl!, `分镜${scene.id + 1}_尾帧.png`); }}
+                      onClick={(e) => { e.stopPropagation(); e.preventDefault(); handleDownloadImage(resolvedEndFrameUrl || scene.endFrameImageUrl!, `Phân cảnh ${scene.id + 1}_Khung cuối.png`); }}
                       className="p-0.5 rounded bg-black/50 text-white hover:bg-blue-600"
-                      title="下载尾帧"
+                      title="Tải Khung cuối"
                     >
                       <Download className="h-3 w-3" />
                     </button>
@@ -686,7 +686,7 @@ export function SplitSceneCard({
                       type="button"
                       onClick={(e) => { e.stopPropagation(); e.preventDefault(); handleRemoveEndFrame(); }}
                       className="p-0.5 rounded bg-black/50 text-white hover:bg-red-600"
-                      title="删除尾帧"
+                      title="Xóa Khung cuối"
                     >
                       <X className="h-3 w-3" />
                     </button>
@@ -698,24 +698,24 @@ export function SplitSceneCard({
               ) : scene.endFrameStatus === 'generating' ? (
                 <div className="w-full h-full flex flex-col items-center justify-center gap-1 bg-orange-500/10">
                   <Loader2 className="h-4 w-4 text-orange-500 animate-spin" />
-                  <span className="text-[10px] text-orange-500">生成中 {scene.endFrameProgress}%</span>
+                  <span className="text-[10px] text-orange-500">Đang tạo {scene.endFrameProgress}%</span>
                   <button
                     onClick={(e) => { e.stopPropagation(); onStopEndFrameGeneration?.(scene.id); }}
                     className="mt-0.5 px-2 py-0.5 rounded bg-red-600/80 hover:bg-red-600 text-white text-[9px] flex items-center gap-0.5 transition-colors"
-                    title="停止生成"
+                    title="Dừng tạo"
                   >
-                    <Square className="h-2.5 w-2.5" />停止
+                    <Square className="h-2.5 w-2.5" />Dừng
                   </button>
                 </div>
               ) : scene.needsEndFrame ? (
                 <div className="w-full h-full flex flex-col items-center justify-center gap-1 bg-orange-500/5">
                   <span className="text-orange-500 text-lg">◉</span>
-                  <span className="text-[10px] text-orange-500/70">需要尾帧</span>
+                  <span className="text-[10px] text-orange-500/70">Cần khung cuối</span>
                 </div>
               ) : (
                 <div className="w-full h-full flex flex-col items-center justify-center gap-1 bg-blue-500/5">
                   <Upload className="h-4 w-4 text-blue-400/60" />
-                  <span className="text-[10px] text-blue-400/60">上传/生成</span>
+                  <span className="text-[10px] text-blue-400/60">Tải lên/Tạo</span>
                 </div>
               )}
             </div>
@@ -754,10 +754,10 @@ export function SplitSceneCard({
             )}
             {/* 场景参考选择器 - 根据选中的帧目标切换 */}
             {selectedFrameTarget === 'start' ? (
-              // 首帧场景参考已在上方渲染
+              // Khung đầu场景参考已在上方渲染
               null
             ) : (
-              // 尾帧场景库选择器
+              // Khung cuối场景库选择器
               onUpdateEndFrameSceneReference && (
                 <SceneLibrarySelector
                   sceneId={scene.id}
@@ -790,7 +790,7 @@ export function SplitSceneCard({
           </div>
         </div>
 
-        {/* 第二排：生成图片/视频按钮 + 视频预览/状态 */}
+        {/* 第二排：Tạo ảnh/Video按钮 + Video预览/状态 */}
         <div className="flex items-center gap-2">
           {!hasImage ? (
             <div className="flex items-center gap-1">
@@ -802,9 +802,9 @@ export function SplitSceneCard({
                 disabled={isGeneratingAny || isImageGenerating}
               >
                 {isImageGenerating ? (
-                  <><Loader2 className="h-3 w-3 mr-1 animate-spin" />生成中 {scene.imageProgress}%</>
+                  <><Loader2 className="h-3 w-3 mr-1 animate-spin" />Đang tạo {scene.imageProgress}%</>
                 ) : (
-                  <><ImageIcon className="h-3 w-3 mr-1" />生成图片</>
+                  <><ImageIcon className="h-3 w-3 mr-1" />Tạo ảnh</>
                 )}
               </Button>
               {isImageGenerating && (
@@ -813,7 +813,7 @@ export function SplitSceneCard({
                   variant="destructive"
                   className="h-7 text-xs px-2"
                   onClick={() => onStopImageGeneration?.(scene.id)}
-                  title="停止生成"
+                  title="Dừng tạo"
                 >
                   <Square className="h-3 w-3" />
                 </Button>
@@ -829,11 +829,11 @@ export function SplitSceneCard({
                 disabled={isGeneratingAny || isVideoGenerating}
               >
                 {isVideoGenerating ? (
-                  <><Loader2 className="h-3 w-3 mr-1 animate-spin" />生成中 {scene.videoProgress}%</>
+                  <><Loader2 className="h-3 w-3 mr-1 animate-spin" />Đang tạo {scene.videoProgress}%</>
                 ) : isVideoReady ? (
-                  <><RefreshCw className="h-3 w-3 mr-1" />重新生成</>
+                  <><RefreshCw className="h-3 w-3 mr-1" />Tạo lại</>
                 ) : (
-                  <><Play className="h-3 w-3 mr-1" />生成视频</>
+                  <><Play className="h-3 w-3 mr-1" />Tạo video</>
                 )}
               </Button>
               {isVideoGenerating && (
@@ -842,7 +842,7 @@ export function SplitSceneCard({
                   variant="destructive"
                   className="h-7 text-xs px-2"
                   onClick={() => onStopVideoGeneration?.(scene.id)}
-                  title="停止生成"
+                  title="Dừng tạo"
                 >
                   <Square className="h-3 w-3" />
                 </Button>
@@ -854,7 +854,7 @@ export function SplitSceneCard({
             <div className="flex items-center gap-1">
               <div 
                 className="flex-1 aspect-video max-w-[120px] bg-muted rounded overflow-hidden cursor-pointer relative"
-                onClick={() => setPreviewItem({ type: 'video', url: scene.videoUrl!, name: `分镜 ${scene.id + 1} 视频` })}
+                onClick={() => setPreviewItem({ type: 'video', url: scene.videoUrl!, name: `Phân cảnh ${scene.id + 1} Video` })}
                 draggable={!!canDragVideo}
                 onDragStart={handleVideoDragStart}
               >
@@ -863,10 +863,10 @@ export function SplitSceneCard({
                   <Play className="h-4 w-4 text-white" />
                 </div>
                 {canDragVideo && (
-                  <span className="absolute bottom-0.5 right-0.5 text-[8px] bg-green-600 text-white px-1 rounded">拖到时间线</span>
+                  <span className="absolute bottom-0.5 right-0.5 text-[8px] bg-green-600 text-white px-1 rounded">Kéo vào timeline</span>
                 )}
               </div>
-              {/* 提取尾帧按钮 */}
+              {/* 提取Khung cuối按钮 */}
               <TooltipProvider>
                 <Tooltip>
                   <TooltipTrigger asChild>
@@ -886,7 +886,7 @@ export function SplitSceneCard({
                     </button>
                   </TooltipTrigger>
                   <TooltipContent side="top">
-                    <p className="text-xs">提取最后一帧到下一分镜首帧</p>
+                    <p className="text-xs">Trích xuất khung cuối cùng sang khung đầu phân cảnh tiếp theo</p>
                   </TooltipContent>
                 </Tooltip>
               </TooltipProvider>
@@ -902,13 +902,13 @@ export function SplitSceneCard({
             )}>
               <AlertCircle className="h-3 w-3" />
               {isVideoModerationSkipped 
-                ? '内容审核跳过'
-                : (scene.videoError || '生成失败')}
+                ? 'Bỏ qua do kiểm duyệt nội dung'
+                : (scene.videoError || 'Tạo thất bại')}
             </span>
           )}
         </div>
 
-        {/* 第三排：提示词系统（剧本动作 + 三层提示词 + 情绪标签） - 彩色分区 */}
+        {/* 第三排：Prompt系统（Kịch bảnHành động + 三层Prompt + 情绪标签） - 彩色分区 */}
         <div className="space-y-1.5">
           {/* 折叠/展开 Header：Chevron + 标题 + 填充状态徽章 */}
           <button
@@ -916,7 +916,7 @@ export function SplitSceneCard({
             className="w-full flex items-center gap-2 px-2.5 py-2 rounded-md bg-muted/50 border hover:bg-muted/70 transition-colors"
           >
             <ChevronRight className={cn("h-3.5 w-3.5 text-muted-foreground shrink-0 transition-transform duration-200", showPromptDetails && "rotate-90")} />
-            <span className="text-xs font-medium">提示词</span>
+            <span className="text-xs font-medium">Prompt</span>
             {/* 填充状态徽章 */}
             <div className="flex items-center gap-1.5 ml-auto">
               <span className={cn(
@@ -925,7 +925,7 @@ export function SplitSceneCard({
                   ? "bg-violet-500/15 text-violet-600 dark:text-violet-400 border-violet-500/20"
                   : "bg-muted text-muted-foreground/40 border-transparent"
               )}>
-                <Edit3 className="h-2.5 w-2.5" /> 剧本
+                <Edit3 className="h-2.5 w-2.5" /> Kịch bản
               </span>
               <span className={cn(
                 "text-[9px] px-1.5 py-0.5 rounded-full inline-flex items-center gap-0.5 border",
@@ -933,7 +933,7 @@ export function SplitSceneCard({
                   ? "bg-blue-500/15 text-blue-600 dark:text-blue-400 border-blue-500/20"
                   : "bg-muted text-muted-foreground/40 border-transparent"
               )}>
-                <ImageIcon className="h-2.5 w-2.5" /> 首帧
+                <ImageIcon className="h-2.5 w-2.5" /> Khung đầu
               </span>
               <span className={cn(
                 "text-[9px] px-1.5 py-0.5 rounded-full inline-flex items-center gap-0.5 border",
@@ -943,7 +943,7 @@ export function SplitSceneCard({
                     ? "bg-orange-500/5 text-orange-400/60 border-dashed border-orange-400/30"
                     : "bg-muted text-muted-foreground/40 border-transparent"
               )}>
-                ◉ 尾帧
+                ◉ Khung cuối
               </span>
               <span className={cn(
                 "text-[9px] px-1.5 py-0.5 rounded-full inline-flex items-center gap-0.5 border",
@@ -951,36 +951,36 @@ export function SplitSceneCard({
                   ? "bg-green-500/15 text-green-600 dark:text-green-400 border-green-500/20"
                   : "bg-muted text-muted-foreground/40 border-transparent"
               )}>
-                <Play className="h-2.5 w-2.5" /> 视频
+                <Play className="h-2.5 w-2.5" /> Video
               </span>
             </div>
           </button>
 
           {showPromptDetails ? (
             <div className="space-y-2 pl-1">
-              {/* ━━ 剧本动作（提示词来源）━━ 紫色左边框 */}
+              {/* ━━ Kịch bảnHành động（Prompt来源）━━ 紫色左边框 */}
               <div className="border-l-[3px] border-violet-500 pl-3 py-1 space-y-1">
                 <Label className="text-[10px] text-violet-600 dark:text-violet-400 flex items-center gap-1 font-medium">
                   <Edit3 className="h-3 w-3" />
-                  剧本动作（提示词来源）
+                  Hành động kịch bản (nguồn prompt)
                 </Label>
                 <div className="rounded bg-violet-500/5 border border-violet-500/10">
                   <EditableTextField
                     label=""
                     value={scene.actionSummary || ''}
                     onChange={(v) => onUpdateField?.(scene.id, 'actionSummary', v)}
-                    placeholder="双击添加动作描述（AI 将据此生成三层提示词）..."
+                    placeholder="Nhấn đúp để thêm mô tả hành động (AI sẽ tạo prompt 3 lớp từ đây)..."
                     disabled={isGeneratingAny}
                     multiline
                   />
                 </div>
               </div>
 
-              {/* ━━ 首帧提示词 ━━ 蓝色左边框 */}
+              {/* ━━ Khung đầuPrompt ━━ 蓝色左边框 */}
               <div className="border-l-[3px] border-blue-500 pl-3 py-1 space-y-1">
                 <Label className="text-[10px] text-blue-600 dark:text-blue-400 flex items-center gap-1 font-medium">
                   <ImageIcon className="h-3 w-3" />
-                  首帧提示词（静态画面）
+                  Prompt khung đầu (hình ảnh tĩnh)
                 </Label>
                 {editingPrompt === 'image' ? (
                   <>
@@ -988,15 +988,15 @@ export function SplitSceneCard({
                       value={editPromptValue}
                       onChange={(e) => setEditPromptValue(e.target.value)}
                       className="min-h-[150px] text-xs resize-none border-blue-500/30 focus-visible:ring-blue-500/30"
-                      placeholder="描述首帧的静态画面..."
+                      placeholder="Mô tả hình ảnh tĩnh của khung đầu..."
                       autoFocus
                     />
                     <div className="flex gap-1 justify-end mt-1">
                       <Button variant="outline" size="sm" onClick={handleCancelEdit} className="h-5 px-2 text-[10px]">
-                        <X className="h-2.5 w-2.5 mr-0.5" />取消
+                        <X className="h-2.5 w-2.5 mr-0.5" />Hủy
                       </Button>
                       <Button size="sm" onClick={handleSavePrompt} className="h-5 px-2 text-[10px]">
-                        <Check className="h-2.5 w-2.5 mr-0.5" />保存
+                        <Check className="h-2.5 w-2.5 mr-0.5" />Lưu
                       </Button>
                     </div>
                   </>
@@ -1006,18 +1006,18 @@ export function SplitSceneCard({
                     onClick={() => !isGeneratingAny && startEditing('image')}
                   >
                     <p className="text-[11px] text-muted-foreground flex-1 line-clamp-6 min-h-[4.5em]">
-                      {getPromptByLanguage(scene.imagePromptZh, scene.imagePrompt) || "点击添加首帧描述..."}
+                      {getPromptByLanguage(scene.imagePromptZh, scene.imagePrompt) || "Nhấn để thêm mô tả khung đầu..."}
                     </p>
                     {!isGeneratingAny && <Edit3 className="h-2.5 w-2.5 text-blue-500/50 shrink-0 mt-0.5" />}
                   </div>
                 )}
               </div>
 
-              {/* ━━ 尾帧提示词 ━━ 橙色左边框 */}
+              {/* ━━ Khung cuốiPrompt ━━ 橙色左边框 */}
               <div className="border-l-[3px] border-orange-500 pl-3 py-1 space-y-1">
                 <Label className="text-[10px] text-orange-600 dark:text-orange-400 flex items-center gap-1 font-medium">
                   <span>◉</span>
-                  尾帧提示词{scene.needsEndFrame ? '' : '（可选）'}
+                  Prompt khung cuối{scene.needsEndFrame ? '' : ' (tùy chọn)'}
                 </Label>
                 {editingPrompt === 'endFrame' ? (
                   <>
@@ -1025,15 +1025,15 @@ export function SplitSceneCard({
                       value={editPromptValue}
                       onChange={(e) => setEditPromptValue(e.target.value)}
                       className="min-h-[150px] text-xs resize-none border-orange-500/30 focus-visible:ring-orange-500/30"
-                      placeholder="描述尾帧的静态画面..."
+                      placeholder="Mô tả hình ảnh tĩnh của khung cuối..."
                       autoFocus
                     />
                     <div className="flex gap-1 justify-end mt-1">
                       <Button variant="outline" size="sm" onClick={handleCancelEdit} className="h-5 px-2 text-[10px]">
-                        <X className="h-2.5 w-2.5 mr-0.5" />取消
+                        <X className="h-2.5 w-2.5 mr-0.5" />Hủy
                       </Button>
                       <Button size="sm" onClick={handleSavePrompt} className="h-5 px-2 text-[10px]">
-                        <Check className="h-2.5 w-2.5 mr-0.5" />保存
+                        <Check className="h-2.5 w-2.5 mr-0.5" />Lưu
                       </Button>
                     </div>
                   </>
@@ -1051,35 +1051,35 @@ export function SplitSceneCard({
                       "text-[11px] flex-1 line-clamp-6 min-h-[4.5em]",
                       "text-orange-600 dark:text-orange-400"
                     )}>
-                      {getPromptByLanguage(scene.endFramePromptZh, scene.endFramePrompt) || (scene.needsEndFrame ? "点击添加尾帧描述..." : "点击添加尾帧描述...（可选）")}
+                      {getPromptByLanguage(scene.endFramePromptZh, scene.endFramePrompt) || (scene.needsEndFrame ? "Nhấn để thêm mô tả khung cuối..." : "Nhấn để thêm mô tả khung cuối... (tùy chọn)")}
                     </p>
                     {!isGeneratingAny && <Edit3 className="h-2.5 w-2.5 text-orange-500/50 shrink-0 mt-0.5" />}
                   </div>
                 )}
               </div>
 
-              {/* ━━ 视频提示词 ━━ 绿色左边框 */}
+              {/* ━━ VideoPrompt ━━ 绿色左边框 */}
               <div className="border-l-[3px] border-green-500 pl-3 py-1 space-y-1.5">
                 <Label className="text-[10px] text-green-600 dark:text-green-400 flex items-center gap-1 font-medium">
                   <Play className="h-3 w-3" />
-                  视频提示词（动态动作）
+                  Prompt video (hành động động)
                 </Label>
-                {/* 视频提示词文本 */}
+                {/* VideoPrompt文本 */}
                 {editingPrompt === 'video' ? (
                   <>
                     <Textarea
                       value={editPromptValue}
                       onChange={(e) => setEditPromptValue(e.target.value)}
                       className="min-h-[150px] text-xs resize-none border-green-500/30 focus-visible:ring-green-500/30"
-                      placeholder="描述视频中的动作、运动、变化..."
+                      placeholder="Mô tả hành động, chuyển động, thay đổi trong video..."
                       autoFocus
                     />
                     <div className="flex gap-1 justify-end mt-1">
                       <Button variant="outline" size="sm" onClick={handleCancelEdit} className="h-5 px-2 text-[10px]">
-                        <X className="h-2.5 w-2.5 mr-0.5" />取消
+                        <X className="h-2.5 w-2.5 mr-0.5" />Hủy
                       </Button>
                       <Button size="sm" onClick={handleSavePrompt} className="h-5 px-2 text-[10px]">
-                        <Check className="h-2.5 w-2.5 mr-0.5" />保存
+                        <Check className="h-2.5 w-2.5 mr-0.5" />Lưu
                       </Button>
                     </div>
                   </>
@@ -1089,7 +1089,7 @@ export function SplitSceneCard({
                     onClick={() => !isGeneratingAny && startEditing('video')}
                   >
                     <p className="text-[11px] text-green-600 dark:text-green-400 flex-1 line-clamp-6 min-h-[4.5em]">
-                      {getPromptByLanguage(scene.videoPromptZh, scene.videoPrompt) || "点击添加动作描述..."}
+                      {getPromptByLanguage(scene.videoPromptZh, scene.videoPrompt) || "Nhấn để thêm mô tả hành động..."}
                     </p>
                     {!isGeneratingAny && <Edit3 className="h-2.5 w-2.5 text-green-500/50 shrink-0 mt-0.5" />}
                   </div>
@@ -1104,30 +1104,30 @@ export function SplitSceneCard({
             >
               <p className="text-[10px] truncate flex items-center gap-1.5">
                 <span className="shrink-0 inline-flex items-center gap-0.5 text-violet-600 dark:text-violet-400 font-medium">
-                  <Edit3 className="h-2.5 w-2.5" /> 剧本:
+                  <Edit3 className="h-2.5 w-2.5" /> Kịch bản:
                 </span>
-                <span className="text-muted-foreground">{scene.actionSummary || '未设置'}</span>
+                <span className="text-muted-foreground">{scene.actionSummary || 'Chưa đặt'}</span>
               </p>
               <p className="text-[10px] truncate flex items-center gap-1.5">
                 <span className="shrink-0 inline-flex items-center gap-0.5 text-blue-600 dark:text-blue-400 font-medium">
-                  <ImageIcon className="h-2.5 w-2.5" /> 首帧:
+                  <ImageIcon className="h-2.5 w-2.5" /> Khung đầu:
                 </span>
-                <span className="text-muted-foreground">{getPromptByLanguage(scene.imagePromptZh, scene.imagePrompt) || '未设置'}</span>
+                <span className="text-muted-foreground">{getPromptByLanguage(scene.imagePromptZh, scene.imagePrompt) || 'Chưa đặt'}</span>
               </p>
               {(scene.needsEndFrame || getPromptByLanguage(scene.endFramePromptZh, scene.endFramePrompt)) && (
                 <p className="text-[10px] truncate flex items-center gap-1.5">
                   <span className="shrink-0 inline-flex items-center gap-0.5 text-orange-600 dark:text-orange-400 font-medium">
-                    ◉ 尾帧:
+                    ◉ Khung cuối:
                   </span>
-                  <span className="text-orange-600/70 dark:text-orange-400/70">{getPromptByLanguage(scene.endFramePromptZh, scene.endFramePrompt) || '未设置'}</span>
+                  <span className="text-orange-600/70 dark:text-orange-400/70">{getPromptByLanguage(scene.endFramePromptZh, scene.endFramePrompt) || 'Chưa đặt'}</span>
                 </p>
               )}
               <p className="text-[10px] truncate flex items-center gap-1.5">
                 <span className="shrink-0 inline-flex items-center gap-0.5 text-green-600 dark:text-green-400 font-medium">
-                  <Play className="h-2.5 w-2.5" /> 视频:
+                  <Play className="h-2.5 w-2.5" /> Video:
                 </span>
                 <span className="text-muted-foreground">
-                  {getPromptByLanguage(scene.videoPromptZh, scene.videoPrompt) || '未设置'}
+                  {getPromptByLanguage(scene.videoPromptZh, scene.videoPrompt) || 'Chưa đặt'}
                 {scene.cameraMovement && scene.cameraMovement !== 'none' && (
                     <span className="ml-1 text-green-500/50">[{CAMERA_MOVEMENT_PRESETS.find(p => p.id === scene.cameraMovement)?.label || scene.cameraMovement}]</span>
                   )}
@@ -1141,12 +1141,12 @@ export function SplitSceneCard({
           )}
         </div>
 
-        {/* 秒数 + 镜头 + 情绪氛围（始终显示，不随提示词折叠） */}
+        {/* 秒数 + 镜头 + 情绪氛围（始终显示，不随Prompt折叠） */}
         <div className="space-y-1.5">
           <div className="flex flex-wrap items-center gap-2">
             {/* 秒数 */}
             <div className="flex items-center gap-1">
-              <span className="text-[9px] text-muted-foreground">秒数:</span>
+              <span className="text-[9px] text-muted-foreground">Giây:</span>
               <DurationSelector
                 value={scene.duration || 5}
                 onChange={(v) => onUpdateDuration(scene.id, v)}
@@ -1240,7 +1240,7 @@ export function SplitSceneCard({
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="none" className="text-[11px]">无技法</SelectItem>
+                  <SelectItem value="none" className="text-[11px]">Không có kỹ thuật</SelectItem>
                   {PHOTOGRAPHY_TECHNIQUE_PRESETS.map((p) => (
                     <SelectItem key={p.id} value={p.id} className="text-[11px]">
                       {p.emoji} {p.label}
@@ -1253,7 +1253,7 @@ export function SplitSceneCard({
           {/* 机位描述（AI 生成的自由文本） */}
           {scene.cameraPosition && (
             <div className="flex items-center gap-1.5">
-              <span className="text-[9px] text-muted-foreground shrink-0">机位:</span>
+              <span className="text-[9px] text-muted-foreground shrink-0">Góc máy:</span>
               <span className="text-[10px] text-muted-foreground/80 truncate">{scene.cameraPosition}</span>
             </div>
           )}
@@ -1267,10 +1267,10 @@ export function SplitSceneCard({
           </div>
         </div>
 
-        {/* 第四排：音频控制（环境音/音效/对白） */}
+        {/* 第四排：音频控制（Âm nền/Hiệu ứng/Lời thoại） */}
         <div className="space-y-1">
-          <Label className="text-[10px] text-muted-foreground mb-0.5 block">音频控制</Label>
-          {/* 环境音 */}
+          <Label className="text-[10px] text-muted-foreground mb-0.5 block">Điều khiển âm thanh</Label>
+          {/* Âm nền */}
           <div className="flex items-center gap-1.5">
             <button
               onClick={() => onUpdateField?.(scene.id, 'audioAmbientEnabled', scene.audioAmbientEnabled === false)}
@@ -1282,18 +1282,18 @@ export function SplitSceneCard({
                   : "bg-muted text-muted-foreground line-through"
               )}
             >
-              环境音
+              Âm nền
             </button>
             <input
               type="text"
               value={scene.ambientSound || ''}
               onChange={(e) => onUpdateAmbientSound(scene.id, e.target.value)}
-              placeholder="风声、雨声、鸟鸣..."
+              placeholder="Tiếng gió, mưa, chim hót..."
               disabled={isGeneratingAny || scene.audioAmbientEnabled === false}
               className="flex-1 h-6 px-1.5 text-[10px] rounded border bg-transparent disabled:opacity-40 placeholder:text-muted-foreground/30"
             />
           </div>
-          {/* 音效 */}
+          {/* Hiệu ứng */}
           <div className="flex items-center gap-1.5">
             <button
               onClick={() => onUpdateField?.(scene.id, 'audioSfxEnabled', scene.audioSfxEnabled === false)}
@@ -1305,18 +1305,18 @@ export function SplitSceneCard({
                   : "bg-muted text-muted-foreground line-through"
               )}
             >
-              音效
+              Hiệu ứng
             </button>
             <input
               type="text"
               value={scene.soundEffectText || ''}
               onChange={(e) => onUpdateField?.(scene.id, 'soundEffectText', e.target.value)}
-              placeholder="脚步声、门关声..."
+              placeholder="Tiếng bước chân, tiếng đóng cửa..."
               disabled={isGeneratingAny || scene.audioSfxEnabled === false}
               className="flex-1 h-6 px-1.5 text-[10px] rounded border bg-transparent disabled:opacity-40 placeholder:text-muted-foreground/30"
             />
           </div>
-          {/* 对白 */}
+          {/* Lời thoại */}
           <div className="flex items-center gap-1.5">
             <button
               onClick={() => onUpdateField?.(scene.id, 'audioDialogueEnabled', scene.audioDialogueEnabled === false)}
@@ -1328,18 +1328,18 @@ export function SplitSceneCard({
                   : "bg-muted text-muted-foreground line-through"
               )}
             >
-              对白
+              Lời thoại
             </button>
             <input
               type="text"
               value={scene.dialogue || ''}
               onChange={(e) => onUpdateField?.(scene.id, 'dialogue', e.target.value)}
-              placeholder="角色台词..."
+              placeholder="Lời thoại nhân vật..."
               disabled={isGeneratingAny || scene.audioDialogueEnabled === false}
               className="flex-1 h-6 px-1.5 text-[10px] rounded border bg-transparent disabled:opacity-40 placeholder:text-muted-foreground/30"
             />
           </div>
-          {/* 背景音乐 */}
+          {/* 背景Nhạc nền */}
           <div className="flex items-center gap-1.5">
             <button
               onClick={() => onUpdateField?.(scene.id, 'audioBgmEnabled', !(scene.audioBgmEnabled === true))}
@@ -1351,13 +1351,13 @@ export function SplitSceneCard({
                   : "bg-muted text-muted-foreground line-through"
               )}
             >
-              音乐
+              Nhạc nền
             </button>
             <input
               type="text"
               value={scene.backgroundMusic || ''}
               onChange={(e) => onUpdateField?.(scene.id, 'backgroundMusic', e.target.value)}
-              placeholder="默认禁止背景音乐，如需要请开启并填写..."
+              placeholder="Mặc định tắt nhạc nền, bật và nhập nếu cần..."
               disabled={isGeneratingAny || scene.audioBgmEnabled !== true}
               className="flex-1 h-6 px-1.5 text-[10px] rounded border bg-transparent disabled:opacity-40 placeholder:text-muted-foreground/30"
             />

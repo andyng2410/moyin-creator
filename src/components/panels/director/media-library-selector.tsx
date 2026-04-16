@@ -5,7 +5,7 @@
 
 /**
  * 素材库选择器组件 (Media Library Selector)
- * 从素材库中选择图片应用到分镜首帧/尾帧
+ * Từ tư liệu中选择图片应用到分镜首帧/尾帧
  */
 
 import React, { useState, useMemo } from "react";
@@ -86,23 +86,23 @@ export function MediaLibrarySelector({
         >
           <ImageIcon className="h-3 w-3" />
           <span className="max-w-[80px] truncate">
-            {isEndFrame ? '从素材库' : '从素材库'}
+            {isEndFrame ? 'Từ tư liệu' : 'Từ tư liệu'}
           </span>
         </button>
       </PopoverTrigger>
       <PopoverContent className="w-[480px] p-3" align="start">
         <div className="flex items-center justify-between mb-3">
           <p className="text-sm font-medium">
-            选择图片应用到{isEndFrame ? '尾帧' : '首帧'}
+            Chọn ảnh áp dụng cho {isEndFrame ? 'khung cuối' : 'khung đầu'}
           </p>
           <span className="text-xs text-muted-foreground">
-            共 {filteredImages.length} 张图片
+            Tổng {filteredImages.length} ảnh
           </span>
         </div>
         
         {imageFiles.length === 0 ? (
           <p className="text-sm text-muted-foreground text-center py-8">
-            素材库中没有图片，请先添加图片或生成四宫格
+            Thư viện tư liệu chưa có ảnh, vui lòng thêm ảnh hoặc tạo lưới 4 ô
           </p>
         ) : (
           <div className="space-y-3">
@@ -118,7 +118,7 @@ export function MediaLibrarySelector({
                       : "bg-muted hover:bg-muted/80 text-muted-foreground"
                   )}
                 >
-                  全部
+                  Tất cả
                 </button>
                 {visibleFolders.map((folder) => (
                   <button
@@ -142,7 +142,7 @@ export function MediaLibrarySelector({
             <div className="max-h-[300px] overflow-y-auto">
               {filteredImages.length === 0 ? (
                 <p className="text-sm text-muted-foreground text-center py-4">
-                  该文件夹中没有图片
+                  Thư mục này chưa có ảnh
                 </p>
               ) : (
                 <div className="grid grid-cols-4 gap-2">

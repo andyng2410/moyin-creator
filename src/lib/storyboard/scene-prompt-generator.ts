@@ -468,7 +468,7 @@ Return a RAW JSON array (no markdown code block). BILINGUAL output required.
       }
       
       if (response.status === 401 || response.status === 403) {
-        throw new Error('API Key 无效或已过期');
+        throw new Error('API Key không hợp lệ hoặc đã hết hạn');
       }
       throw new Error(errorMessage);
     }
@@ -487,11 +487,11 @@ Return a RAW JSON array (no markdown code block). BILINGUAL output required.
       parsed = JSON.parse(cleanContent);
     } catch (e) {
       console.error('[ScenePromptGenerator] Failed to parse JSON:', content);
-      throw new Error('AI 响应不是有效的 JSON 格式');
+      throw new Error('Phản hồi AI không phải định dạng JSON hợp lệ');
     }
 
     if (!Array.isArray(parsed)) {
-      throw new Error('AI 响应不是数组格式');
+      throw new Error('Phản hồi AI không phải định dạng mảng');
     }
 
     // Validate and map to three-tier prompt result

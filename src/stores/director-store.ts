@@ -1624,7 +1624,7 @@ export const useDirectorStore = create<DirectorStore>()(
 
     const blankScene: SplitScene = {
       id: newId,
-      sceneName: `空白分镜 ${newId + 1}`,
+      sceneName: `Phân cảnh trống ${newId + 1}`,
       sceneLocation: '',
       imageDataUrl: '',
       imageHttpUrl: null,

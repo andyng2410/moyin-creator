@@ -145,7 +145,7 @@ export function ShotGroupPrompt({
             </TooltipTrigger>
             <TooltipContent>
               <div className="text-xs space-y-1">
-                <p className="font-medium">图片引用 ({result.refs.images.length}/{SEEDANCE_LIMITS.maxImages})</p>
+                <p className="font-medium">Ảnh tham chiếu ({result.refs.images.length}/{SEEDANCE_LIMITS.maxImages})</p>
                 {result.refs.images.map((r) => (
                   <p key={r.id} className="text-muted-foreground">
                     {r.tag}: {r.fileName}
@@ -176,8 +176,8 @@ export function ShotGroupPrompt({
             </TooltipTrigger>
             <TooltipContent>
               <p>
-                视频引用 ({result.refs.videos.length}/{SEEDANCE_LIMITS.maxVideos})
-                {result.refs.videos.length === 0 && " — 可在镜头卡片中上传"}
+                Video tham chiếu ({result.refs.videos.length}/{SEEDANCE_LIMITS.maxVideos})
+                {result.refs.videos.length === 0 && " — Có thể tải lên trong thẻ cảnh quay"}
               </p>
             </TooltipContent>
           </Tooltip>
@@ -203,8 +203,8 @@ export function ShotGroupPrompt({
             </TooltipTrigger>
             <TooltipContent>
               <p>
-                音频引用 ({result.refs.audios.length}/{SEEDANCE_LIMITS.maxAudios})
-                {result.refs.audios.length === 0 && " — 可在镜头卡片中上传"}
+                Âm thanh tham chiếu ({result.refs.audios.length}/{SEEDANCE_LIMITS.maxAudios})
+                {result.refs.audios.length === 0 && " — Có thể tải lên trong thẻ cảnh quay"}
               </p>
             </TooltipContent>
           </Tooltip>
@@ -214,7 +214,7 @@ export function ShotGroupPrompt({
         {result.dialogueSegments.length > 0 && (
           <div className="flex items-center gap-1 px-1.5 py-0.5 rounded bg-amber-500/10 text-amber-600 dark:text-amber-400">
             <MessageCircle className="h-3 w-3" />
-            <span>{result.dialogueSegments.length} 段对白</span>
+            <span>{result.dialogueSegments.length} đoạn thoại</span>
           </div>
         )}
 
@@ -222,7 +222,7 @@ export function ShotGroupPrompt({
         {result.refs.overLimit && (
           <div className="flex items-center gap-1 text-red-500">
             <AlertCircle className="h-3 w-3" />
-            <span>素材超限</span>
+            <span>Vượt giới hạn tài nguyên</span>
           </div>
         )}
 
@@ -254,7 +254,7 @@ export function ShotGroupPrompt({
                 "text-xs font-mono resize-y",
                 isOverLimit && "border-red-500"
               )}
-              placeholder="组级提示词..."
+              placeholder="Prompt cấp nhóm..."
             />
             <div className="flex items-center gap-1.5">
               <Button
@@ -263,7 +263,7 @@ export function ShotGroupPrompt({
                 onClick={handleSave}
               >
                 <Check className="h-3 w-3 mr-1" />
-                保存
+                Lưu
               </Button>
               <Button
                 variant="outline"
@@ -271,7 +271,7 @@ export function ShotGroupPrompt({
                 className="h-6 px-2 text-xs"
                 onClick={() => setIsEditing(false)}
               >
-                取消
+                Hủy
               </Button>
               <Button
                 variant="ghost"
@@ -280,7 +280,7 @@ export function ShotGroupPrompt({
                 onClick={handleReset}
               >
                 <RotateCcw className="h-3 w-3 mr-1" />
-                重置为自动
+                Đặt lại tự động
               </Button>
             </div>
           </div>
@@ -326,7 +326,7 @@ export function ShotGroupPrompt({
  * 在 prompt 文本中高亮 @Image/@Video/@Audio 标签
  */
 function highlightRefs(text: string): React.ReactNode {
-  if (!text) return <span className="text-muted-foreground">点击编辑组级提示词...</span>;
+  if (!text) return <span className="text-muted-foreground">Nhấp để chỉnh sửa prompt cấp nhóm...</span>;
 
   // 匹配 @Image1, @Video2, @Audio3 等
   const regex = /(@(?:Image|Video|Audio)\d+)/g;

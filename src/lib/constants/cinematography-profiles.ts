@@ -2,10 +2,10 @@
 // Licensed under AGPL-3.0-or-later. See LICENSE for details.
 // Commercial licensing available. See COMMERCIAL_LICENSE.md.
 /**
- * Cinematography Profile Presets — 摄影风格档案预设
+ * Cinematography Profile Presets — Bộ cài đặt phong cách quay phim
  *
- * 在「画风选择」和「逐镜拍摄控制字段」之间，提供项目级摄影语言基准。
- * AI 校准时以此为默认倾向，prompt builder 在逐镜字段为空时回退到此处。
+ * Giữa「lựa chọn phong cách」và「trường điều khiển quay từng cảnh」, cung cấp tiêu chuẩn ngôn ngữ quay phim cấp dự án.
+ * Khi AI hiệu chỉnh sẽ sử dụng đây làm xu hướng mặc định, prompt builder sẽ quay về đây khi trường từng cảnh trống.
  */
 
 import type {
@@ -24,86 +24,86 @@ import type {
   PhotographyTechnique,
 } from '@/types/script';
 
-// ==================== 类型定义 ====================
+// ==================== Định nghĩa kiểu ====================
 
 export type CinematographyCategory =
-  | 'cinematic'     // 电影类
-  | 'documentary'   // 纪实类
-  | 'stylized'      // 风格化
-  | 'genre'         // 类型片
-  | 'era';          // 时代风格
+  | 'cinematic'     // Phim điện ảnh
+  | 'documentary'   // Phim tài liệu
+  | 'stylized'      // Phong cách hóa
+  | 'genre'         // Phim thể loại
+  | 'era';          // Phong cách thời đại
 
 export interface CinematographyProfile {
   id: string;
-  name: string;          // 中文名
-  nameEn: string;        // 英文名
+  name: string;          // Tên tiếng Việt
+  nameEn: string;        // Tên tiếng Anh
   category: CinematographyCategory;
-  description: string;   // 中文描述（1-2句）
-  emoji: string;         // 标识 emoji
+  description: string;   // Mô tả (1-2 câu)
+  emoji: string;         // Emoji nhận diện
 
-  // ---- 灯光默认 (Gaffer) ----
+  // ---- Ánh sáng mặc định (Gaffer) ----
   defaultLighting: {
     style: LightingStyle;
     direction: LightingDirection;
     colorTemperature: ColorTemperature;
   };
 
-  // ---- 焦点默认 (Focus Puller) ----
+  // ---- Tiêu điểm mặc định (Focus Puller) ----
   defaultFocus: {
     depthOfField: DepthOfField;
     focusTransition: FocusTransition;
   };
 
-  // ---- 器材默认 (Camera Rig) ----
+  // ---- Thiết bị mặc định (Camera Rig) ----
   defaultRig: {
     cameraRig: CameraRig;
     movementSpeed: MovementSpeed;
   };
 
-  // ---- 氛围默认 (On-set SFX) ----
+  // ---- Bầu không khí mặc định (On-set SFX) ----
   defaultAtmosphere: {
     effects: AtmosphericEffect[];
     intensity: EffectIntensity;
   };
 
-  // ---- 速度默认 (Speed Ramping) ----
+  // ---- Tốc độ mặc định (Speed Ramping) ----
   defaultSpeed: {
     playbackSpeed: PlaybackSpeed;
   };
 
-  // ---- 拍摄角度 / 焦距 / 技法默认（可选） ----
+  // ---- Góc quay / Tiêu cự / Kỹ thuật mặc định (tùy chọn) ----
   defaultAngle?: CameraAngle;
   defaultFocalLength?: FocalLength;
   defaultTechnique?: PhotographyTechnique;
 
-  // ---- AI 指导 ----
-  /** 给 AI 的中文摄影指导说明（2-3句话，注入 system prompt） */
+  // ---- Hướng dẫn AI ----
+  /** Hướng dẫn quay phim cho AI (2-3 câu, đưa vào system prompt) */
   promptGuidance: string;
-  /** 参考影片列表（帮助 AI 理解目标风格） */
+  /** Danh sách phim tham khảo (giúp AI hiểu phong cách mục tiêu) */
   referenceFilms: string[];
 }
 
-// ==================== 分类信息 ====================
+// ==================== Thông tin phân loại ====================
 
 export const CINEMATOGRAPHY_CATEGORIES: { id: CinematographyCategory; name: string; emoji: string }[] = [
-  { id: 'cinematic', name: '电影类', emoji: '🎬' },
-  { id: 'documentary', name: '纪实类', emoji: '📹' },
-  { id: 'stylized', name: '风格化', emoji: '🎨' },
-  { id: 'genre', name: '类型片', emoji: '🎭' },
-  { id: 'era', name: '时代风格', emoji: '📅' },
+  { id: 'cinematic', name: 'Phim điện ảnh', emoji: '🎬' },
+  { id: 'documentary', name: 'Phim tài liệu', emoji: '📹' },
+  { id: 'stylized', name: 'Phong cách hóa', emoji: '🎨' },
+  { id: 'genre', name: 'Phim thể loại', emoji: '🎭' },
+  { id: 'era', name: 'Phong cách thời đại', emoji: '📅' },
 ];
 
-// ==================== 预设列表 ====================
+// ==================== Danh sách cài đặt sẵn ====================
 
-// ---------- 电影类 (cinematic) ----------
+// ---------- Phim điện ảnh (cinematic) ----------
 
 const CINEMATIC_PROFILES: CinematographyProfile[] = [
   {
     id: 'classic-cinematic',
-    name: '经典电影',
+    name: 'Điện ảnh kinh điển',
     nameEn: 'Classic Cinematic',
     category: 'cinematic',
-    description: '标准院线电影质感，三点布光，自然色温，匀速轨道运镜，画面端正大气',
+    description: 'Chất lượng phim chiếu rạp chuẩn, ánh sáng ba điểm, nhiệt độ màu tự nhiên, di chuyển đường ray đều, hình ảnh trang trọng và hoành tráng',
     emoji: '🎞️',
     defaultLighting: { style: 'natural', direction: 'three-point', colorTemperature: 'warm' },
     defaultFocus: { depthOfField: 'medium', focusTransition: 'rack-between' },
@@ -112,15 +112,15 @@ const CINEMATIC_PROFILES: CinematographyProfile[] = [
     defaultSpeed: { playbackSpeed: 'normal' },
     defaultAngle: 'eye-level',
     defaultFocalLength: '50mm',
-    promptGuidance: '遵循经典电影语法，三点布光为基础，暖色调营造温暖质感。轨道推拉保持画面稳定流畅，景深随叙事功能调整——对话用浅景深聚焦情绪，全景用深景深交代环境。',
-    referenceFilms: ['肖申克的救赎', '阿甘正传', '教父'],
+    promptGuidance: 'Tuân theo ngữ pháp điện ảnh kinh điển, ánh sáng ba điểm làm nền tảng, tông màu ấm tạo chất cảm ấm áp. Đường ray đẩy kéo giữ hình ảnh ổn định mượt mà, độ sâu trường ảnh điều chỉnh theo chức năng tự sự — đối thoại dùng độ sâu nông tập trung cảm xúc, toàn cảnh dùng độ sâu sâu giới thiệu bối cảnh.',
+    referenceFilms: ['The Shawshank Redemption', 'Forrest Gump', 'The Godfather'],
   },
   {
     id: 'film-noir',
-    name: '黑色电影',
+    name: 'Phim đen',
     nameEn: 'Film Noir',
     category: 'cinematic',
-    description: '低调布光、强烈明暗对比、侧光为主、冷色调、雾气弥漫、手持呼吸感',
+    description: 'Ánh sáng low-key, tương phản sáng tối mạnh, chủ yếu ánh sáng bên, tông lạnh, sương mù lan tỏa, cảm giác thở cầm tay',
     emoji: '🖤',
     defaultLighting: { style: 'low-key', direction: 'side', colorTemperature: 'cool' },
     defaultFocus: { depthOfField: 'shallow', focusTransition: 'rack-to-fg' },
@@ -129,15 +129,15 @@ const CINEMATIC_PROFILES: CinematographyProfile[] = [
     defaultSpeed: { playbackSpeed: 'normal' },
     defaultAngle: 'low-angle',
     defaultFocalLength: '35mm',
-    promptGuidance: '黑色电影的灵魂是光影——大面积阴影中只留一束侧光照亮人物。冷色调配合雾气营造不安感，手持微晃增加真实的紧张感。尽量让人物半脸在黑暗中，暗示角色的双面性。',
-    referenceFilms: ['银翼杀手', '唐人街', '第三人', '罪恶之城'],
+    promptGuidance: 'Linh hồn của phim đen là ánh sáng và bóng tối — trong vùng bóng tối lớn chỉ để lại một tia sáng bên chiếu sáng nhân vật. Tông lạnh kết hợp sương mù tạo cảm giác bất an, cầm tay rung nhẹ tăng sự căng thẳng chân thực. Cố gắng để nửa mặt nhân vật trong bóng tối, ám chỉ tính hai mặt của nhân vật.',
+    referenceFilms: ['Blade Runner', 'Chinatown', 'The Third Man', 'Sin City'],
   },
   {
     id: 'epic-blockbuster',
-    name: '史诗大片',
+    name: 'Phim sử thi',
     nameEn: 'Epic Blockbuster',
     category: 'cinematic',
-    description: '高调明亮、正面光、深景深、摇臂大幅运动、镜头光晕、宏大感',
+    description: 'High-key sáng, ánh sáng chính diện, độ sâu trường ảnh sâu, cần cẩu di chuyển lớn, lóe ống kính, cảm giác hoành tráng',
     emoji: '⚔️',
     defaultLighting: { style: 'high-key', direction: 'front', colorTemperature: 'neutral' },
     defaultFocus: { depthOfField: 'deep', focusTransition: 'none' },
@@ -146,15 +146,15 @@ const CINEMATIC_PROFILES: CinematographyProfile[] = [
     defaultSpeed: { playbackSpeed: 'normal' },
     defaultAngle: 'eye-level',
     defaultFocalLength: '24mm',
-    promptGuidance: '史诗感来自空间纵深——用深景深和摇臂大幅升降展示宏大场面。正面高调光让画面明亮壮观，适当加入镜头光晕和尘埃粒子增加电影感。战斗场面可切换肩扛手持增加冲击力。',
-    referenceFilms: ['指环王', '角斗士', '勇敢的心', '天国王朝'],
+    promptGuidance: 'Cảm giác sử thi đến từ chiều sâu không gian — dùng độ sâu trường ảnh sâu và cần cẩu nâng hạ lớn để thể hiện cảnh hoành tráng. Ánh sáng high-key chính diện làm hình ảnh sáng và hùng vĩ, thêm lóe ống kính và hạt bụi tăng cảm giác điện ảnh. Cảnh chiến đấu có thể chuyển sang vác vai cầm tay tăng sức tác động.',
+    referenceFilms: ['The Lord of the Rings', 'Gladiator', 'Braveheart', 'Kingdom of Heaven'],
   },
   {
     id: 'intimate-drama',
-    name: '亲密剧情',
+    name: 'Kịch tính thân mật',
     nameEn: 'Intimate Drama',
     category: 'cinematic',
-    description: '自然侧光、暖色温、浅景深、三脚架静态、安静内敛、聚焦人物情绪',
+    description: 'Ánh sáng bên tự nhiên, nhiệt độ màu ấm, độ sâu nông, chân máy tĩnh, yên tĩnh nội tâm, tập trung cảm xúc nhân vật',
     emoji: '🫂',
     defaultLighting: { style: 'natural', direction: 'side', colorTemperature: 'warm' },
     defaultFocus: { depthOfField: 'shallow', focusTransition: 'rack-between' },
@@ -163,15 +163,15 @@ const CINEMATIC_PROFILES: CinematographyProfile[] = [
     defaultSpeed: { playbackSpeed: 'normal' },
     defaultAngle: 'eye-level',
     defaultFocalLength: '85mm',
-    promptGuidance: '亲密剧情用静态镜头和浅景深把观众拉入角色的内心世界。自然侧光创造面部的明暗层次，暖色温传递情感温度。摄影机几乎不动，让演员的微表情成为画面的全部焦点。',
-    referenceFilms: ['海边的曼彻斯特', '婚姻故事', '花样年华'],
+    promptGuidance: 'Kịch tính thân mật dùng ống kính tĩnh và độ sâu nông kéo khán giả vào thế giới nội tâm nhân vật. Ánh sáng bên tự nhiên tạo tầng lớp sáng tối trên gương mặt, nhiệt độ màu ấm truyền tải cảm xúc. Máy quay gần như không di chuyển, để biểu cảm vi tế của diễn viên trở thành toàn bộ tiêu điểm.',
+    referenceFilms: ['Manchester by the Sea', 'Marriage Story', 'In the Mood for Love'],
   },
   {
     id: 'romantic-film',
-    name: '浪漫爱情',
+    name: 'Phim tình cảm lãng mạn',
     nameEn: 'Romantic Film',
     category: 'cinematic',
-    description: '逆光黄金时段、极浅景深、斯坦尼康丝滑跟随、丁达尔光效、梦幻柔和',
+    description: 'Ngược sáng giờ vàng, độ sâu cực nông, Steadicam theo dõi mượt mà, hiệu ứng tia sáng Tyndall, mộng mơ và nhẹ nhàng',
     emoji: '💕',
     defaultLighting: { style: 'natural', direction: 'back', colorTemperature: 'golden-hour' },
     defaultFocus: { depthOfField: 'ultra-shallow', focusTransition: 'pull-focus' },
@@ -181,20 +181,20 @@ const CINEMATIC_PROFILES: CinematographyProfile[] = [
     defaultAngle: 'eye-level',
     defaultFocalLength: '85mm',
     defaultTechnique: 'bokeh',
-    promptGuidance: '浪漫感的核心是逆光——黄金时段的暖色逆光让人物轮廓发光。极浅景深把世界虚化成光斑，斯坦尼康轻柔跟随人物，仿佛在梦中行走。偶尔飘落的花瓣或光束为画面增添诗意。',
-    referenceFilms: ['恋恋笔记本', '爱乐之城', '傲慢与偏见', '情书'],
+    promptGuidance: 'Cốt lõi của cảm giác lãng mạn là ngược sáng — ngược sáng tông ấm giờ vàng làm viền nhân vật phát sáng. Độ sâu cực nông xóa mờ thế giới thành đốm sáng, Steadicam nhẹ nhàng theo nhân vật, như đang bước đi trong giấc mơ. Cánh hoa rơi hay tia sáng thỉnh thoảng thêm chất thơ cho hình ảnh.',
+    referenceFilms: ['The Notebook', 'La La Land', 'Pride and Prejudice', 'Love Letter'],
   },
 ];
 
-// ---------- 纪实类 (documentary) ----------
+// ---------- Phim tài liệu (documentary) ----------
 
 const DOCUMENTARY_PROFILES: CinematographyProfile[] = [
   {
     id: 'documentary-raw',
-    name: '纪实手持',
+    name: 'Tài liệu cầm tay',
     nameEn: 'Raw Documentary',
     category: 'documentary',
-    description: '手持呼吸感、自然光、中等景深、正面光、无修饰、真实粗粝',
+    description: 'Cảm giác thở cầm tay, ánh sáng tự nhiên, độ sâu trung bình, ánh sáng chính diện, không chỉnh sửa, chân thực thô ráp',
     emoji: '📹',
     defaultLighting: { style: 'natural', direction: 'front', colorTemperature: 'neutral' },
     defaultFocus: { depthOfField: 'medium', focusTransition: 'pull-focus' },
@@ -203,15 +203,15 @@ const DOCUMENTARY_PROFILES: CinematographyProfile[] = [
     defaultSpeed: { playbackSpeed: 'normal' },
     defaultAngle: 'eye-level',
     defaultFocalLength: '35mm',
-    promptGuidance: '纪实风格追求「在场感」——手持摄影的轻微晃动让观众感觉身临其境。完全使用自然光，不做任何人工修饰。跟焦跟随人物运动，允许偶尔的焦点偏移，这种不完美反而增加真实感。',
-    referenceFilms: ['人生果实', '海豚湾', '徒手攀岩'],
+    promptGuidance: 'Phong cách tài liệu theo đuổi「cảm giác hiện diện」— rung nhẹ của quay cầm tay khiến khán giả cảm thấy như đang ở đó. Sử dụng hoàn toàn ánh sáng tự nhiên, không chỉnh sửa nhân tạo. Lấy nét theo chuyển động nhân vật, cho phép lệch nét thỉnh thoảng, sự không hoàn hảo này ngược lại tăng thêm cảm giác chân thực.',
+    referenceFilms: ['Life is Fruity', 'The Cove', 'Free Solo'],
   },
   {
     id: 'news-report',
-    name: '新闻纪实',
+    name: 'Tin tức thời sự',
     nameEn: 'News Report',
     category: 'documentary',
-    description: '肩扛、高调光、深景深、中性色温、信息优先、画面清晰锐利',
+    description: 'Vác vai, ánh sáng high-key, độ sâu sâu, nhiệt độ màu trung tính, ưu tiên thông tin, hình ảnh sắc nét',
     emoji: '📡',
     defaultLighting: { style: 'high-key', direction: 'front', colorTemperature: 'neutral' },
     defaultFocus: { depthOfField: 'deep', focusTransition: 'none' },
@@ -220,20 +220,20 @@ const DOCUMENTARY_PROFILES: CinematographyProfile[] = [
     defaultSpeed: { playbackSpeed: 'normal' },
     defaultAngle: 'eye-level',
     defaultFocalLength: '24mm',
-    promptGuidance: '新闻纪实以信息传达为第一优先——深景深确保画面所有元素清晰可辨，高调光消除阴影让细节完整呈现。肩扛摄影保持灵活跟踪，但比手持更稳定。画面构图讲究信息层次，重要人物或事件始终在视觉焦点。',
-    referenceFilms: ['聚焦', '总统班底', '华盛顿邮报'],
+    promptGuidance: 'Tin tức thời sự lấy truyền tải thông tin làm ưu tiên hàng đầu — độ sâu sâu đảm bảo mọi yếu tố trong hình ảnh đều rõ ràng, ánh sáng high-key loại bỏ bóng để chi tiết hiện rõ đầy đủ. Quay vác vai giữ theo dõi linh hoạt nhưng ổn định hơn cầm tay. Bố cục hình ảnh chú trọng tầng lớp thông tin, nhân vật hoặc sự kiện quan trọng luôn ở tiêu điểm thị giác.',
+    referenceFilms: ['Spotlight', 'All the President\'s Men', 'The Post'],
   },
 ];
 
-// ---------- 风格化 (stylized) ----------
+// ---------- Phong cách hóa (stylized) ----------
 
 const STYLIZED_PROFILES: CinematographyProfile[] = [
   {
     id: 'cyberpunk-neon',
-    name: '赛博朋克',
+    name: 'Cyberpunk',
     nameEn: 'Cyberpunk Neon',
     category: 'stylized',
-    description: '霓虹灯光、轮廓光、混合色温、浅景深、稳定器滑动、薄霾弥漫',
+    description: 'Ánh sáng neon, ánh sáng viền, nhiệt độ màu hỗn hợp, độ sâu nông, ổn định trượt, sương mù lan tỏa',
     emoji: '🌃',
     defaultLighting: { style: 'neon', direction: 'rim', colorTemperature: 'mixed' },
     defaultFocus: { depthOfField: 'shallow', focusTransition: 'rack-to-bg' },
@@ -243,15 +243,15 @@ const STYLIZED_PROFILES: CinematographyProfile[] = [
     defaultAngle: 'low-angle',
     defaultFocalLength: '35mm',
     defaultTechnique: 'reflection',
-    promptGuidance: '赛博朋克的视觉语言是「冷暖冲突」——霓虹紫红与冰蓝同框，轮廓光把人物从暗色背景中剥离。浅景深让霓虹灯化为迷幻光斑，薄霾为光线增加体积感。镜头慢速滑动穿过雨夜街道，营造未来都市的疏离感。',
-    referenceFilms: ['银翼杀手2049', '攻壳机动队', '黑客帝国', '创战纪'],
+    promptGuidance: 'Ngôn ngữ thị giác của Cyberpunk là「xung đột lạnh ấm」— neon tím đỏ và xanh băng cùng khung hình, ánh sáng viền tách nhân vật khỏi nền tối. Độ sâu nông biến neon thành đốm sáng ảo giác, sương mù thêm cảm giác khối cho ánh sáng. Ống kính trượt chậm qua đường phố đêm mưa, tạo cảm giác xa cách của đô thị tương lai.',
+    referenceFilms: ['Blade Runner 2049', 'Ghost in the Shell', 'The Matrix', 'TRON: Legacy'],
   },
   {
     id: 'wuxia-classic',
-    name: '古典武侠',
+    name: 'Võ hiệp cổ điển',
     nameEn: 'Classic Wuxia',
     category: 'stylized',
-    description: '自然侧光、暖色温、中景深、摇臂升降、薄雾飘渺、古韵悠然',
+    description: 'Ánh sáng bên tự nhiên, nhiệt độ màu ấm, độ sâu trung bình, cần cẩu nâng hạ, sương mờ phiêu diêu, cổ phong thanh tao',
     emoji: '🗡️',
     defaultLighting: { style: 'natural', direction: 'side', colorTemperature: 'warm' },
     defaultFocus: { depthOfField: 'medium', focusTransition: 'rack-between' },
@@ -260,15 +260,15 @@ const STYLIZED_PROFILES: CinematographyProfile[] = [
     defaultSpeed: { playbackSpeed: 'normal' },
     defaultAngle: 'eye-level',
     defaultFocalLength: '50mm',
-    promptGuidance: '古典武侠追求「意境」——山间薄雾与落叶营造江湖的苍茫感。摇臂从高处缓缓降至人物，如俯瞰天下的视角。自然侧光模拟透过竹林的斑驳光影，暖色温呼应水墨丹青。打斗场面可加入慢动作，展现武术之美。',
-    referenceFilms: ['卧虎藏龙', '英雄', '刺客聂隐娘', '一代宗师'],
+    promptGuidance: 'Võ hiệp cổ điển theo đuổi「ý cảnh」— sương mù trên núi và lá rơi tạo cảm giác bao la của giang hồ. Cần cẩu từ trên cao từ từ hạ xuống nhân vật, như góc nhìn bao quát thiên hạ. Ánh sáng bên tự nhiên mô phỏng ánh sáng lốm đốm xuyên rừng tre, nhiệt độ màu ấm hòa hợp với tranh thủy mặc. Cảnh chiến đấu có thể thêm chuyển động chậm, thể hiện vẻ đẹp của võ thuật.',
+    referenceFilms: ['Crouching Tiger, Hidden Dragon', 'Hero', 'The Assassin', 'The Grandmaster'],
   },
   {
     id: 'horror-thriller',
-    name: '恐怖惊悚',
+    name: 'Kinh dị rùng rợn',
     nameEn: 'Horror Thriller',
     category: 'stylized',
-    description: '低调布光、底光不安感、冷色调、浅景深、手持颤抖、浓雾遮蔽',
+    description: 'Ánh sáng low-key, ánh sáng từ dưới gây bất an, tông lạnh, độ sâu nông, cầm tay run rẩy, sương mù dày che khuất',
     emoji: '👻',
     defaultLighting: { style: 'low-key', direction: 'bottom', colorTemperature: 'cool' },
     defaultFocus: { depthOfField: 'shallow', focusTransition: 'rack-to-bg' },
@@ -277,15 +277,15 @@ const STYLIZED_PROFILES: CinematographyProfile[] = [
     defaultSpeed: { playbackSpeed: 'normal' },
     defaultAngle: 'low-angle',
     defaultFocalLength: '24mm',
-    promptGuidance: '恐怖片的摄影原则是「隐藏比展示更可怕」——浅景深让背景模糊成未知的威胁，浓雾遮蔽视野制造不安。底光让面部出现不自然的阴影，手持极慢移动制造潜行感。关键时刻突然快速甩镜，打破之前的缓慢节奏。',
-    referenceFilms: ['闪灵', '遗传厄运', '招魂', '午夜凶铃'],
+    promptGuidance: 'Nguyên tắc quay phim kinh dị là「ẩn giấu đáng sợ hơn phơi bày」— độ sâu nông làm hậu cảnh mờ thành mối đe dọa vô hình, sương mù dày che khuất tầm nhìn tạo bất an. Ánh sáng từ dưới tạo bóng bất thường trên gương mặt, cầm tay di chuyển cực chậm tạo cảm giác rình rập. Khoảnh khắc then chốt đột ngột quay nhanh, phá vỡ nhịp chậm trước đó.',
+    referenceFilms: ['The Shining', 'Hereditary', 'The Conjuring', 'Ringu'],
   },
   {
     id: 'music-video',
-    name: 'MV风格',
+    name: 'Phong cách MV',
     nameEn: 'Music Video',
     category: 'stylized',
-    description: '霓虹逆光、混合色温、极浅景深、斯坦尼康环绕、光粒子飞舞、视觉冲击力强',
+    description: 'Neon ngược sáng, nhiệt độ màu hỗn hợp, độ sâu cực nông, Steadicam xoay vòng, hạt sáng bay, tác động thị giác mạnh',
     emoji: '🎵',
     defaultLighting: { style: 'neon', direction: 'back', colorTemperature: 'mixed' },
     defaultFocus: { depthOfField: 'ultra-shallow', focusTransition: 'pull-focus' },
@@ -295,20 +295,20 @@ const STYLIZED_PROFILES: CinematographyProfile[] = [
     defaultAngle: 'low-angle',
     defaultFocalLength: '35mm',
     defaultTechnique: 'bokeh',
-    promptGuidance: 'MV追求极致视觉冲击——每一帧都要像海报。极浅景深把一切虚化成五彩光斑，霓虹逆光勾勒人物轮廓。快速斯坦尼康环绕拍摄，配合频繁的速度变化（慢放与快进交替）。大量使用光粒子和镜头光晕增加梦幻感。',
-    referenceFilms: ['爱乐之城MV段落', 'Beyoncé - Lemonade', 'The Weeknd - Blinding Lights'],
+    promptGuidance: 'MV theo đuổi tác động thị giác cực đại — mỗi khung hình phải như poster. Độ sâu cực nông xóa mờ mọi thứ thành đốm sáng đa sắc, neon ngược sáng vẽ viền nhân vật. Steadicam nhanh quay vòng, kết hợp thay đổi tốc độ thường xuyên (chậm và nhanh xen kẽ). Sử dụng nhiều hạt sáng và lóe ống kính tăng cảm giác mộng mơ.',
+    referenceFilms: ['Đoạn MV trong La La Land', 'Beyoncé - Lemonade', 'The Weeknd - Blinding Lights'],
   },
 ];
 
-// ---------- 类型片 (genre) ----------
+// ---------- Phim thể loại (genre) ----------
 
 const GENRE_PROFILES: CinematographyProfile[] = [
   {
     id: 'family-warmth',
-    name: '家庭温情',
+    name: 'Gia đình ấm áp',
     nameEn: 'Family Warmth',
     category: 'genre',
-    description: '自然正面光、暖色温3200K、中等景深、三脚架稳定、温暖如阳光洒入客厅',
+    description: 'Ánh sáng chính diện tự nhiên, nhiệt độ màu ấm 3200K, độ sâu trung bình, chân máy ổn định, ấm áp như nắng rọi vào phòng khách',
     emoji: '🏠',
     defaultLighting: { style: 'natural', direction: 'front', colorTemperature: 'warm' },
     defaultFocus: { depthOfField: 'medium', focusTransition: 'rack-between' },
@@ -317,15 +317,15 @@ const GENRE_PROFILES: CinematographyProfile[] = [
     defaultSpeed: { playbackSpeed: 'normal' },
     defaultAngle: 'eye-level',
     defaultFocalLength: '50mm',
-    promptGuidance: '家庭剧的摄影要像一个安静的观察者——三脚架稳定不干扰，暖色光如午后阳光洒入窗户。中等景深让家庭成员都在画面中清晰可见，传递「团聚」感。偶尔的丁达尔光线从窗户射入，为平凡的家庭场景增添一丝诗意。',
-    referenceFilms: ['小偷家族', '步履不停', '请回答1988', '都挺好'],
+    promptGuidance: 'Quay phim gia đình phải như một người quan sát yên lặng — chân máy ổn định không can thiệp, ánh sáng ấm như nắng chiều rọi qua cửa sổ. Độ sâu trung bình để các thành viên gia đình đều rõ trong hình, truyền tải cảm giác「đoàn tụ」. Thỉnh thoảng tia sáng Tyndall từ cửa sổ chiếu vào, thêm chút thơ mộng cho cảnh gia đình bình thường.',
+    referenceFilms: ['Shoplifters', 'Still Walking', 'Reply 1988', 'All Is Well'],
   },
   {
     id: 'action-intense',
-    name: '动作激烈',
+    name: 'Hành động mãnh liệt',
     nameEn: 'Intense Action',
     category: 'genre',
-    description: '高调侧光、中性色温、中景深、肩扛快速跟拍、尘土飞扬',
+    description: 'Ánh sáng bên high-key, nhiệt độ màu trung tính, độ sâu trung bình, vác vai bám theo nhanh, bụi bay mù mịt',
     emoji: '💥',
     defaultLighting: { style: 'high-key', direction: 'side', colorTemperature: 'neutral' },
     defaultFocus: { depthOfField: 'medium', focusTransition: 'pull-focus' },
@@ -335,15 +335,15 @@ const GENRE_PROFILES: CinematographyProfile[] = [
     defaultAngle: 'eye-level',
     defaultFocalLength: '24mm',
     defaultTechnique: 'high-speed',
-    promptGuidance: '动作戏的摄影追求「动能传递」——肩扛快速跟拍让观众感受冲击力，侧光强化肌肉轮廓和动作线条。中景深保证主体清晰但背景有适度虚化。关键动作瞬间（出拳、爆炸）可使用慢放0.5x突出力量感，随后立刻恢复正常速度。尘土和火花增加物理碰撞的真实感。',
-    referenceFilms: ['疯狂的麦克斯', '谍影重重', '突袭', '碟中谍'],
+    promptGuidance: 'Quay phim hành động theo đuổi「truyền tải động năng」— vác vai bám theo nhanh để khán giả cảm nhận sức tác động, ánh sáng bên làm nổi bật cơ bắp và đường nét chuyển động. Độ sâu trung bình đảm bảo chủ thể rõ nhưng hậu cảnh xóa mờ vừa phải. Khoảnh khắc hành động then chốt (ra đòn, nổ) có thể dùng chậm 0.5x nhấn mạnh sức mạnh, sau đó trở lại tốc độ bình thường ngay. Bụi và tia lửa tăng cảm giác va chạm vật lý chân thực.',
+    referenceFilms: ['Mad Max: Fury Road', 'The Bourne Identity', 'The Raid', 'Mission: Impossible'],
   },
   {
     id: 'suspense-mystery',
-    name: '悬疑推理',
+    name: 'Hồi hộp trinh thám',
     nameEn: 'Suspense Mystery',
     category: 'genre',
-    description: '低调侧光、冷色调、浅景深、轨道缓推、薄雾笼罩、隐藏与揭示',
+    description: 'Ánh sáng bên low-key, tông lạnh, độ sâu nông, đường ray đẩy chậm, sương mù bao phủ, ẩn giấu và hé lộ',
     emoji: '🔍',
     defaultLighting: { style: 'low-key', direction: 'side', colorTemperature: 'cool' },
     defaultFocus: { depthOfField: 'shallow', focusTransition: 'rack-to-fg' },
@@ -352,20 +352,20 @@ const GENRE_PROFILES: CinematographyProfile[] = [
     defaultSpeed: { playbackSpeed: 'normal' },
     defaultAngle: 'eye-level',
     defaultFocalLength: '50mm',
-    promptGuidance: '悬疑片的摄影核心是「控制信息揭示」——浅景深选择性地让观众只看到导演想让他们看到的。轨道极慢推进制造压迫感，低调侧光让画面总有一半隐藏在阴影中。转焦是重要叙事手法，从前景线索转焦到背景嫌疑人，或反向操作。薄雾为画面增加朦胧感，暗示真相的不确定性。',
-    referenceFilms: ['消失的爱人', '七宗罪', '杀人回忆', '十二怒汉'],
+    promptGuidance: 'Cốt lõi quay phim hồi hộp là「kiểm soát việc hé lộ thông tin」— độ sâu nông có chọn lọc chỉ cho khán giả thấy những gì đạo diễn muốn. Đường ray tiến cực chậm tạo cảm giác áp bức, ánh sáng bên low-key khiến hình ảnh luôn có một nửa ẩn trong bóng tối. Chuyển nét là thủ pháp tự sự quan trọng, từ manh mối tiền cảnh chuyển nét sang nghi phạm hậu cảnh, hoặc ngược lại. Sương mù thêm cảm giác mờ ảo, ám chỉ sự bất định của sự thật.',
+    referenceFilms: ['Gone Girl', 'Se7en', 'Memories of Murder', '12 Angry Men'],
   },
 ];
 
-// ---------- 时代风格 (era) ----------
+// ---------- Phong cách thời đại (era) ----------
 
 const ERA_PROFILES: CinematographyProfile[] = [
   {
     id: 'hk-retro-90s',
-    name: '90s港片',
+    name: 'Phim Hong Kong 90s',
     nameEn: '90s Hong Kong',
     category: 'era',
-    description: '霓虹侧光、混合色温、中景深、手持晃动、薄霾弥漫、王家卫式忧郁',
+    description: 'Neon ánh sáng bên, nhiệt độ màu hỗn hợp, độ sâu trung bình, cầm tay lắc, sương mù lan tỏa, u sầu kiểu Vương Gia Vệ',
     emoji: '🌙',
     defaultLighting: { style: 'neon', direction: 'side', colorTemperature: 'mixed' },
     defaultFocus: { depthOfField: 'medium', focusTransition: 'rack-between' },
@@ -374,15 +374,15 @@ const ERA_PROFILES: CinematographyProfile[] = [
     defaultSpeed: { playbackSpeed: 'normal' },
     defaultAngle: 'eye-level',
     defaultFocalLength: '35mm',
-    promptGuidance: '90年代港片的摄影DNA是「都市霓虹+手持游走」——混合色温的霓虹灯把城市街道染成红蓝交织的梦境。手持摄影在人群中穿梭，偶尔使用抽帧或降格制造王家卫式的虚影效果。薄霾笼罩的街头，每个路人都像有故事。侧光勾勒出人物忧郁的轮廓。',
-    referenceFilms: ['重庆森林', '堕落天使', '无间道', '英雄本色'],
+    promptGuidance: 'DNA quay phim của phim Hong Kong 90s là「neon đô thị + cầm tay lang thang」— neon nhiệt độ màu hỗn hợp nhuộm đường phố thành giấc mơ đan xen đỏ xanh. Quay cầm tay luồn lách trong đám đông, thỉnh thoảng dùng rút khung hình tạo hiệu ứng bóng mờ kiểu Vương Gia Vệ. Đường phố phủ sương mù, mỗi người qua đường đều như có câu chuyện. Ánh sáng bên vẽ nét viền u sầu của nhân vật.',
+    referenceFilms: ['Chungking Express', 'Fallen Angels', 'Infernal Affairs', 'A Better Tomorrow'],
   },
   {
     id: 'golden-age-hollywood',
-    name: '好莱坞黄金时代',
+    name: 'Thời hoàng kim Hollywood',
     nameEn: 'Golden Age Hollywood',
     category: 'era',
-    description: '高调三点布光、暖色温、深景深、轨道优雅运动、光芒四射、端庄华丽',
+    description: 'Ánh sáng ba điểm high-key, nhiệt độ màu ấm, độ sâu sâu, đường ray di chuyển thanh lịch, tỏa sáng rực rỡ, trang trọng lộng lẫy',
     emoji: '⭐',
     defaultLighting: { style: 'high-key', direction: 'three-point', colorTemperature: 'warm' },
     defaultFocus: { depthOfField: 'deep', focusTransition: 'none' },
@@ -391,14 +391,14 @@ const ERA_PROFILES: CinematographyProfile[] = [
     defaultSpeed: { playbackSpeed: 'normal' },
     defaultAngle: 'eye-level',
     defaultFocalLength: '50mm',
-    promptGuidance: '好莱坞黄金时代的摄影追求「完美」——三点布光消除一切不美的阴影，让明星容光焕发。深景深和精心构图让每一帧都像油画，轨道缓慢优雅移动如华尔兹。暖色温赋予画面怀旧的金色光芒。一切都要端庄、华丽、无可挑剔。',
-    referenceFilms: ['卡萨布兰卡', '公民凯恩', '日落大道', '乱世佳人'],
+    promptGuidance: 'Quay phim thời hoàng kim Hollywood theo đuổi「sự hoàn hảo」— ánh sáng ba điểm loại bỏ mọi bóng tối không đẹp, để ngôi sao tỏa sáng rạng ngời. Độ sâu sâu và bố cục tinh tế khiến mỗi khung hình như bức tranh sơn dầu, đường ray di chuyển chậm thanh lịch như điệu waltz. Nhiệt độ màu ấm mang đến ánh sáng vàng hoài cổ. Tất cả phải trang trọng, lộng lẫy, hoàn hảo không tỳ vết.',
+    referenceFilms: ['Casablanca', 'Citizen Kane', 'Sunset Boulevard', 'Gone with the Wind'],
   },
 ];
 
-// ==================== 导出 ====================
+// ==================== Xuất ====================
 
-/** 所有摄影风格档案预设 */
+/** Tất cả cài đặt sẵn phong cách quay phim */
 export const CINEMATOGRAPHY_PROFILES: readonly CinematographyProfile[] = [
   ...CINEMATIC_PROFILES,
   ...DOCUMENTARY_PROFILES,
@@ -407,31 +407,31 @@ export const CINEMATOGRAPHY_PROFILES: readonly CinematographyProfile[] = [
   ...ERA_PROFILES,
 ] as const;
 
-/** 按分类组织 */
+/** Tổ chức theo phân loại */
 export const CINEMATOGRAPHY_PROFILE_CATEGORIES: {
   id: CinematographyCategory;
   name: string;
   emoji: string;
   profiles: readonly CinematographyProfile[];
 }[] = [
-  { id: 'cinematic', name: '电影类', emoji: '🎬', profiles: CINEMATIC_PROFILES },
-  { id: 'documentary', name: '纪实类', emoji: '📹', profiles: DOCUMENTARY_PROFILES },
-  { id: 'stylized', name: '风格化', emoji: '🎨', profiles: STYLIZED_PROFILES },
-  { id: 'genre', name: '类型片', emoji: '🎭', profiles: GENRE_PROFILES },
-  { id: 'era', name: '时代风格', emoji: '📅', profiles: ERA_PROFILES },
+  { id: 'cinematic', name: 'Phim điện ảnh', emoji: '🎬', profiles: CINEMATIC_PROFILES },
+  { id: 'documentary', name: 'Phim tài liệu', emoji: '📹', profiles: DOCUMENTARY_PROFILES },
+  { id: 'stylized', name: 'Phong cách hóa', emoji: '🎨', profiles: STYLIZED_PROFILES },
+  { id: 'genre', name: 'Phim thể loại', emoji: '🎭', profiles: GENRE_PROFILES },
+  { id: 'era', name: 'Phong cách thời đại', emoji: '📅', profiles: ERA_PROFILES },
 ];
 
-/** 根据 ID 获取摄影档案 */
+/** Lấy hồ sơ quay phim theo ID */
 export function getCinematographyProfile(profileId: string): CinematographyProfile | undefined {
   return CINEMATOGRAPHY_PROFILES.find(p => p.id === profileId);
 }
 
-/** 默认摄影档案 ID */
+/** ID hồ sơ quay phim mặc định */
 export const DEFAULT_CINEMATOGRAPHY_PROFILE_ID = 'classic-cinematic';
 
 /**
- * 生成 AI 校准用的摄影档案指导文本
- * 注入到 system prompt 中，作为拍摄控制字段的默认基准
+ * Tạo văn bản hướng dẫn hồ sơ quay phim cho AI hiệu chỉnh
+ * Đưa vào system prompt, làm tiêu chuẩn mặc định cho trường điều khiển quay phim
  */
 export function buildCinematographyGuidance(profileId: string): string {
   const profile = getCinematographyProfile(profileId);
@@ -440,26 +440,26 @@ export function buildCinematographyGuidance(profileId: string): string {
   const { defaultLighting, defaultFocus, defaultRig, defaultAtmosphere, defaultSpeed } = profile;
 
   const lines = [
-    `【🎬 摄影风格档案 — ${profile.name} (${profile.nameEn})】`,
+    `【🎬 Hồ sơ phong cách quay phim — ${profile.name} (${profile.nameEn})】`,
     `${profile.description}`,
     '',
-    '**默认摄影基准（逐镜可根据剧情需要偏离，但须有理由）：**',
-    `灯光：${profile.defaultLighting.style} 风格 + ${profile.defaultLighting.direction} 方向 + ${profile.defaultLighting.colorTemperature} 色温`,
-    `焦点：${defaultFocus.depthOfField} 景深 + ${defaultFocus.focusTransition} 转焦`,
-    `器材：${defaultRig.cameraRig} + ${defaultRig.movementSpeed} 速度`,
+    '**Tiêu chuẩn quay phim mặc định (từng cảnh có thể điều chỉnh theo nhu cầu kịch bản, nhưng phải có lý do):**',
+    `Ánh sáng: ${profile.defaultLighting.style} phong cách + ${profile.defaultLighting.direction} hướng + ${profile.defaultLighting.colorTemperature} nhiệt độ màu`,
+    `Tiêu điểm: ${defaultFocus.depthOfField} độ sâu trường ảnh + ${defaultFocus.focusTransition} chuyển nét`,
+    `Thiết bị: ${defaultRig.cameraRig} + ${defaultRig.movementSpeed} tốc độ`,
     defaultAtmosphere.effects.length > 0
-      ? `氛围：${defaultAtmosphere.effects.join('+')} (${defaultAtmosphere.intensity})`
-      : '氛围：无特殊氛围效果',
-    `速度：${defaultSpeed.playbackSpeed}`,
-    profile.defaultAngle ? `拍摄角度：${profile.defaultAngle}` : '',
-    profile.defaultFocalLength ? `镜头焦距：${profile.defaultFocalLength}` : '',
-    profile.defaultTechnique ? `摄影技法：${profile.defaultTechnique}` : '',
+      ? `Bầu không khí: ${defaultAtmosphere.effects.join('+')} (${defaultAtmosphere.intensity})`
+      : 'Bầu không khí: Không có hiệu ứng đặc biệt',
+    `Tốc độ: ${defaultSpeed.playbackSpeed}`,
+    profile.defaultAngle ? `Góc quay: ${profile.defaultAngle}` : '',
+    profile.defaultFocalLength ? `Tiêu cự ống kính: ${profile.defaultFocalLength}` : '',
+    profile.defaultTechnique ? `Kỹ thuật quay phim: ${profile.defaultTechnique}` : '',
     '',
-    `**摄影指导：** ${profile.promptGuidance}`,
+    `**Hướng dẫn quay phim:** ${profile.promptGuidance}`,
     '',
-    `**参考影片：** ${profile.referenceFilms.join('、')}`,
+    `**Phim tham khảo:** ${profile.referenceFilms.join(', ')}`,
     '',
-    '⚠️ 以上是本项目的摄影语言基准。每个分镜的拍摄控制字段应以此为默认值，但如果剧情的叙事功能（如高潮、转折）需要偏离基准，可以自由调整——关键是要有叙事理由，不要随机变化。',
+    '⚠️ Trên đây là tiêu chuẩn ngôn ngữ quay phim của dự án. Trường điều khiển quay phim của mỗi cảnh nên lấy đây làm giá trị mặc định, nhưng nếu chức năng tự sự của kịch bản (như cao trào, bước ngoặt) cần điều chỉnh, có thể tự do thay đổi — điều quan trọng là phải có lý do tự sự, không thay đổi ngẫu nhiên.',
   ].filter(Boolean);
 
   return lines.join('\n');

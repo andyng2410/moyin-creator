@@ -65,7 +65,7 @@ export function StylePicker({
   trigger,
   className,
   disabled = false,
-  placeholder = "选择风格",
+  placeholder = "Chọn phong cách",
 }: StylePickerProps) {
   const [hoveredStyle, setHoveredStyle] = useState<StylePreset | null>(null);
   const [isOpen, setIsOpen] = useState(false);
@@ -132,7 +132,7 @@ export function StylePicker({
           {customAsPresets.length > 0 && (
             <div className="mb-4">
               <div className="px-2 py-1.5 text-xs font-medium text-primary border-b border-primary/30 mb-2">
-                我的风格
+                Phong cách của tôi
               </div>
               <div className="space-y-1">
                 {customAsPresets.map((style) => (
@@ -197,7 +197,7 @@ export function StylePicker({
                       ? 'bg-primary/20 text-primary'
                       : CATEGORY_COLORS[selectedStyle.category] || 'bg-muted'
                   )}>
-                    {selectedStyle.id.startsWith('custom_style_') ? '★' : selectedStyle.category === '3d' ? '3D' : selectedStyle.category === '2d' ? '2D' : selectedStyle.category === 'real' ? '真' : '定'}
+                    {selectedStyle.id.startsWith('custom_style_') ? '★' : selectedStyle.category === '3d' ? '3D' : selectedStyle.category === '2d' ? '2D' : selectedStyle.category === 'real' ? 'TT' : 'SM'}
                   </span>
                 )}
                 <span className={!selectedStyle ? "text-muted-foreground" : ""}>
@@ -259,7 +259,7 @@ function StyleItem({ style, isSelected, isCustom, onSelect, onHover, onLeave }: 
         "w-10 h-10 rounded flex items-center justify-center text-[10px] font-bold flex-shrink-0",
         isCustom ? 'bg-primary/20 text-primary' : CATEGORY_COLORS[style.category] || 'bg-muted'
       )}>
-        {isCustom ? '★' : style.category === '3d' ? '3D' : style.category === '2d' ? '2D' : style.category === 'real' ? '真' : '定'}
+        {isCustom ? '★' : style.category === '3d' ? '3D' : style.category === '2d' ? '2D' : style.category === 'real' ? 'TT' : 'SM'}
       </span>
       {/* 名称 */}
       <span className="flex-1 text-left text-sm truncate">{style.name}</span>

@@ -5,7 +5,7 @@
 
 /**
  * EditableTextField Component
- * 可双击编辑的文本字段组件
+ * 可Nhấn đúp để chỉnh sửa的文本字段组件
  */
 
 import React, { useState, useRef } from "react";
@@ -110,7 +110,7 @@ export function EditableTextField({
     <div 
       className={cn("cursor-pointer group/field", className)}
       onDoubleClick={startEditing}
-      title="双击编辑"
+      title="Nhấn đúp để chỉnh sửa"
     >
       <Label className="text-[10px] text-muted-foreground flex items-center gap-1">
         {label}
@@ -121,7 +121,7 @@ export function EditableTextField({
         value ? "text-foreground/80" : "text-muted-foreground/50 italic",
         multiline && "line-clamp-2"
       )}>
-        {value || placeholder || "双击编辑..."}
+        {value || placeholder || "Nhấn đúp để chỉnh sửa..."}
       </p>
     </div>
   );

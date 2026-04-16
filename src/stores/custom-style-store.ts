@@ -126,7 +126,7 @@ export const useCustomStyleStore = create<CustomStyleStore>()(
         const copy: CustomStyle = {
           ...source,
           id: newId,
-          name: `${source.name} (副本)`,
+          name: `${source.name} (Bản sao)`,
           createdAt: now,
           updatedAt: now,
         };

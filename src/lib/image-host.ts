@@ -118,7 +118,7 @@ async function toUploadFile(imageData: string, name?: string): Promise<{ blob: B
   if (isHttpUrl(imageData)) {
     const response = await fetch(imageData);
     if (!response.ok) {
-      throw new Error(`下载图片失败: ${response.status}`);
+      throw new Error(`Tải ảnh thất bại: ${response.status}`);
     }
     blob = await response.blob();
   } else if (imageData.startsWith('data:')) {

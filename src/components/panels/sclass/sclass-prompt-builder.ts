@@ -113,7 +113,7 @@ export async function mergeToGridImage(
   imageUrls: string[],
   aspectRatio: string = '16:9',
 ): Promise<string> {
-  if (imageUrls.length === 0) throw new Error('mergeToGridImage: 无图片可合并');
+  if (imageUrls.length === 0) throw new Error('mergeToGridImage: Không có ảnh để gộp');
   if (imageUrls.length === 1) {
     // 单张直接返回，无需合并
     return imageUrls[0];
@@ -138,7 +138,7 @@ export async function mergeToGridImage(
       const img = new Image();
       img.crossOrigin = 'anonymous';
       img.onload = () => resolve(img);
-      img.onerror = () => reject(new Error(`加载图片失败: ${src.substring(0, 60)}...`));
+      img.onerror = () => reject(new Error(`Tải ảnh thất bại: ${src.substring(0, 60)}...`));
       img.src = src;
     });
 
@@ -357,10 +357,10 @@ export function collectAllRefs(
   const totalFiles = taggedImages.length + taggedVideos.length + taggedAudios.length;
   const warnings: string[] = [];
   if (taggedImages.length >= SEEDANCE_LIMITS.maxImages) {
-    warnings.push(`图片引用已达上限 ${SEEDANCE_LIMITS.maxImages}`);
+    warnings.push(`Ảnh tham chiếu đã đạt giới hạn ${SEEDANCE_LIMITS.maxImages}`);
   }
   if (totalFiles > SEEDANCE_LIMITS.maxTotalFiles) {
-    warnings.push(`总文件数 ${totalFiles} 超出限制 ${SEEDANCE_LIMITS.maxTotalFiles}`);
+    warnings.push(`Tổng số tệp ${totalFiles} vượt giới hạn ${SEEDANCE_LIMITS.maxTotalFiles}`);
   }
 
   return {
@@ -506,7 +506,7 @@ function buildShotSegment(
 
   return {
     sceneId: scene.id,
-    sceneName: scene.sceneName || `镜头${scene.id + 1}`,
+    sceneName: scene.sceneName || `Cảnh quay ${scene.id + 1}`,
     shotIndex,
     description: parts.join(', '),
     dialogue: scene.dialogue || '',
@@ -805,7 +805,7 @@ function buildExtendEditPrompt(
     audios: taggedAudios,
     totalFiles,
     overLimit: totalFiles > SEEDANCE_LIMITS.maxTotalFiles,
-    limitWarnings: totalFiles > SEEDANCE_LIMITS.maxTotalFiles ? [`总文件数 ${totalFiles} 超出限制 ${SEEDANCE_LIMITS.maxTotalFiles}`] : [],
+    limitWarnings: totalFiles > SEEDANCE_LIMITS.maxTotalFiles ? [`Tổng số tệp ${totalFiles} vượt giới hạn ${SEEDANCE_LIMITS.maxTotalFiles}`] : [],
   };
 
   // --- 构建 prompt ---

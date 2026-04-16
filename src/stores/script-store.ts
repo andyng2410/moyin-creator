@@ -580,13 +580,13 @@ export const useScriptStore = create<ScriptStore>()(
           const newEpisode: Episode = {
             id: newEpisodeId,
             index: newIndex,
-            title: title || `第${newIndex}集`,
+            title: title || `Tập ${newIndex}`,
             description: synopsis || '',
             sceneIds: [],
           };
           const newRawScript: EpisodeRawScript = {
             episodeIndex: newIndex,
-            title: title || `第${newIndex}集`,
+            title: title || `Tập ${newIndex}`,
             synopsis: synopsis || '',
             keyEvents: [],
             rawContent: '',
@@ -624,7 +624,7 @@ export const useScriptStore = create<ScriptStore>()(
           const reindexedRaw = newRawScripts.map((e, i) => ({
             ...e,
             episodeIndex: i + 1,
-            title: e.title.replace(/^第\d+集/, `第${i + 1}集`),
+            title: e.title.replace(/^(第\d+集|Tập \d+)/, `Tập ${i + 1}`),
           }));
           return {
             projects: {

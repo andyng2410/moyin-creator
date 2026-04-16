@@ -52,26 +52,26 @@ import { getStyleById, getStylePrompt, type VisualStyleId, DEFAULT_STYLE_ID } fr
 
 // Gender presets
 const GENDER_PRESETS = [
-  { id: "male", label: "男" },
-  { id: "female", label: "女" },
-  { id: "other", label: "其他" },
+  { id: "male", label: "Nam" },
+  { id: "female", label: "Nữ" },
+  { id: "other", label: "Khác" },
 ] as const;
 
 // Age presets
 const AGE_PRESETS = [
-  { id: "child", label: "儿童", range: "5-12岁" },
-  { id: "teen", label: "青少年", range: "13-18岁" },
-  { id: "young-adult", label: "青年", range: "19-30岁" },
-  { id: "adult", label: "中年", range: "31-50岁" },
-  { id: "senior", label: "老年", range: "50岁以上" },
+  { id: "child", label: "Trẻ em", range: "5-12 tuổi" },
+  { id: "teen", label: "Thiếu niên", range: "13-18 tuổi" },
+  { id: "young-adult", label: "Thanh niên", range: "19-30 tuổi" },
+  { id: "adult", label: "Trung niên", range: "31-50 tuổi" },
+  { id: "senior", label: "Cao tuổi", range: "trên 50 tuổi" },
 ] as const;
 
 // Sheet elements
 const SHEET_ELEMENTS = [
-  { id: 'three-view', label: '三视图', prompt: 'front view, side view, back view, turnaround', default: true },
-  { id: 'expressions', label: '表情设定', prompt: 'expression sheet, multiple facial expressions, happy, sad, angry, surprised', default: true },
-  { id: 'proportions', label: '比例设定', prompt: 'height chart, body proportions, head-to-body ratio reference', default: false },
-  { id: 'poses', label: '动作设定', prompt: 'pose sheet, various action poses, standing, sitting, running', default: false },
+  { id: 'three-view', label: 'Ba góc nhìn', prompt: 'front view, side view, back view, turnaround', default: true },
+  { id: 'expressions', label: 'Thiết kế biểu cảm', prompt: 'expression sheet, multiple facial expressions, happy, sad, angry, surprised', default: true },
+  { id: 'proportions', label: 'Thiết kế tỷ lệ', prompt: 'height chart, body proportions, head-to-body ratio reference', default: false },
+  { id: 'poses', label: 'Thiết kế động tác', prompt: 'pose sheet, various action poses, standing, sitting, running', default: false },
 ] as const;
 
 type SheetElementId = typeof SHEET_ELEMENTS[number]['id'];
@@ -193,12 +193,12 @@ export function GenerationPanel({ selectedCharacter, onCharacterCreated }: Gener
       
       // Also build description for display/generation prompt
       const descParts: string[] = [];
-      if (pendingCharacterData.role) descParts.push(`【身份/背景】\n${pendingCharacterData.role}`);
-      if (pendingCharacterData.traits) descParts.push(`【核心特质】\n${pendingCharacterData.traits}`);
-      if (pendingCharacterData.skills) descParts.push(`【技能/能力】\n${pendingCharacterData.skills}`);
-      if (pendingCharacterData.keyActions) descParts.push(`【关键事迹】\n${pendingCharacterData.keyActions}`);
-      if (pendingCharacterData.appearance) descParts.push(`【外貌特征】\n${pendingCharacterData.appearance}`);
-      if (pendingCharacterData.relationships) descParts.push(`【人物关系】\n${pendingCharacterData.relationships}`);
+      if (pendingCharacterData.role) descParts.push(`【Danh tính/Bối cảnh】\n${pendingCharacterData.role}`);
+      if (pendingCharacterData.traits) descParts.push(`【Đặc điểm cốt lõi】\n${pendingCharacterData.traits}`);
+      if (pendingCharacterData.skills) descParts.push(`【Kỹ năng/Năng lực】\n${pendingCharacterData.skills}`);
+      if (pendingCharacterData.keyActions) descParts.push(`【Sự kiện quan trọng】\n${pendingCharacterData.keyActions}`);
+      if (pendingCharacterData.appearance) descParts.push(`【Đặc điểm ngoại hình】\n${pendingCharacterData.appearance}`);
+      if (pendingCharacterData.relationships) descParts.push(`【Mối quan hệ】\n${pendingCharacterData.relationships}`);
       if (descParts.length > 0) {
         setDescription(descParts.join("\n\n"));
       }
@@ -329,15 +329,15 @@ export function GenerationPanel({ selectedCharacter, onCharacterCreated }: Gener
   // 创建新角色并生成图片（始终新建，不会覆盖已有角色）
   const handleCreateAndGenerate = async () => {
     if (!name.trim()) {
-      toast.error("请输入角色名称");
+      toast.error("Vui lòng nhập tên nhân vật");
       return;
     }
     if (!description.trim()) {
-      toast.error("请输入角色描述");
+      toast.error("Vui lòng nhập mô tả nhân vật");
       return;
     }
     if (selectedElements.length === 0) {
-      toast.error("请至少选择一个生成内容");
+      toast.error("Vui lòng chọn ít nhất một nội dung tạo");
       return;
     }
 
@@ -423,11 +423,11 @@ export function GenerationPanel({ selectedCharacter, onCharacterCreated }: Gener
       setPreviewUrl(result.imageUrl);
       setPreviewCharacterId(targetId);
       setGenerationStatus('completed');
-      toast.success("图片生成完成，请预览确认");
+      toast.success("Tạo ảnh hoàn tất, vui lòng xem trước và xác nhận");
     } catch (error) {
       const err = error as Error;
       setGenerationStatus('error', err.message);
-      toast.error(`生成失败: ${err.message}`);
+      toast.error(`Tạo thất bại: ${err.message}`);
     } finally {
       setGeneratingCharacter(null);
     }
@@ -436,7 +436,7 @@ export function GenerationPanel({ selectedCharacter, onCharacterCreated }: Gener
   const handleSavePreview = async () => {
     if (!previewUrl || !previewCharacterId) return;
 
-    toast.loading("正在保存图片到本地...", { id: 'saving-preview' });
+    toast.loading("Đang lưu ảnh vào máy...", { id: 'saving-preview' });
     
     try {
       // Save image to local storage
@@ -459,7 +459,7 @@ export function GenerationPanel({ selectedCharacter, onCharacterCreated }: Gener
       const aiFolderId = getOrCreateCategoryFolder('ai-image');
       addMediaFromUrl({
         url: localPath,
-        name: `角色-${name || '未命名'}`,
+        name: `Nhân vật-${name || 'Chưa đặt tên'}`,
         type: 'image',
         source: 'ai-image',
         folderId: aiFolderId,
@@ -468,10 +468,10 @@ export function GenerationPanel({ selectedCharacter, onCharacterCreated }: Gener
 
       setPreviewUrl(null);
       setPreviewCharacterId(null);
-      toast.success("角色设定图已保存到本地！", { id: 'saving-preview' });
+      toast.success("Đã lưu bản thiết kế nhân vật vào máy!", { id: 'saving-preview' });
     } catch (error) {
       console.error('Failed to save preview:', error);
-      toast.error("保存失败", { id: 'saving-preview' });
+      toast.error("Lưu thất bại", { id: 'saving-preview' });
     }
   };
 
@@ -485,31 +485,31 @@ export function GenerationPanel({ selectedCharacter, onCharacterCreated }: Gener
     return (
       <div className="h-full flex flex-col overflow-hidden">
         <div className="p-3 pb-2 border-b shrink-0">
-          <h3 className="font-medium text-sm">预览角色设定图</h3>
+          <h3 className="font-medium text-sm">Xem trước bản thiết kế nhân vật</h3>
         </div>
         <ScrollArea className="flex-1 min-h-0">
           <div className="p-3 space-y-4 pb-32">
             <div className="relative rounded-lg overflow-hidden border-2 border-amber-500/50 bg-muted">
               <img 
                 src={previewUrl} 
-                alt="角色设定预览"
+                alt="Xem trước thiết kế nhân vật"
                 className="w-full h-auto"
               />
               <div className="absolute top-2 left-2 bg-amber-500 text-white text-xs px-2 py-1 rounded">
-                预览
+                Xem trước
               </div>
             </div>
           </div>
         </ScrollArea>
         <div className="p-3 border-t space-y-2 shrink-0">
           <Button onClick={handleSavePreview} className="w-full">
-            保存设定图
+            Lưu bản thiết kế
           </Button>
           <Button onClick={handleCreateAndGenerate} variant="outline" className="w-full" disabled={isGenerating}>
-            重新生成
+            Tạo lại
           </Button>
           <Button onClick={handleDiscardPreview} variant="ghost" className="w-full text-muted-foreground" size="sm">
-            放弃并返回
+            Bỏ qua và quay lại
           </Button>
         </div>
       </div>
@@ -519,18 +519,18 @@ export function GenerationPanel({ selectedCharacter, onCharacterCreated }: Gener
   return (
     <div className="h-full flex flex-col overflow-hidden">
       <div className="p-3 pb-2 border-b shrink-0">
-        <h3 className="font-medium text-sm">生成控制台</h3>
+        <h3 className="font-medium text-sm">Bảng điều khiển tạo ảnh</h3>
       </div>
       
       <div className="flex-1 min-h-0 overflow-y-auto">
         <div className="p-3 space-y-4">
           {/* Character name */}
           <div className="space-y-2">
-            <Label className="text-xs">角色名称</Label>
+            <Label className="text-xs">Tên nhân vật</Label>
             <Input
               value={name}
               onChange={(e) => setName(e.target.value)}
-              placeholder="例如：小明、机器猫"
+              placeholder="Ví dụ: Minh, Doraemon"
               disabled={isGenerating}
             />
           </div>
@@ -538,10 +538,10 @@ export function GenerationPanel({ selectedCharacter, onCharacterCreated }: Gener
           {/* Gender and Age */}
           <div className="grid grid-cols-2 gap-2">
             <div className="space-y-2">
-              <Label className="text-xs">性别</Label>
+              <Label className="text-xs">Giới tính</Label>
               <Select value={gender} onValueChange={setGender} disabled={isGenerating}>
                 <SelectTrigger>
-                  <SelectValue placeholder="选择" />
+                  <SelectValue placeholder="Chọn" />
                 </SelectTrigger>
                 <SelectContent>
                   {GENDER_PRESETS.map((g) => (
@@ -551,10 +551,10 @@ export function GenerationPanel({ selectedCharacter, onCharacterCreated }: Gener
               </Select>
             </div>
             <div className="space-y-2">
-              <Label className="text-xs">年龄段</Label>
+              <Label className="text-xs">Độ tuổi</Label>
               <Select value={age} onValueChange={setAge} disabled={isGenerating}>
                 <SelectTrigger>
-                  <SelectValue placeholder="选择" />
+                  <SelectValue placeholder="Chọn" />
                 </SelectTrigger>
                 <SelectContent>
                   {AGE_PRESETS.map((a) => (
@@ -567,22 +567,22 @@ export function GenerationPanel({ selectedCharacter, onCharacterCreated }: Gener
 
           {/* Personality */}
           <div className="space-y-2">
-            <Label className="text-xs">性格特征</Label>
+            <Label className="text-xs">Tính cách</Label>
             <Input
               value={personality}
               onChange={(e) => setPersonality(e.target.value)}
-              placeholder="开朗、勇敢..."
+              placeholder="Vui vẻ, dũng cảm..."
               disabled={isGenerating}
             />
           </div>
 
           {/* Description */}
           <div className="space-y-2">
-            <Label className="text-xs">角色描述</Label>
+            <Label className="text-xs">Mô tả nhân vật</Label>
             <Textarea
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              placeholder="详细描述角色外观..."
+              placeholder="Mô tả chi tiết ngoại hình nhân vật..."
               className="min-h-[80px] text-sm resize-none"
               disabled={isGenerating}
             />
@@ -604,18 +604,18 @@ export function GenerationPanel({ selectedCharacter, onCharacterCreated }: Gener
                   ) : (
                     <ChevronRight className="h-4 w-4 text-muted-foreground" />
                   )}
-                  <span className="text-xs font-medium">AI 校准信息</span>
+                  <span className="text-xs font-medium">Thông tin hiệu chỉnh AI</span>
                 </div>
                 <div className="flex items-center gap-1">
                   {isManuallyModified ? (
                     <>
                       <AlertTriangle className="h-3 w-3 text-amber-500" />
-                      <span className="text-[10px] text-amber-500">已修改</span>
+                      <span className="text-[10px] text-amber-500">Đã sửa</span>
                     </>
                   ) : (
                     <>
                       <CheckCircle2 className="h-3 w-3 text-green-500" />
-                      <span className="text-[10px] text-green-500">已校准</span>
+                      <span className="text-[10px] text-green-500">Đã hiệu chỉnh</span>
                     </>
                   )}
                 </div>
@@ -627,7 +627,7 @@ export function GenerationPanel({ selectedCharacter, onCharacterCreated }: Gener
                   {/* 6层身份锚点 */}
                   {identityAnchors && (
                     <div className="space-y-2">
-                      <Label className="text-[10px] text-muted-foreground">① 骨相层</Label>
+                      <Label className="text-[10px] text-muted-foreground">{"① Lớp cấu trúc xương"}</Label>
                       <div className="grid grid-cols-3 gap-1">
                         <Input
                           value={identityAnchors.faceShape || ''}
@@ -635,7 +635,7 @@ export function GenerationPanel({ selectedCharacter, onCharacterCreated }: Gener
                             setIdentityAnchors({ ...identityAnchors, faceShape: e.target.value || undefined });
                             setIsManuallyModified(true);
                           }}
-                          placeholder="脸型"
+                          placeholder="Hình mặt"
                           className="h-7 text-[10px]"
                           disabled={isGenerating}
                         />
@@ -645,7 +645,7 @@ export function GenerationPanel({ selectedCharacter, onCharacterCreated }: Gener
                             setIdentityAnchors({ ...identityAnchors, jawline: e.target.value || undefined });
                             setIsManuallyModified(true);
                           }}
-                          placeholder="下颂"
+                          placeholder="Hàm dưới"
                           className="h-7 text-[10px]"
                           disabled={isGenerating}
                         />
@@ -655,13 +655,13 @@ export function GenerationPanel({ selectedCharacter, onCharacterCreated }: Gener
                             setIdentityAnchors({ ...identityAnchors, cheekbones: e.target.value || undefined });
                             setIsManuallyModified(true);
                           }}
-                          placeholder="颚骨"
+                          placeholder="Xương gò má"
                           className="h-7 text-[10px]"
                           disabled={isGenerating}
                         />
                       </div>
                       
-                      <Label className="text-[10px] text-muted-foreground">② 五官层</Label>
+                      <Label className="text-[10px] text-muted-foreground">{"② Lớp ngũ quan"}</Label>
                       <div className="grid grid-cols-2 gap-1">
                         <Input
                           value={identityAnchors.eyeShape || ''}
@@ -669,7 +669,7 @@ export function GenerationPanel({ selectedCharacter, onCharacterCreated }: Gener
                             setIdentityAnchors({ ...identityAnchors, eyeShape: e.target.value || undefined });
                             setIsManuallyModified(true);
                           }}
-                          placeholder="眼型"
+                          placeholder="Hình mắt"
                           className="h-7 text-[10px]"
                           disabled={isGenerating}
                         />
@@ -679,7 +679,7 @@ export function GenerationPanel({ selectedCharacter, onCharacterCreated }: Gener
                             setIdentityAnchors({ ...identityAnchors, noseShape: e.target.value || undefined });
                             setIsManuallyModified(true);
                           }}
-                          placeholder="鼻型"
+                          placeholder="Hình mũi"
                           className="h-7 text-[10px]"
                           disabled={isGenerating}
                         />
@@ -689,7 +689,7 @@ export function GenerationPanel({ selectedCharacter, onCharacterCreated }: Gener
                             setIdentityAnchors({ ...identityAnchors, lipShape: e.target.value || undefined });
                             setIsManuallyModified(true);
                           }}
-                          placeholder="唇型"
+                          placeholder="Hình môi"
                           className="h-7 text-[10px]"
                           disabled={isGenerating}
                         />
@@ -699,13 +699,13 @@ export function GenerationPanel({ selectedCharacter, onCharacterCreated }: Gener
                             setIdentityAnchors({ ...identityAnchors, eyeDetails: e.target.value || undefined });
                             setIsManuallyModified(true);
                           }}
-                          placeholder="眼部细节"
+                          placeholder="Chi tiết mắt"
                           className="h-7 text-[10px]"
                           disabled={isGenerating}
                         />
                       </div>
                       
-                      <Label className="text-[10px] text-muted-foreground">③ 辨识标记层（最强锚点）</Label>
+                      <Label className="text-[10px] text-muted-foreground">{"③ Lớp dấu hiệu nhận dạng (neo mạnh nhất)"}</Label>
                       <Input
                         value={identityAnchors.uniqueMarks?.join(', ') || ''}
                         onChange={(e) => {
@@ -713,12 +713,12 @@ export function GenerationPanel({ selectedCharacter, onCharacterCreated }: Gener
                           setIdentityAnchors({ ...identityAnchors, uniqueMarks: marks.length > 0 ? marks : [] });
                           setIsManuallyModified(true);
                         }}
-                        placeholder="特征标记，用逗号分隔"
+                        placeholder="Dấu hiệu đặc trưng, phân cách bằng dấu phẩy"
                         className="h-7 text-[10px]"
                         disabled={isGenerating}
                       />
                       
-                      <Label className="text-[10px] text-muted-foreground">④ 色彩锚点层（Hex色值）</Label>
+                      <Label className="text-[10px] text-muted-foreground">{"④ Lớp neo màu sắc (Hex)"}</Label>
                       <div className="grid grid-cols-4 gap-1">
                         <div className="flex items-center gap-1">
                           <input
@@ -734,7 +734,7 @@ export function GenerationPanel({ selectedCharacter, onCharacterCreated }: Gener
                             className="w-6 h-6 rounded cursor-pointer"
                             disabled={isGenerating}
                           />
-                          <span className="text-[9px] text-muted-foreground">瞳</span>
+                          <span className="text-[9px] text-muted-foreground">Mắt</span>
                         </div>
                         <div className="flex items-center gap-1">
                           <input
@@ -750,7 +750,7 @@ export function GenerationPanel({ selectedCharacter, onCharacterCreated }: Gener
                             className="w-6 h-6 rounded cursor-pointer"
                             disabled={isGenerating}
                           />
-                          <span className="text-[9px] text-muted-foreground">发</span>
+                          <span className="text-[9px] text-muted-foreground">Tóc</span>
                         </div>
                         <div className="flex items-center gap-1">
                           <input
@@ -766,7 +766,7 @@ export function GenerationPanel({ selectedCharacter, onCharacterCreated }: Gener
                             className="w-6 h-6 rounded cursor-pointer"
                             disabled={isGenerating}
                           />
-                          <span className="text-[9px] text-muted-foreground">肤</span>
+                          <span className="text-[9px] text-muted-foreground">Da</span>
                         </div>
                         <div className="flex items-center gap-1">
                           <input
@@ -782,23 +782,23 @@ export function GenerationPanel({ selectedCharacter, onCharacterCreated }: Gener
                             className="w-6 h-6 rounded cursor-pointer"
                             disabled={isGenerating}
                           />
-                          <span className="text-[9px] text-muted-foreground">唇</span>
+                          <span className="text-[9px] text-muted-foreground">Môi</span>
                         </div>
                       </div>
                       
-                      <Label className="text-[10px] text-muted-foreground">⑤ 皮肤纹理层</Label>
+                      <Label className="text-[10px] text-muted-foreground">{"⑤ Lớp kết cấu da"}</Label>
                       <Input
                         value={identityAnchors.skinTexture || ''}
                         onChange={(e) => {
                           setIdentityAnchors({ ...identityAnchors, skinTexture: e.target.value || undefined });
                           setIsManuallyModified(true);
                         }}
-                        placeholder="皮肤纹理描述"
+                        placeholder="Mô tả kết cấu da"
                         className="h-7 text-[10px]"
                         disabled={isGenerating}
                       />
                       
-                      <Label className="text-[10px] text-muted-foreground">⑥ 发型锚点层</Label>
+                      <Label className="text-[10px] text-muted-foreground">{"⑥ Lớp neo kiểu tóc"}</Label>
                       <div className="grid grid-cols-2 gap-1">
                         <Input
                           value={identityAnchors.hairStyle || ''}
@@ -806,7 +806,7 @@ export function GenerationPanel({ selectedCharacter, onCharacterCreated }: Gener
                             setIdentityAnchors({ ...identityAnchors, hairStyle: e.target.value || undefined });
                             setIsManuallyModified(true);
                           }}
-                          placeholder="发型"
+                          placeholder="Kiểu tóc"
                           className="h-7 text-[10px]"
                           disabled={isGenerating}
                         />
@@ -816,7 +816,7 @@ export function GenerationPanel({ selectedCharacter, onCharacterCreated }: Gener
                             setIdentityAnchors({ ...identityAnchors, hairlineDetails: e.target.value || undefined });
                             setIsManuallyModified(true);
                           }}
-                          placeholder="发际线细节"
+                          placeholder="Chi tiết đường chân tóc"
                           className="h-7 text-[10px]"
                           disabled={isGenerating}
                         />
@@ -827,7 +827,7 @@ export function GenerationPanel({ selectedCharacter, onCharacterCreated }: Gener
                   {/* 负面提示词 */}
                   {charNegativePrompt && (
                     <div className="space-y-2 pt-2 border-t">
-                      <Label className="text-[10px] text-muted-foreground">负面提示词</Label>
+                      <Label className="text-[10px] text-muted-foreground">Prompt phủ định</Label>
                       <Input
                         value={charNegativePrompt.avoid?.join(', ') || ''}
                         onChange={(e) => {
@@ -835,7 +835,7 @@ export function GenerationPanel({ selectedCharacter, onCharacterCreated }: Gener
                           setCharNegativePrompt({ ...charNegativePrompt, avoid: avoidList });
                           setIsManuallyModified(true);
                         }}
-                        placeholder="避免元素，用逗号分隔"
+                        placeholder="Yếu tố cần tránh, phân cách bằng dấu phẩy"
                         className="h-7 text-[10px]"
                         disabled={isGenerating}
                       />
@@ -846,7 +846,7 @@ export function GenerationPanel({ selectedCharacter, onCharacterCreated }: Gener
                           setCharNegativePrompt({ ...charNegativePrompt, styleExclusions: exclusions.length > 0 ? exclusions : undefined });
                           setIsManuallyModified(true);
                         }}
-                        placeholder="风格排除，用逗号分隔"
+                        placeholder="Loại trừ phong cách, phân cách bằng dấu phẩy"
                         className="h-7 text-[10px]"
                         disabled={isGenerating}
                       />
@@ -859,12 +859,12 @@ export function GenerationPanel({ selectedCharacter, onCharacterCreated }: Gener
                     const showZh = effectiveLang === 'zh' || effectiveLang === 'zh+en';
                     const activePrompt = showZh ? visualPromptZh : visualPromptEn;
                     const setActivePrompt = showZh ? setVisualPromptZh : setVisualPromptEn;
-                    const langLabel = showZh ? '中文' : '英文';
+                    const langLabel = showZh ? 'Tiếng Trung' : 'Tiếng Anh';
                     if (!activePrompt) return null;
                     return (
                       <div className="space-y-2 pt-2 border-t">
                         <Label className="text-[10px] text-muted-foreground">
-                          视觉提示词（{langLabel}，修改后直接用于生成）
+                          Gợi ý thị giác ({langLabel}, sửa xong sẽ dùng trực tiếp để tạo)
                         </Label>
                         <Textarea
                           value={activePrompt}
@@ -872,7 +872,7 @@ export function GenerationPanel({ selectedCharacter, onCharacterCreated }: Gener
                             setActivePrompt(e.target.value);
                             setIsManuallyModified(true);
                           }}
-                          placeholder={`${langLabel}提示词`}
+                          placeholder={`Prompt ${langLabel}`}
                           className="min-h-[120px] text-xs resize-y"
                           disabled={isGenerating}
                         />
@@ -886,7 +886,7 @@ export function GenerationPanel({ selectedCharacter, onCharacterCreated }: Gener
 
           {/* Style */}
           <div className="space-y-2">
-            <Label className="text-xs">视觉风格</Label>
+            <Label className="text-xs">Phong cách thị giác</Label>
             <StylePicker
               value={styleId}
               onChange={(id) => setStyleId(id)}
@@ -897,7 +897,7 @@ export function GenerationPanel({ selectedCharacter, onCharacterCreated }: Gener
           {/* Reference images */}
           <div className="space-y-2">
             <div className="flex items-center justify-between">
-              <Label className="text-xs">参考图片</Label>
+              <Label className="text-xs">Ảnh tham khảo</Label>
               <span className="text-xs text-muted-foreground">{referenceImages.length}/3</span>
             </div>
             <div className="flex gap-2 flex-wrap">
@@ -905,7 +905,7 @@ export function GenerationPanel({ selectedCharacter, onCharacterCreated }: Gener
                 <div key={i} className="relative group">
                   <img
                     src={img}
-                    alt={`参考图 ${i + 1}`}
+                    alt={`Ảnh tham khảo ${i + 1}`}
                     className="w-14 h-14 object-cover rounded-md border"
                   />
                   <button
@@ -932,7 +932,7 @@ export function GenerationPanel({ selectedCharacter, onCharacterCreated }: Gener
                     onClick={() => document.getElementById('gen-panel-ref-image')?.click()}
                   >
                     <ImagePlus className="h-4 w-4" />
-                    <span className="text-[10px]">上传</span>
+                    <span className="text-[10px]">Tải lên</span>
                   </div>
                 </>
               )}
@@ -941,7 +941,7 @@ export function GenerationPanel({ selectedCharacter, onCharacterCreated }: Gener
 
           {/* Sheet elements */}
           <div className="space-y-2">
-            <Label className="text-xs">生成内容</Label>
+            <Label className="text-xs">Nội dung tạo</Label>
             <div className="space-y-1.5">
               {SHEET_ELEMENTS.map((element) => (
                 <div
@@ -974,12 +974,12 @@ export function GenerationPanel({ selectedCharacter, onCharacterCreated }: Gener
               {isGenerating ? (
                 <>
                   <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                  生成中...
+                  Đang tạo...
                 </>
               ) : (
                 <>
                   <FileImage className="h-4 w-4 mr-2" />
-                  生成设定图
+                  Tạo bản thiết kế
                 </>
               )}
             </Button>
@@ -992,87 +992,87 @@ export function GenerationPanel({ selectedCharacter, onCharacterCreated }: Gener
                 const lines: string[] = [];
                 
                 // 基本信息
-                lines.push(`角色名称: ${name || '(未填写)'}`);
+                lines.push(`Tên nhân vật: ${name || '(Chưa nhập)'}`);
                 const genderLabel = GENDER_PRESETS.find(g => g.id === gender)?.label;
-                if (genderLabel) lines.push(`性别: ${genderLabel}`);
+                if (genderLabel) lines.push(`Giới tính: ${genderLabel}`);
                 const ageLabel = AGE_PRESETS.find(a => a.id === age)?.label;
-                if (ageLabel) lines.push(`年龄段: ${ageLabel}`);
-                if (personality) lines.push(`性格特征: ${personality}`);
+                if (ageLabel) lines.push(`Độ tuổi: ${ageLabel}`);
+                if (personality) lines.push(`Tính cách: ${personality}`);
                 
                 // 角色描述
                 if (description) {
                   lines.push('');
-                  lines.push(`角色描述:`);
+                  lines.push(`Mô tả nhân vật:`);
                   lines.push(description);
                 }
                 
                 // AI 校准信息
                 if (hasCalibrationData) {
                   lines.push('');
-                  lines.push(`AI 校准信息: ${isManuallyModified ? '已修改' : '已校准'}`);
+                  lines.push(`Thông tin hiệu chỉnh AI: ${isManuallyModified ? 'Đã sửa' : 'Đã hiệu chỉnh'}`);
                   
                   // 6层身份锚点
                   if (identityAnchors) {
                     lines.push('');
-                    lines.push('--- 6层身份锚点 ---');
+                    lines.push('--- 6 lớp neo danh tính ---');
                     
                     // ① 骨相层
                     const boneFeatures = [identityAnchors.faceShape, identityAnchors.jawline, identityAnchors.cheekbones].filter(Boolean);
                     if (boneFeatures.length > 0) {
-                      lines.push(`① 骨相层: ${boneFeatures.join(', ')}`);
+                      lines.push(`① Lớp cấu trúc xương: ${boneFeatures.join(', ')}`);
                     }
                     
                     // ② 五官层
                     const facialFeatures = [identityAnchors.eyeShape, identityAnchors.eyeDetails, identityAnchors.noseShape, identityAnchors.lipShape].filter(Boolean);
                     if (facialFeatures.length > 0) {
-                      lines.push(`② 五官层: ${facialFeatures.join(', ')}`);
+                      lines.push(`② Lớp ngũ quan: ${facialFeatures.join(', ')}`);
                     }
                     
                     // ③ 辨识标记层
                     if (identityAnchors.uniqueMarks && identityAnchors.uniqueMarks.length > 0) {
-                      lines.push(`③ 辨识标记层: ${identityAnchors.uniqueMarks.join(', ')}`);
+                      lines.push(`③ Lớp dấu hiệu nhận dạng: ${identityAnchors.uniqueMarks.join(', ')}`);
                     }
                     
                     // ④ 色彩锚点层
                     if (identityAnchors.colorAnchors) {
                       const colors: string[] = [];
-                      if (identityAnchors.colorAnchors.iris) colors.push(`瞳色:${identityAnchors.colorAnchors.iris}`);
-                      if (identityAnchors.colorAnchors.hair) colors.push(`发色:${identityAnchors.colorAnchors.hair}`);
-                      if (identityAnchors.colorAnchors.skin) colors.push(`肤色:${identityAnchors.colorAnchors.skin}`);
-                      if (identityAnchors.colorAnchors.lips) colors.push(`唇色:${identityAnchors.colorAnchors.lips}`);
+                      if (identityAnchors.colorAnchors.iris) colors.push(`Màu mắt:${identityAnchors.colorAnchors.iris}`);
+                      if (identityAnchors.colorAnchors.hair) colors.push(`Màu tóc:${identityAnchors.colorAnchors.hair}`);
+                      if (identityAnchors.colorAnchors.skin) colors.push(`Màu da:${identityAnchors.colorAnchors.skin}`);
+                      if (identityAnchors.colorAnchors.lips) colors.push(`Màu môi:${identityAnchors.colorAnchors.lips}`);
                       if (colors.length > 0) {
-                        lines.push(`④ 色彩锚点层: ${colors.join(', ')}`);
+                        lines.push(`④ Lớp neo màu sắc: ${colors.join(', ')}`);
                       }
                     }
                     
                     // ⑤ 皮肤纹理层
                     if (identityAnchors.skinTexture) {
-                      lines.push(`⑤ 皮肤纹理层: ${identityAnchors.skinTexture}`);
+                      lines.push(`⑤ Lớp kết cấu da: ${identityAnchors.skinTexture}`);
                     }
                     
                     // ⑥ 发型锚点层
                     const hairFeatures = [identityAnchors.hairStyle, identityAnchors.hairlineDetails].filter(Boolean);
                     if (hairFeatures.length > 0) {
-                      lines.push(`⑥ 发型锚点层: ${hairFeatures.join(', ')}`);
+                      lines.push(`⑥ Lớp neo kiểu tóc: ${hairFeatures.join(', ')}`);
                     }
                   }
                   
                   // 负面提示词
                   if (charNegativePrompt) {
                     lines.push('');
-                    lines.push('--- 负面提示词 ---');
+                    lines.push('--- Prompt phủ định ---');
                     if (charNegativePrompt.avoid && charNegativePrompt.avoid.length > 0) {
-                      lines.push(`避免: ${charNegativePrompt.avoid.join(', ')}`);
+                      lines.push(`Tránh: ${charNegativePrompt.avoid.join(', ')}`);
                     }
                     if (charNegativePrompt.styleExclusions && charNegativePrompt.styleExclusions.length > 0) {
-                      lines.push(`风格排除: ${charNegativePrompt.styleExclusions.join(', ')}`);
+                      lines.push(`Loại trừ phong cách: ${charNegativePrompt.styleExclusions.join(', ')}`);
                     }
                   }
                   
                   // 专业视觉提示词
                   if (visualPromptEn || visualPromptZh) {
                     lines.push('');
-                    lines.push('--- 专业视觉提示词 ---');
+                    lines.push('--- Gợi ý thị giác chuyên nghiệp ---');
                     if (visualPromptEn) lines.push(`EN: ${visualPromptEn}`);
                     if (visualPromptZh) lines.push(`ZH: ${visualPromptZh}`);
                   }
@@ -1081,23 +1081,23 @@ export function GenerationPanel({ selectedCharacter, onCharacterCreated }: Gener
                 // 年代信息
                 if (storyYear || era) {
                   lines.push('');
-                  lines.push('--- 年代信息 ---');
-                  if (storyYear) lines.push(`故事年份: ${storyYear}年`);
-                  if (era) lines.push(`时代背景: ${era}`);
+                  lines.push('--- Thông tin thời đại ---');
+                  if (storyYear) lines.push(`Năm câu chuyện: ${storyYear}`);
+                  if (era) lines.push(`Bối cảnh thời đại: ${era}`);
                 }
                 
                 // 视觉风格
                 const stylePreset = getStyleById(styleId);
                 const styleLabel = stylePreset?.name || styleId;
                 lines.push('');
-                lines.push(`视觉风格: ${styleLabel}`);
+                lines.push(`Phong cách thị giác: ${styleLabel}`);
                 if (stylePreset?.prompt) {
-                  lines.push(`风格提示词: ${stylePreset.prompt.substring(0, 100)}...`);
+                  lines.push(`Prompt phong cách: ${stylePreset.prompt.substring(0, 100)}...`);
                 }
                 
                 // 参考图片
                 if (referenceImages.length > 0) {
-                  lines.push(`参考图片: ${referenceImages.length} 张`);
+                  lines.push(`Ảnh tham khảo: ${referenceImages.length} ảnh`);
                 }
                 
                 // 生成内容
@@ -1105,19 +1105,19 @@ export function GenerationPanel({ selectedCharacter, onCharacterCreated }: Gener
                 if (selectedSheetElements.length > 0) {
                   const labels = selectedSheetElements.map(e => e?.label).join(', ');
                   const prompts = selectedSheetElements.map(e => e?.prompt).join(', ');
-                  lines.push(`生成内容: ${labels}`);
-                  lines.push(`内容提示词: ${prompts}`);
+                  lines.push(`Nội dung tạo: ${labels}`);
+                  lines.push(`Prompt nội dung: ${prompts}`);
                 }
                 
                 const text = lines.join('\n');
                 navigator.clipboard.writeText(text);
-                toast.success('角色数据已复制到剪贴板');
+                toast.success('Đã sao chép dữ liệu nhân vật vào clipboard');
               }}
               className="w-full"
               disabled={isGenerating}
             >
               <Copy className="h-4 w-4 mr-2" />
-              复制角色数据
+              Sao chép dữ liệu nhân vật
             </Button>
           </div>
         </div>

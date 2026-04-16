@@ -481,7 +481,7 @@ export function AngleController({
       
       {!compact && (
         <div className="text-[9px] text-zinc-500 font-mono">
-          [拖拽] 旋转 · [滚轮] 缩放
+          [Kéo thả] Xoay · [Cuộn] Thu phóng
         </div>
       )}
     </div>

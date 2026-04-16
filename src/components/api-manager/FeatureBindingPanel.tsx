@@ -59,49 +59,49 @@ interface FeatureMeta {
 const FEATURE_CONFIGS: FeatureMeta[] = [
   {
     key: "script_analysis",
-    name: "剧本分析 / 对话",
-    description: "将故事文本分解为结构化剧本",
+    name: "Phân tích kịch bản / Hội thoại",
+    description: "Phân tách văn bản truyện thành kịch bản có cấu trúc",
     icon: <FileText className="h-4 w-4" />,
     requiredCapability: "text",
   },
   {
     key: "character_generation",
-    name: "图片生成",
-    description: "生成角色和场景参考图",
+    name: "Tạo ảnh",
+    description: "Tạo ảnh tham chiếu nhân vật và bối cảnh",
     icon: <Image className="h-4 w-4" />,
     requiredCapability: "image_generation",
-    recommendation: "💎 推荐使用 Nano Banana Pro (Gemini 3 Pro)— 画质优秀、一致性好",
+    recommendation: "💎 Đề xuất sử dụng Nano Banana Pro (Gemini 3 Pro) — chất lượng hình ảnh tuyệt vời, tính nhất quán cao",
   },
   {
     key: "video_generation",
-    name: "视频生成",
-    description: "将图片转换为视频",
+    name: "Tạo video",
+    description: "Chuyển đổi ảnh thành video",
     icon: <Video className="h-4 w-4" />,
     requiredCapability: "video_generation",
-    recommendation: "🧪 测试推荐 doubao-seedance-1-0-lite-t2v-250428 — 适合快速验证流程",
+    recommendation: "🧪 Đề xuất kiểm thử doubao-seedance-1-0-lite-t2v-250428 — phù hợp để xác minh quy trình nhanh",
   },
   {
     key: "image_understanding",
-    name: "图片理解",
-    description: "分析图片内容生成描述",
+    name: "Nhận diện ảnh",
+    description: "Phân tích nội dung ảnh và tạo mô tả",
     icon: <ScanEye className="h-4 w-4" />,
     requiredCapability: "vision",
   },
   {
     key: "freedom_image",
-    name: "自由板块-图片",
-    description: "自由板块独立的图片生成配置（未配置时回退到「图片生成」）",
+    name: "Bảng tự do - Ảnh",
+    description: "Cấu hình tạo ảnh độc lập cho bảng tự do (khi chưa cấu hình sẽ dùng \"Tạo ảnh\")",
     icon: <Sparkles className="h-4 w-4" />,
     requiredCapability: "image_generation",
-    recommendation: "🎨 可独立配置自由板块使用的图片生成模型，不影响其他板块",
+    recommendation: "🎨 Có thể cấu hình riêng model tạo ảnh cho bảng tự do, không ảnh hưởng các bảng khác",
   },
   {
     key: "freedom_video",
-    name: "自由板块-视频",
-    description: "自由板块独立的视频生成配置（未配置时回退到「视频生成」）",
+    name: "Bảng tự do - Video",
+    description: "Cấu hình tạo video độc lập cho bảng tự do (khi chưa cấu hình sẽ dùng \"Tạo video\")",
     icon: <Clapperboard className="h-4 w-4" />,
     requiredCapability: "video_generation",
-    recommendation: "🎬 可独立配置自由板块使用的视频生成模型，不影响其他板块",
+    recommendation: "🎬 Có thể cấu hình riêng model tạo video cho bảng tự do, không ảnh hưởng các bảng khác",
   },
 ];
 
@@ -389,10 +389,10 @@ export function FeatureBindingPanel() {
       <div className="flex items-center justify-between">
         <h3 className="font-bold text-foreground flex items-center gap-2">
           <Link2 className="h-4 w-4" />
-          服务映射
+          Ánh xạ dịch vụ
         </h3>
         <span className="text-xs text-muted-foreground">
-          已配置: {configuredCount}/{FEATURE_CONFIGS.length}
+          Đã cấu hình: {configuredCount}/{FEATURE_CONFIGS.length}
         </span>
       </div>
 
@@ -478,17 +478,17 @@ export function FeatureBindingPanel() {
                       )}
                       {validBindings.length > 0 && (
                         <span className="text-xs bg-primary/20 text-primary px-1.5 py-0.5 rounded">
-                          {validBindings.length} 个模型
+                          {validBindings.length} model
                         </span>
                       )}
                       {isFreedomFeature && (
                         <span className="text-xs bg-muted text-muted-foreground px-1.5 py-0.5 rounded">
-                          可用 {selectableOptionKeys.length}
+                          Khả dụng {selectableOptionKeys.length}
                         </span>
                       )}
                       {isFreedomFeature && invalidBindings.length > 0 && (
                         <span className="text-xs bg-amber-500/15 text-amber-700 dark:text-amber-300 px-1.5 py-0.5 rounded">
-                          暂不可用 {invalidBindings.length}
+                          Tạm không khả dụng {invalidBindings.length}
                         </span>
                       )}
                     </div>
@@ -513,12 +513,12 @@ export function FeatureBindingPanel() {
                 <div className="px-4 pb-4 pt-0 border-t border-border/50">
                   {options.length === 0 ? (
                     <p className="text-xs text-muted-foreground py-2">
-                      暂无可选模型（请先在 API 服务商里配置模型列表）
+                      Chưa có model khả dụng (vui lòng cấu hình danh sách model trong nhà cung cấp API trước)
                     </p>
                   ) : (
                     <div className="space-y-3 pt-3">
                       <p className="text-xs text-muted-foreground">
-                        可多选，请求将按轮询分配到各模型（间隔 3 秒）
+                        Có thể chọn nhiều, yêu cầu sẽ được phân phối luân phiên đến các model (cách 3 giây)
                       </p>
 
                       {/* 推荐模型提示 */}
@@ -547,7 +547,7 @@ export function FeatureBindingPanel() {
                         return (
                           <div className="flex flex-col gap-1.5 px-3 py-2.5 rounded-md bg-blue-500/10 border border-blue-500/30">
                             <span className="text-xs font-medium text-blue-600 dark:text-blue-400">
-                              已选的 MemeFast 模型支持以下分组：
+                              Các model MemeFast đã chọn hỗ trợ các nhóm sau:
                             </span>
                             <div className="flex flex-wrap gap-1.5">
                               {sortedGroups.map(g => (
@@ -557,14 +557,14 @@ export function FeatureBindingPanel() {
                               ))}
                             </div>
                             <span className="text-[11px] text-blue-600/80 dark:text-blue-400/80">
-                              建议在 memefast.top 后台为以上分组都添加 Key，Key 越多可用性越高。
+                              Khuyến nghị thêm Key cho các nhóm trên tại trang quản trị memefast.top, càng nhiều Key thì khả dụng càng cao.
                             </span>
                           </div>
                         );
                       })()}
                       {isFreedomFeature && invalidBindings.length > 0 && (
                         <p className="text-[11px] text-amber-700 dark:text-amber-300">
-                          检测到暂不可用绑定：系统不会自动清理，模型恢复后会自动继续可用。
+                          Phát hiện liên kết tạm không khả dụng: hệ thống sẽ không tự động xóa, khi model phục hồi sẽ tự động hoạt động lại.
                         </p>
                       )}
 
@@ -577,7 +577,7 @@ export function FeatureBindingPanel() {
                               onCheckedChange={handleToggleSelectAll}
                               disabled={selectableOptionKeys.length === 0}
                             />
-                            全选模型（取消即全部不选）
+                            Chọn tất cả model (bỏ chọn để hủy toàn bộ)
                           </label>
                           <span className="text-[11px] text-muted-foreground">
                             {selectedSelectableCount}/{selectableOptionKeys.length}
@@ -590,7 +590,7 @@ export function FeatureBindingPanel() {
                         <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground" />
                         <input
                           type="text"
-                          placeholder="搜索模型名称..."
+                          placeholder="Tìm kiếm tên model..."
                           value={searchQuery[feature.key] || ''}
                           onChange={(e) => setSearchQuery(prev => ({ ...prev, [feature.key]: e.target.value }))}
                           className="w-full pl-8 pr-3 py-1.5 text-xs rounded-md border border-border bg-background focus:outline-none focus:ring-1 focus:ring-primary/50"
@@ -624,7 +624,7 @@ export function FeatureBindingPanel() {
                                     : "bg-muted/30 border-border hover:bg-accent/50 text-muted-foreground"
                                 )}
                               >
-                                全部品牌
+                                Tất cả thương hiệu
                                 <span className={cn(
                                   "text-[10px] px-1 py-0.5 rounded-full min-w-[18px] text-center",
                                   !activeBrand ? "bg-primary/20" : "bg-muted"
@@ -668,7 +668,7 @@ export function FeatureBindingPanel() {
                             <div className="space-y-1 max-h-[280px] overflow-y-auto">
                               {filteredOptions.length === 0 ? (
                                 <p className="text-xs text-muted-foreground py-2 text-center">
-                                  无匹配模型
+                                  Không có model phù hợp
                                 </p>
                               ) : (
                                 filteredOptions.map((option) => {
@@ -724,10 +724,10 @@ export function FeatureBindingPanel() {
           <AlertCircle className="h-4 w-4 text-destructive mt-0.5 shrink-0" />
           <div className="text-xs">
             <p className="font-medium text-destructive">
-              部分服务未配置
+              Một số dịch vụ chưa được cấu hình
             </p>
             <p className="text-muted-foreground mt-1">
-              请在上方为每个功能选择「供应商/模型」，并确保对应供应商已填写 API Key。
+              Vui lòng chọn "Nhà cung cấp/Model" cho từng tính năng ở trên, và đảm bảo nhà cung cấp tương ứng đã điền API Key.
             </p>
           </div>
         </div>
@@ -736,12 +736,12 @@ export function FeatureBindingPanel() {
       {/* Help text */}
       <div className="text-xs text-muted-foreground bg-muted/50 p-3 rounded-lg space-y-2">
         <p>
-          <strong>💡 多模型轮询：</strong>
-          每个功能可选择多个模型，请求将按顺序分配到各模型（每次间隔 3 秒），避免单一 API 限流。
+          <strong>💡 Luân phiên đa model:</strong>
+          Mỗi tính năng có thể chọn nhiều model, yêu cầu sẽ được phân phối theo thứ tự đến từng model (cách 3 giây mỗi lần), tránh giới hạn tốc độ API đơn lẻ.
         </p>
         <p>
-          <strong>📌 说明：</strong>
-          可选项来自「API 服务商」里配置的模型列表，点击展开后可多选。
+          <strong>📌 Lưu ý:</strong>
+          Các tùy chọn đến từ danh sách model đã cấu hình trong "Nhà cung cấp API", nhấp để mở rộng và chọn nhiều.
         </p>
       </div>
     </div>

@@ -91,10 +91,10 @@ export function AngleSwitchDialog({
       <DialogContent className="max-w-sm p-4 bg-zinc-900 border-zinc-800">
         <DialogHeader className="pb-2">
           <DialogTitle className="text-sm text-white">
-            视角切换 - {frameType === "start" ? "首帧" : "尾帧"}
+            Chuyển góc nhìn - {frameType === "start" ? "Khung đầu" : "Khung cuối"}
           </DialogTitle>
           <DialogDescription className="sr-only">
-            通过3D球面控制器选择目标视角，拖拽旋转、滚轮缩放
+            Chọn góc nhìn mục tiêu qua bộ điều khiển cầu 3D, kéo để xoay, cuộn để thu phóng
           </DialogDescription>
         </DialogHeader>
 
@@ -116,7 +116,7 @@ export function AngleSwitchDialog({
               disabled={isGenerating}
               className="flex-1 h-8 text-xs bg-transparent border-zinc-700 hover:bg-zinc-800 text-white"
             >
-              取消
+              Hủy
             </Button>
             <Button
               size="sm"
@@ -125,9 +125,9 @@ export function AngleSwitchDialog({
               className="flex-1 h-8 text-xs bg-lime-500 hover:bg-lime-600 text-black"
             >
               {isGenerating ? (
-                <><Loader2 className="h-3 w-3 mr-1 animate-spin" />生成中</>
+                <><Loader2 className="h-3 w-3 mr-1 animate-spin" />Đang tạo</>
               ) : (
-                "生成"
+                "Tạo"
               )}
             </Button>
           </div>

@@ -29,7 +29,7 @@ interface ProjectStore {
 // Default project for desktop app
 const DEFAULT_PROJECT: Project = {
   id: "default-project",
-  name: "魔因漫创项目",
+  name: "Dự án Moyin Creator",
   createdAt: Date.now(),
   updatedAt: Date.now(),
 };
@@ -62,7 +62,7 @@ export const useProjectStore = create<ProjectStore>()(
       createProject: (name) => {
         const newProject: Project = {
           id: generateUUID(),
-          name: name?.trim() || `新项目 ${new Date().toLocaleDateString('zh-CN')}`,
+          name: name?.trim() || `Dự án mới ${new Date().toLocaleDateString('vi-VN')}`,
           createdAt: Date.now(),
           updatedAt: Date.now(),
         };
@@ -182,7 +182,7 @@ async function discoverProjectsFromDisk(): Promise<void> {
     // 尝试从每个遗漏项目的 director / script store 文件中提取项目名
     const recoveredProjects: Project[] = [];
     for (const pid of missingIds) {
-      let name = `恢复的项目 (${pid.substring(0, 8)})`;
+      let name = `Dự án khôi phục (${pid.substring(0, 8)})`;
       const createdAt = Date.now();
 
       // 尝试从 script store 获取名称
@@ -207,7 +207,7 @@ async function discoverProjectsFromDisk(): Promise<void> {
           if (state?.projects?.[pid]?.screenplay) {
             // 有剧本内容，说明确实是有效项目
             const screenplay = state.projects[pid].screenplay;
-            if (!name.includes('恢复的项目')) {
+            if (!name.includes('Dự án khôi phục')) {
               // 已经有名称了，不覆盖
             } else if (screenplay) {
               // 用剧本前几个字做临时名称

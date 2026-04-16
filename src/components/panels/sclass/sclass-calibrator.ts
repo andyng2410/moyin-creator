@@ -81,7 +81,7 @@ export async function calibrateGroup(
   _sceneLibrary: Scene[],
 ): Promise<CalibrationResult> {
   if (scenes.length === 0) {
-    throw new Error('组内无镜头，无法校准');
+    throw new Error('Không có cảnh quay trong nhóm, không thể hiệu chỉnh');
   }
 
   const totalDuration = scenes.reduce((sum, s) => sum + (s.duration || 5), 0);
@@ -140,7 +140,7 @@ calibratedPrompt 必须覆盖全部 ${scenes.length} 个镜头，保持镜头编
   try {
     parsed = JSON.parse(cleaned);
   } catch {
-    throw new Error('AI 返回的 JSON 解析失败，请重试');
+    throw new Error('Phân tích JSON từ AI thất bại, vui lòng thử lại');
   }
 
   // ---- 校验 & 容错 ----
@@ -161,7 +161,7 @@ calibratedPrompt 必须覆盖全部 ${scenes.length} 个镜头，保持镜头编
   }
 
   if (!result.calibratedPrompt) {
-    throw new Error('AI 未返回有效的 calibratedPrompt');
+    throw new Error('AI không trả về calibratedPrompt hợp lệ');
   }
 
   return result;

@@ -220,7 +220,7 @@ export function isFeatureReady(feature: AIFeature): boolean {
 export function getFeatureNotConfiguredMessage(feature: AIFeature): string {
   const featureInfo = AI_FEATURES.find(f => f.key === feature);
   const featureName = featureInfo?.name || feature;
-  return `请先在设置中为「${featureName}」功能绑定 API 供应商`;
+  return `Vui lòng liên kết nhà cung cấp API cho chức năng "${featureName}" trong cài đặt trước`;
 }
 
 // ==================== 统一 API 调用入口 ====================
@@ -267,10 +267,10 @@ export async function callFeatureAPI(
   const model = options?.modelOverride || config.model || config.models?.[0];
   const baseUrl = config.baseUrl?.replace(/\/+$/, '');
   if (!baseUrl) {
-    throw new Error('请先在设置中配置 Base URL');
+    throw new Error('Vui lòng cấu hình Base URL trong cài đặt trước');
   }
   if (!model) {
-    throw new Error('请先在设置中配置模型');
+    throw new Error('Vui lòng cấu hình mô hình trong cài đặt trước');
   }
   
   console.log(`[callFeatureAPI] 功能: ${feature}`);

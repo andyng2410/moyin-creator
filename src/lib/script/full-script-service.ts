@@ -383,7 +383,7 @@ export async function generateEpisodeShots(
   const project = store.projects[projectId];
   
   if (!project) {
-    throw new Error("项目不存在");
+    throw new Error("Dự án không tồn tại");
   }
   
   const episodeScript = project.episodeRawScripts.find(
@@ -391,7 +391,7 @@ export async function generateEpisodeShots(
   );
   
   if (!episodeScript) {
-    throw new Error(`找不到第 ${episodeIndex} 集的剧本`);
+    throw new Error(`Không tìm thấy kịch bản tập ${episodeIndex}`);
   }
   
   // 更新集的生成状态
@@ -405,12 +405,12 @@ export async function generateEpisodeShots(
     // 获取该集对应的场景
     const scriptData = project.scriptData;
     if (!scriptData) {
-      throw new Error("剧本数据不存在");
+      throw new Error("Dữ liệu kịch bản không tồn tại");
     }
     
     const episode = scriptData.episodes.find((ep) => ep.index === episodeIndex);
     if (!episode) {
-      throw new Error(`找不到第 ${episodeIndex} 集的结构数据`);
+      throw new Error(`Không tìm thấy dữ liệu cấu trúc tập ${episodeIndex}`);
     }
     
     const episodeScenes = scriptData.scenes.filter((s) =>
@@ -984,7 +984,7 @@ export async function regenerateAllEpisodeShots(
   const project = store.projects[projectId];
   
   if (!project || !project.episodeRawScripts.length) {
-    throw new Error("没有可生成的集");
+    throw new Error("Không có tập nào để tạo");
   }
   
   const totalEpisodes = project.episodeRawScripts.length;
@@ -2241,7 +2241,7 @@ ${shotDescriptions}`;
       // 部分解析也失败
     }
     
-    throw new Error('解析 AI 响应失败');
+    throw new Error('Phân tích phản hồi AI thất bại');
   }
 }
 

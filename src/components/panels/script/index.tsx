@@ -2348,13 +2348,13 @@ export function ScriptView() {
         <div className="flex items-center justify-between">
           <h2 className="font-semibold text-sm flex items-center gap-2">
             <FileText className="h-4 w-4" />
-            剧本编辑
+            Chỉnh sửa kịch bản
           </h2>
           <span className="text-xs text-muted-foreground">
             {parseStatus === "parsing"
-              ? "解析中..."
+              ? "Đang phân tích..."
               : scriptProject?.shotStatus === "generating"
-              ? "分镜生成中..."
+              ? "Đang tạo phân cảnh..."
               : parseStatus === "ready" && scriptData
               ? `${scriptData.title}`
               : ""}
@@ -2502,15 +2502,15 @@ export function ScriptView() {
       <AlertDialog open={structureOverwriteConfirmOpen} onOpenChange={setStructureOverwriteConfirmOpen}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>覆盖现有场景结构？</AlertDialogTitle>
+            <AlertDialogTitle>Ghi đè cấu trúc bối cảnh hiện tại?</AlertDialogTitle>
             <AlertDialogDescription>
-              该集已有场景数据，重新解析将替换现有场景并清理对应分镜。确认继续？
+              Tập này đã có dữ liệu bối cảnh, phân tích lại sẽ thay thế bối cảnh hiện tại và xóa phân cảnh tương ứng. Xác nhận tiếp tục?
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>取消</AlertDialogCancel>
+            <AlertDialogCancel>Hủy</AlertDialogCancel>
             <AlertDialogAction onClick={() => handleStructureCompletion()}>
-              确认覆盖
+              Xác nhận ghi đè
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

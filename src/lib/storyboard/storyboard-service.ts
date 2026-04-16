@@ -127,9 +127,9 @@ async function submitImageGenTask(
 
         const error = new Error(
           response.status === 401 || response.status === 403
-            ? 'API Key 无效或已过期，请检查配置'
+            ? 'API Key không hợp lệ hoặc đã hết hạn, vui lòng kiểm tra cấu hình'
             : response.status >= 500
-              ? '图片生成服务暂时不可用，请稍后再试'
+              ? 'Dịch vụ tạo ảnh tạm thời không khả dụng, vui lòng thử lại sau'
               : errorMessage
         ) as Error & { status?: number };
         error.status = response.status;
@@ -178,7 +178,7 @@ async function submitImageGenTask(
       }
       throw error;
     }
-    throw new Error('调用图片生成 API 时发生未知错误');
+    throw new Error('Đã xảy ra lỗi không xác định khi gọi API tạo ảnh');
   }
 }
 
@@ -591,7 +591,7 @@ async function submitVideoGenTask(
       }
 
       if (response.status === 401 || response.status === 403) {
-        throw new Error('API Key 无效或已过期，请检查配置');
+        throw new Error('API Key không hợp lệ hoặc đã hết hạn, vui lòng kiểm tra cấu hình');
       }
 
       const error = new Error(errorMessage) as Error & { status?: number };

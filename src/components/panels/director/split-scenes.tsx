@@ -4,8 +4,8 @@
 "use client";
 
 /**
- * 分镜组件 (Split Scenes Component)
- * 显示分镜切割结果，支持编辑提示词、上传尾帧、选择角色库、添加情绪标签
+ * phân cảnh组件 (Split Scenes Component)
+ * 显示phân cảnh切割结果，支持编辑提示词、上传khung cuối、选择角色库、添加情绪标签
  */
 
 import React, { useState, useCallback, useMemo, useRef } from "react";
@@ -283,24 +283,24 @@ const buildSceneCharacterCastLine = (contexts: SceneCharacterContext[]): string 
 };
 
 export function SplitScenes({ onBack, onGenerateVideos }: SplitScenesProps) {
-  // ========== 合并生成（九宫格）本地 UI 状态 ==========
+  // ========== Tạo gộp（lưới 9 ô）本地 UI 状态 ==========
   const [imageGenMode, setImageGenMode] = useState<'single' | 'merged'>('merged');
   const [frameMode, setFrameMode] = useState<'first' | 'last' | 'both'>('first');
   const [isMergedRunning, setIsMergedRunning] = useState(false);
   const [refStrategy, setRefStrategy] = useState<'cluster'|'minimal'|'none'>('cluster');
   const [useExemplar, setUseExemplar] = useState(true);
   const PAGE_CONCURRENCY = 2; // 每页并发集群数限制
-  // 合并生成停止控制
+  // Tạo gộpDừng控制
   const mergedAbortRef = useRef(false);
-  // 首帧/视频/尾帧生成的 AbortController（用于真正取消底层 fetch 和轮询）
+  // khung đầu/video/khung cuốitạo的 AbortController（用于真正Hủy底层 fetch 和轮询）
   const imageAbortRef = useRef<AbortController | null>(null);
   const videoAbortRef = useRef<AbortController | null>(null);
   const endFrameAbortRef = useRef<AbortController | null>(null);
-  // 合并生成控件将在 JSX 中内联渲染，避免闭包引用问题
+  // Tạo gộp控件将在 JSX 中内联渲染，避免闭包引用问题
   const [isGenerating, setIsGenerating] = useState(false);
   const [isGeneratingPrompts, setIsGeneratingPrompts] = useState(false);
   const [currentGeneratingId, setCurrentGeneratingId] = useState<number | null>(null);
-  // Tab 状态: 分镜编辑 vs 预告片
+  // Tab 状态: Chỉnh sửa phân cảnh vs Trailer
   const [activeTab, setActiveTab] = useState<"editing" | "trailer">("editing");
 
   // 角度切换状态
@@ -311,10 +311,10 @@ export function SplitScenes({ onBack, onGenerateVideos }: SplitScenesProps) {
   const [selectedHistoryIndex, setSelectedHistoryIndex] = useState(-1);
   const [isAngleSwitching, setIsAngleSwitching] = useState(false);
   
-  // 提取视频最后一帧状态
+  // 提取video最后一帧状态
   const [isExtractingFrame, setIsExtractingFrame] = useState(false);
 
-  // 四宫格状态
+  // lưới 4 ô状态
   const [quadGridOpen, setQuadGridOpen] = useState(false);
   const [quadGridResultOpen, setQuadGridResultOpen] = useState(false);
   const [quadGridTarget, setQuadGridTarget] = useState<{ sceneId: number; type: "start" | "end" } | null>(null);
@@ -342,7 +342,7 @@ export function SplitScenes({ onBack, onGenerateVideos }: SplitScenesProps) {
     storyPrompt: '',
   };
   const projectFolderId = projectData?.projectFolderId || null;
-  // 预告片数据 - 直接从 splitScenes 筛选，保证功能一致
+  // Trailer数据 - 直接从 splitScenes 筛选，保证功能一致
   const trailerConfig = projectData?.trailerConfig || null;
   const trailerShotIds = trailerConfig?.shotIds || [];
   
@@ -360,12 +360,12 @@ export function SplitScenes({ onBack, onGenerateVideos }: SplitScenesProps) {
     });
   }
   
-  // 筛选预告片分镜：通过 sceneName 包含 "预告片" 关键字来识别
+  // 筛选Trailerphân cảnh：通过 sceneName 包含 "Trailer" Tắt键字来识别
   const trailerScenes = useMemo(() => {
-    // 通过 sceneName 包含 "预告片" 来筛选
+    // 通过 sceneName 包含 "Trailer" 来筛选
     const filtered = splitScenes.filter(scene => {
       const sceneName = scene.sceneName || '';
-      return sceneName.includes('预告片');
+      return sceneName.includes('Trailer');
     });
     console.log('[SplitScenes] Trailer filter by sceneName:', {
       totalScenes: splitScenes.length,
@@ -396,19 +396,19 @@ export function SplitScenes({ onBack, onGenerateVideos }: SplitScenesProps) {
     updateSplitSceneDuration,
     updateSplitSceneAmbientSound,
     updateSplitSceneSoundEffects,
-    // 场景库关联更新方法
+    // 场景库Tắt联更新方法
     updateSplitSceneReference,
     updateSplitSceneEndFrameReference,
     // 通用字段更新方法（用于双击编辑）
     updateSplitSceneField,
-    // 视角切换历史
+    // chuyển góc nhìn历史
     addAngleSwitchHistory,
     deleteSplitScene,
     addBlankSplitScene,
     resetStoryboard,
-    // 预告片功能
+    // Trailer功能
     clearTrailer,
-    // 摄影风格档案
+    // Phong cách quay phim档案
     setCinematographyProfileId,
   } = useDirectorStore();
   const mediaProjectId = activeProjectId || undefined;
@@ -429,13 +429,13 @@ export function SplitScenes({ onBack, onGenerateVideos }: SplitScenesProps) {
     return null;
   }, [storyboardConfig.visualStyleId, storyboardConfig.styleTokens]);
 
-  // 读取当前摄影风格档案（未设置时使用默认经典电影摄影风格）
+  // 读取当前Phong cách quay phim档案（未设置时使用默认经典电影Phong cách quay phim）
   const currentCinProfileId = projectData?.cinematographyProfileId || DEFAULT_CINEMATOGRAPHY_PROFILE_ID;
 
-  // 切换摄影风格档案
+  // 切换Phong cách quay phim档案
   const handleCinProfileChange = useCallback((profileId: string) => {
     setCinematographyProfileId(profileId || undefined);
-    toast.success('摄影风格已更新');
+    toast.success('Đã cập nhật phong cách quay phim');
   }, [setCinematographyProfileId]);
 
   // Update style
@@ -444,20 +444,20 @@ export function SplitScenes({ onBack, onGenerateVideos }: SplitScenesProps) {
     if (style) {
       // 直接存储风格 ID，同时保留 styleTokens（完整 prompt）兼容旧逻辑
       setStoryboardConfig({ visualStyleId: styleId, styleTokens: [style.prompt] });
-      toast.success(`已切换为 ${style.name} 风格`);
+      toast.success(`Đã chuyển sang phong cách ${style.name}`);
     }
   }, [setStoryboardConfig]);
 
   // Update aspect ratio
   const handleAspectRatioChange = useCallback((ratio: '16:9' | '9:16') => {
     setStoryboardConfig({ aspectRatio: ratio });
-    toast.success(`已切换为 ${ratio === '16:9' ? '横屏' : '竖屏'} 模式`);
+    toast.success(`Đã chuyển sang chế độ ${ratio === '16:9' ? 'Ngang' : 'Dọc'}`);
   }, [setStoryboardConfig]);
 
   const { getApiKey, getProviderByPlatform, concurrency } = useAPIConfigStore();
   const { addMediaFromUrl, getOrCreateCategoryFolder } = useMediaStore();
   
-  // Get system category folder IDs for auto-saving (images → AI图片, videos → AI视频)
+  // Get system category folder IDs for auto-saving (images → AIảnh, videos → AIvideo)
   const getImageFolderId = useCallback(() => getOrCreateCategoryFolder('ai-image'), [getOrCreateCategoryFolder]);
   const getVideoFolderId = useCallback(() => getOrCreateCategoryFolder('ai-video'), [getOrCreateCategoryFolder]);
 
@@ -467,7 +467,7 @@ export function SplitScenes({ onBack, onGenerateVideos }: SplitScenesProps) {
     
     const mediaId = addMediaFromUrl({
       url: videoUrl,
-      name: `分镜 ${sceneId + 1} - AI视频`,
+      name: `phân cảnh ${sceneId + 1} - AIvideo`,
       type: 'video',
       source: 'ai-video',
       thumbnailUrl,
@@ -476,7 +476,7 @@ export function SplitScenes({ onBack, onGenerateVideos }: SplitScenesProps) {
       projectId: mediaProjectId,
     });
     
-    console.log('[SplitScenes] Auto-saved video to AI视频 folder:', mediaId);
+    console.log('[SplitScenes] Auto-saved video to AIvideo folder:', mediaId);
     return mediaId;
   }, [addMediaFromUrl, getVideoFolderId, mediaProjectId]);
 
@@ -486,14 +486,14 @@ export function SplitScenes({ onBack, onGenerateVideos }: SplitScenesProps) {
     
     const mediaId = addMediaFromUrl({
       url: imageUrl,
-      name: `分镜 ${sceneId + 1} - AI图片`,
+      name: `phân cảnh ${sceneId + 1} - AIảnh`,
       type: 'image',
       source: 'ai-image',
       folderId,
       projectId: mediaProjectId,
     });
     
-    console.log('[SplitScenes] Auto-saved image to AI图片 folder:', mediaId);
+    console.log('[SplitScenes] Auto-saved image to AIảnh folder:', mediaId);
     return mediaId;
   }, [addMediaFromUrl, getImageFolderId, mediaProjectId]);
 
@@ -557,7 +557,7 @@ export function SplitScenes({ onBack, onGenerateVideos }: SplitScenesProps) {
   // Handle delete scene
   const handleDeleteScene = useCallback((sceneId: number) => {
     deleteSplitScene(sceneId);
-    toast.success(`分镜 ${sceneId + 1} 已删除`);
+    toast.success(`phân cảnh ${sceneId + 1} đã xóa`);
   }, [deleteSplitScene]);
 
   // Handle remove first frame image
@@ -588,14 +588,14 @@ export function SplitScenes({ onBack, onGenerateVideos }: SplitScenesProps) {
     const sceneIndex = splitScenes.findIndex(s => s.id === sceneId);
     const scene = splitScenes[sceneIndex];
     if (!scene || !scene.videoUrl) {
-      toast.error('请先生成视频');
+      toast.error('Vui lòng tạo video trước');
       return;
     }
 
-    // 检查是否有下一个分镜
+    // 检查是否有下一个phân cảnh
     const nextScene = splitScenes[sceneIndex + 1];
     if (!nextScene) {
-      toast.error('这是最后一个分镜，无法插入到下一个分镜');
+      toast.error('Đây là phân cảnh cuối cùng, không thể chèn vào phân cảnh tiếp theo');
       return;
     }
 
@@ -605,72 +605,72 @@ export function SplitScenes({ onBack, onGenerateVideos }: SplitScenesProps) {
       // 提取最后一帧
       const lastFrameBase64 = await extractLastFrameFromVideo(scene.videoUrl, 0.1);
       if (!lastFrameBase64) {
-        toast.error('提取帧失败');
+        toast.error('Trích xuất khung thất bại');
         return;
       }
       
       // 持久化到本地 + 图床
       const persistResult = await persistSceneImage(lastFrameBase64, nextScene.id, 'first');
       
-      // 插入到下一个分镜的首帧
+      // 插入到下一个phân cảnh的khung đầu
       updateSplitSceneImage(nextScene.id, persistResult.localPath, nextScene.width, nextScene.height, persistResult.httpUrl || undefined);
-      toast.success(`分镜 ${sceneId + 1} 尾帧已插入到分镜 ${nextScene.id + 1} 首帧`);
+      toast.success(`Phân cảnh ${sceneId + 1} khung cuối đã chèn vào khung đầu phân cảnh ${nextScene.id + 1}`);
       
     } catch (e) {
       console.error('[SplitScenes] Extract last frame error:', e);
-      toast.error('提取帧失败');
+      toast.error('Trích xuất khung thất bại');
     } finally {
       setIsExtractingFrame(false);
     }
   }, [splitScenes, updateSplitSceneImage]);
 
-  // ========== 停止生成处理函数 ==========
-  // 停止首帧图片生成
+  // ========== Dừngtạo处理函数 ==========
+  // Dừngkhung đầuảnhtạo
   const handleStopImageGeneration = useCallback((sceneId: number) => {
     imageAbortRef.current?.abort();
     imageAbortRef.current = null;
     updateSplitSceneImageStatus(sceneId, {
       imageStatus: 'idle',
       imageProgress: 0,
-      imageError: '用户已取消',
+      imageError: '用户已Hủy',
     });
     setIsGenerating(false);
     setCurrentGeneratingId(null);
-    toast.info(`分镜 ${sceneId + 1} 首帧生成已停止`);
+    toast.info(`phân cảnh ${sceneId + 1} khung đầutạođã dừng`);
   }, [updateSplitSceneImageStatus]);
 
-  // 停止视频生成
+  // Dừngvideotạo
   const handleStopVideoGeneration = useCallback((sceneId: number) => {
     videoAbortRef.current?.abort();
     videoAbortRef.current = null;
     updateSplitSceneVideo(sceneId, {
       videoStatus: 'idle',
       videoProgress: 0,
-      videoError: '用户已取消',
+      videoError: '用户已Hủy',
     });
     setIsGenerating(false);
     setCurrentGeneratingId(null);
-    toast.info(`分镜 ${sceneId + 1} 视频生成已停止`);
+    toast.info(`phân cảnh ${sceneId + 1} videotạođã dừng`);
   }, [updateSplitSceneVideo]);
 
-  // 停止尾帧图片生成
+  // Dừngkhung cuốiảnhtạo
   const handleStopEndFrameGeneration = useCallback((sceneId: number) => {
     endFrameAbortRef.current?.abort();
     endFrameAbortRef.current = null;
     updateSplitSceneEndFrameStatus(sceneId, {
       endFrameStatus: 'idle',
       endFrameProgress: 0,
-      endFrameError: '用户已取消',
+      endFrameError: '用户已Hủy',
     });
     setIsGenerating(false);
-    toast.info(`分镜 ${sceneId + 1} 尾帧生成已停止`);
+    toast.info(`phân cảnh ${sceneId + 1} khung cuốitạođã dừng`);
   }, [updateSplitSceneEndFrameStatus]);
 
-  // 停止合并生成
+  // DừngTạo gộp
   const handleStopMergedGeneration = useCallback(() => {
     mergedAbortRef.current = true;
     setIsMergedRunning(false);
-    toast.info('合并生成已停止');
+    toast.info('Tạo gộpđã dừng');
   }, []);
 
   // Handle angle switch click
@@ -682,7 +682,7 @@ export function SplitScenes({ onBack, onGenerateVideos }: SplitScenesProps) {
       ? (scene.imageDataUrl || scene.imageHttpUrl) 
       : (scene.endFrameImageUrl || scene.endFrameHttpUrl);
     if (!imageUrl) {
-      toast.error(`请先生成${type === "start" ? "首帧" : "尾帧"}`);
+      toast.error(`Vui lòng tạo ${type === "start" ? "khung đầu" : "khung cuối"} trước`);
       return;
     }
 
@@ -709,7 +709,7 @@ export function SplitScenes({ onBack, onGenerateVideos }: SplitScenesProps) {
     const runninghubBaseUrl = runninghubProvider?.baseUrl?.trim();
     const runninghubAppId = runninghubProvider?.model?.[0];
     if (!runninghubKey || !runninghubBaseUrl || !runninghubAppId) {
-      toast.error("请先在设置中配置 RunningHub（API Key / Base URL / 模型AppId）");
+      toast.error("Vui lòng cấu hình RunningHub (API Key / Base URL / Model AppId) trong cài đặt");
       setAngleSwitchOpen(false);
       return;
     }
@@ -721,7 +721,7 @@ export function SplitScenes({ onBack, onGenerateVideos }: SplitScenesProps) {
       ? (scene.imageDataUrl || scene.imageHttpUrl) 
       : (scene.endFrameImageUrl || scene.endFrameHttpUrl);
     if (!originalImage) {
-      toast.error("找不到原图");
+      toast.error("Không tìm thấy ảnh gốc");
       return;
     }
 
@@ -769,15 +769,15 @@ export function SplitScenes({ onBack, onGenerateVideos }: SplitScenesProps) {
       setAngleSwitchOpen(false);
       setAngleSwitchResultOpen(true);
 
-      toast.success("视角切换生成完成");
+      toast.success("chuyển góc nhìntạohoàn tất");
     } catch (error) {
-      toast.error(`视角切换失败: ${(error as Error).message}`);
+      toast.error(`chuyển góc nhìnthất bại: ${(error as Error).message}`);
     } finally {
       setIsAngleSwitching(false);
     }
   }, [angleSwitchTarget, splitScenes, getProviderByPlatform, addAngleSwitchHistory]);
 
-  // 根据情绪标签生成氛围描述 - 使用统一 prompt-builder 模块
+  // 根据情绪标签tạo氛围描述 - 使用统一 prompt-builder 模块
   const buildEmotionDescription = useCallback((emotionTags: EmotionTag[]): string => {
     return buildEmotionDesc(emotionTags);
   }, []);
@@ -831,7 +831,7 @@ export function SplitScenes({ onBack, onGenerateVideos }: SplitScenesProps) {
     });
   }, []);
 
-  // 收集角色参考图片 - 必须在 handleQuadGridGenerate 之前定义
+  // 收集角色参考ảnh - 必须在 handleQuadGridGenerate 之前定义
   const getCharacterReferenceImages = useCallback((
     characterIds: string[],
     variationMap?: Record<string, string>,
@@ -937,7 +937,7 @@ export function SplitScenes({ onBack, onGenerateVideos }: SplitScenesProps) {
       ? (scene.imageDataUrl || scene.imageHttpUrl)
       : (scene.endFrameImageUrl || scene.endFrameHttpUrl);
     if (!imageUrl) {
-      toast.error(`请先生成${type === "start" ? "首帧" : "尾帧"}`);
+      toast.error(`Vui lòng tạo ${type === "start" ? "khung đầu" : "khung cuối"} trước`);
       return;
     }
 
@@ -956,14 +956,14 @@ export function SplitScenes({ onBack, onGenerateVideos }: SplitScenesProps) {
       ? (scene.imageDataUrl || scene.imageHttpUrl) 
       : (scene.endFrameImageUrl || scene.endFrameHttpUrl);
     if (!sourceImage) {
-      toast.error("找不到原图");
+      toast.error("Không tìm thấy ảnh gốc");
       return;
     }
 
     // Get API key - 使用服务映射配置
     const featureConfig = getFeatureConfig('character_generation');
     if (!featureConfig) {
-      toast.error('请先在设置中配置图片生成 API');
+      toast.error('Vui lòng cấu hình API tạo ảnh trong cài đặt');
       setQuadGridOpen(false);
       return;
     }
@@ -971,20 +971,20 @@ export function SplitScenes({ onBack, onGenerateVideos }: SplitScenesProps) {
     const keyManager = featureConfig.keyManager;
     const apiKey = keyManager.getCurrentKey() || '';
     if (!apiKey) {
-      toast.error('请先在设置中配置图片生成服务映射');
+      toast.error('Vui lòng cấu hình ánh xạ dịch vụ tạo ảnh trong cài đặt');
       setQuadGridOpen(false);
       return;
     }
     const platform = featureConfig.platform;
     const model = featureConfig.models?.[0];
     if (!model) {
-      toast.error('请先在设置中配置图片生成模型');
+      toast.error('Vui lòng cấu hình mô hình tạo ảnh trong cài đặt');
       setQuadGridOpen(false);
       return;
     }
     const imageBaseUrl = featureConfig.baseUrl?.replace(/\/+$/, '');
     if (!imageBaseUrl) {
-      toast.error('请先在设置中配置图片生成服务映射');
+      toast.error('Vui lòng cấu hình ánh xạ dịch vụ tạo ảnh trong cài đặt');
       setQuadGridOpen(false);
       return;
     }
@@ -992,8 +992,8 @@ export function SplitScenes({ onBack, onGenerateVideos }: SplitScenesProps) {
     console.log('[QuadGrid] Using image config:', { platform, model, imageBaseUrl });
 
     setIsQuadGridGenerating(true);
-    // 不在这里关闭对话框，保持打开显示进度
-    // setQuadGridOpen(false) 移到生成成功后
+    // 不在这里Tắt闭对话框，保持打Bật显示进度
+    // setQuadGridOpen(false) 移到tạothành công后
 
     try {
       // Build variation labels based on type
@@ -1035,7 +1035,7 @@ export function SplitScenes({ onBack, onGenerateVideos }: SplitScenesProps) {
             : `EXACTLY ${charCount} distinct people in each panel, no more no less, each person appears only ONCE.`;
       }
 
-      // === 竖屏构图约束（与九宫格一致） ===
+      // === Dọc构图约束（与lưới 9 ô一致） ===
       const verticalConstraint = aspect === '9:16' ? 'vertical composition, tighter framing, avoid letterboxing, ' : '';
 
       // === 动作描述（对时刻变体重要） ===
@@ -1156,7 +1156,7 @@ export function SplitScenes({ onBack, onGenerateVideos }: SplitScenesProps) {
             headers: { 'Authorization': `Bearer ${apiKey}` },
           });
           
-          if (!statusResp.ok) throw new Error(`查询任务失败: ${statusResp.status}`);
+          if (!statusResp.ok) throw new Error(`查询任务thất bại: ${statusResp.status}`);
           
           const statusData = await statusResp.json();
           const status = (statusData.status ?? statusData.data?.status ?? '').toString().toLowerCase();
@@ -1171,7 +1171,7 @@ export function SplitScenes({ onBack, onGenerateVideos }: SplitScenesProps) {
           }
           
           if (status === 'failed' || status === 'error') {
-            throw new Error(statusData.error || '图片生成失败');
+            throw new Error(statusData.error || 'ảnhtạothất bại');
           }
           
           await new Promise(r => setTimeout(r, pollInterval));
@@ -1179,7 +1179,7 @@ export function SplitScenes({ onBack, onGenerateVideos }: SplitScenesProps) {
       }
 
       if (!gridImageUrl) {
-        throw new Error('未获取到四宫格图片 URL');
+        throw new Error('未获取到lưới 4 ôảnh URL');
       }
 
       console.log('[QuadGrid] Grid image URL:', gridImageUrl.substring(0, 80));
@@ -1205,7 +1205,7 @@ export function SplitScenes({ onBack, onGenerateVideos }: SplitScenesProps) {
           }
           resolve(results);
         };
-        img.onerror = () => reject(new Error('加载四宫格图片失败'));
+        img.onerror = () => reject(new Error('加载lưới 4 ôảnhthất bại'));
         img.src = gridImageUrl!;
       });
 
@@ -1215,17 +1215,17 @@ export function SplitScenes({ onBack, onGenerateVideos }: SplitScenesProps) {
       setQuadGridResult({
         originalImage: sourceImage,
         images: slicedImages,
-        variationType: variationType === 'angle' ? '视角变体' : variationType === 'composition' ? '构图变体' : '时刻变体',
+        variationType: variationType === 'angle' ? 'góc nhìn变体' : variationType === 'composition' ? '构图变体' : '时刻变体',
         variationLabels,
       });
       
-      // 自动保存所有四宫格图片到素材库
+      // 自动保存所有lưới 4 ôảnh到素材库
       const folderId = getImageFolderId();
-      const variationTypeLabel = variationType === 'angle' ? '视角变体' : variationType === 'composition' ? '构图变体' : '时刻变体';
+      const variationTypeLabel = variationType === 'angle' ? 'góc nhìn变体' : variationType === 'composition' ? '构图变体' : '时刻变体';
       slicedImages.forEach((img, idx) => {
         addMediaFromUrl({
           url: img,
-          name: `四宫格-${variationTypeLabel}-${variationLabels[idx]}`,
+          name: `lưới 4 ô-${variationTypeLabel}-${variationLabels[idx]}`,
           type: 'image',
           source: 'ai-image',
           folderId,
@@ -1233,15 +1233,15 @@ export function SplitScenes({ onBack, onGenerateVideos }: SplitScenesProps) {
         });
       });
       
-      // 生成成功后才关闭选择对话框，打开结果对话框
+      // tạothành công后才Tắt闭选择对话框，打Bật结果对话框
       setQuadGridOpen(false);
       setQuadGridResultOpen(true);
-      toast.success('四宫格生成完成，已自动保存到素材库');
+      toast.success('lưới 4 ôtạohoàn tất，已自动保存到素材库');
 
     } catch (error) {
       const err = error as Error;
       console.error('[QuadGrid] Failed:', err);
-      toast.error(`四宫格生成失败: ${err.message}`);
+      toast.error(`lưới 4 ôtạothất bại: ${err.message}`);
     } finally {
       setIsQuadGridGenerating(false);
     }
@@ -1278,7 +1278,7 @@ export function SplitScenes({ onBack, onGenerateVideos }: SplitScenesProps) {
     setQuadGridResultOpen(false);
     setQuadGridResult(null);
     setQuadGridTarget(null);
-    toast.success(`已应用到${quadGridTarget.type === "start" ? "首帧" : "尾帧"}`);
+    toast.success(`Đã áp dụng cho${quadGridTarget.type === "start" ? "khung đầu" : "khung cuối"}`);
   }, [quadGridResult, quadGridTarget, updateSplitSceneImage, updateSplitSceneEndFrame]);
 
   // Copy quad grid image to another scene
@@ -1297,7 +1297,7 @@ export function SplitScenes({ onBack, onGenerateVideos }: SplitScenesProps) {
       updateSplitSceneEndFrame(targetSceneId, localPath, undefined, httpUrl || undefined);
     }
 
-    toast.success(`已复制到分镜 ${targetSceneId + 1} 的${targetFrameType === "start" ? "首帧" : "尾帧"}`);
+    toast.success(`Đã sao chép sang phân cảnh ${targetSceneId + 1} 的${targetFrameType === "start" ? "khung đầu" : "khung cuối"}`);
   }, [quadGridResult, updateSplitSceneImage, updateSplitSceneEndFrame]);
 
   // Save quad grid image to library
@@ -1310,14 +1310,14 @@ export function SplitScenes({ onBack, onGenerateVideos }: SplitScenesProps) {
     const folderId = getImageFolderId();
     addMediaFromUrl({
       url: imageToSave,
-      name: `四宫格-${quadGridResult.variationType}-${imageIndex + 1}`,
+      name: `lưới 4 ô-${quadGridResult.variationType}-${imageIndex + 1}`,
       type: 'image',
       source: 'ai-image',
       folderId,
       projectId: mediaProjectId,
     });
 
-    toast.success('已保存到素材库');
+    toast.success('đã lưu vào thư viện tư liệu');
   }, [quadGridResult, quadGridTarget, getImageFolderId, addMediaFromUrl]);
 
   // Save all quad grid images to library
@@ -1328,7 +1328,7 @@ export function SplitScenes({ onBack, onGenerateVideos }: SplitScenesProps) {
     quadGridResult.images.forEach((img, idx) => {
       addMediaFromUrl({
         url: img,
-        name: `四宫格-${quadGridResult.variationType}-${idx + 1}`,
+        name: `lưới 4 ô-${quadGridResult.variationType}-${idx + 1}`,
         type: 'image',
         source: 'ai-image',
         folderId,
@@ -1336,7 +1336,7 @@ export function SplitScenes({ onBack, onGenerateVideos }: SplitScenesProps) {
       });
     });
 
-    toast.success(`已保存 ${quadGridResult.images.length} 张图片到素材库`);
+    toast.success(`已保存 ${quadGridResult.images.length} 张ảnh到素材库`);
   }, [quadGridResult, getImageFolderId, addMediaFromUrl]);
 
   // Apply angle switch result
@@ -1367,17 +1367,17 @@ export function SplitScenes({ onBack, onGenerateVideos }: SplitScenesProps) {
     setAngleSwitchResult(null);
     setAngleSwitchTarget(null);
     setSelectedHistoryIndex(-1);
-    toast.success("视角已应用");
+    toast.success("Đã áp dụng góc nhìn");
   }, [angleSwitchResult, angleSwitchTarget, splitScenes, selectedHistoryIndex, updateSplitSceneImage, updateSplitSceneEndFrame]);
 
   // Handle auto-generate prompts using Gemini Vision
   const handleAutoGeneratePrompts = useCallback(async () => {
     if (!storyboardImage || splitScenes.length === 0) {
-      toast.error("无法生成提示词：缺失故事板或分镜");
+      toast.error("无法tạo提示词：缺失故事板或phân cảnh");
       return;
     }
 
-    // 尝试获取图片理解配置（仅当部分分镜缺少文字描述时才需要）
+    // 尝试获取ảnh理解配置（仅当部分phân cảnh缺少文字描述时才需要）
     const featureConfig = getFeatureConfig('image_understanding');
     const apiKey = featureConfig?.apiKey || '';
     const provider = featureConfig?.platform || '';
@@ -1386,11 +1386,11 @@ export function SplitScenes({ onBack, onGenerateVideos }: SplitScenesProps) {
     // Note: API config is optional - if scenes have text descriptions, no API is needed
 
     setIsGeneratingPrompts(true);
-    toast.info("正在根据分镜内容生成提示词...");
+    toast.info("正在根据phân cảnh内容tạo提示词...");
 
     try {
       // Get story prompt from storyboard config
-      const storyPrompt = storyboardConfig.storyPrompt || "视频分镜";
+      const storyPrompt = storyboardConfig.storyPrompt || "videophân cảnh";
 
       const prompts = await generateScenePrompts({
         storyboardImage,
@@ -1436,11 +1436,11 @@ export function SplitScenes({ onBack, onGenerateVideos }: SplitScenesProps) {
         }
       });
 
-      toast.success(`成功生成 ${updatedCount} 个分镜的提示词（${endFrameCount} 个需要尾帧）`);
+      toast.success(`thành côngtạo ${updatedCount} 个phân cảnh的提示词（${endFrameCount} 个需要khung cuối）`);
     } catch (error) {
       const err = error as Error;
       console.error("[SplitScenes] Prompt generation failed:", err);
-      toast.error(`生成失败: ${err.message}`);
+      toast.error(`tạothất bại: ${err.message}`);
     } finally {
       setIsGeneratingPrompts(false);
     }
@@ -1483,12 +1483,12 @@ export function SplitScenes({ onBack, onGenerateVideos }: SplitScenesProps) {
     const platform = featureConfig.platform;
     const model = featureConfig.models?.[0];
     if (!model) {
-      toast.error('请先在设置中配置视频生成模型');
+      toast.error('Vui lòng cấu hình mô hình tạo video trong cài đặt');
       return;
     }
     const videoBaseUrl = featureConfig.baseUrl?.replace(/\/+$/, '');
     if (!videoBaseUrl) {
-      toast.error('请先在设置中配置视频生成服务映射');
+      toast.error('Vui lòng cấu hình ánh xạ dịch vụ tạo video trong cài đặt');
       return;
     }
     
@@ -1500,7 +1500,7 @@ export function SplitScenes({ onBack, onGenerateVideos }: SplitScenesProps) {
     const keyManager = featureConfig.keyManager;
     const apiKey = keyManager.getCurrentKey() || '';
     if (!apiKey) {
-      toast.error(`请先配置 ${platform} API Key`);
+      toast.error(`Vui lòng cấu hình ${platform} API Key`);
       return;
     }
     
@@ -1511,7 +1511,7 @@ export function SplitScenes({ onBack, onGenerateVideos }: SplitScenesProps) {
     setIsGenerating(true);
     setCurrentGeneratingId(sceneId);
 
-    // 创建本次视频生成的 AbortController，停止按钮可通过 videoAbortRef.current.abort() 取消
+    // 创建本次videotạo的 AbortController，Dừng按钮可通过 videoAbortRef.current.abort() Hủy
     const videoController = new AbortController();
     videoAbortRef.current = videoController;
 
@@ -1524,8 +1524,8 @@ export function SplitScenes({ onBack, onGenerateVideos }: SplitScenesProps) {
         videoUrl: null,
       });
 
-      // 首帧图片选择逻辑：
-      // 1. 如果本地持久化图片存在且已配置图床，始终优先使用本地图重新上传到当前图床
+      // khung đầuảnh选择逻辑：
+      // 1. 如果本地持久化ảnh存在且已配置图床，始终优先使用本地图重新上传到当前图床
       // 2. 否则仅在 imageSource === 'ai-generated' 且已有可用 HTTP URL 时复用该 URL
       // 3. 其余情况使用 imageDataUrl，并在后续转换为 HTTP URL
       let firstFrameUrl = scene.imageDataUrl || (isHttpImageUrl(scene.imageHttpUrl) ? scene.imageHttpUrl : '');
@@ -1556,15 +1556,15 @@ export function SplitScenes({ onBack, onGenerateVideos }: SplitScenesProps) {
       }
       
       if (!firstFrameUrl) {
-        toast.error(`分镜 ${sceneId + 1} 没有首帧图片，请先生成图片`);
+        toast.error(`phân cảnh ${sceneId + 1} 没有khung đầuảnh，请先tạoảnh`);
         setIsGenerating(false);
         setCurrentGeneratingId(null);
         return;
       }
       console.log('[SplitScenes] First frame source:', firstFrameUrl.startsWith('http') ? 'HTTP URL' : 'local/base64');
       
-      // 仅当 needsEndFrame 为 true 时才使用尾帧
-      // 如果用户已删除尾帧或关闭了尾帧开关，则不使用尾帧作为视频生成的参考
+      // 仅当 needsEndFrame 为 true 时才使用khung cuối
+      // 如果用户đã xóakhung cuối或Tắt闭了khung cuốiBậtTắt，则不使用khung cuối作为videotạo的参考
       let lastFrameUrl: string | null | undefined = null;
       if (scene.needsEndFrame && (scene.endFrameImageUrl || scene.endFrameHttpUrl)) {
         const shouldRefreshEndFrame = shouldRefreshImageViaCurrentHost(scene.endFrameImageUrl);
@@ -1591,7 +1591,7 @@ export function SplitScenes({ onBack, onGenerateVideos }: SplitScenesProps) {
         videoProgress: 20,
       });
 
-      // ========== 构建视频提示词（使用统一 prompt-builder 模块） ==========
+      // ========== 构建video提示词（使用统一 prompt-builder 模块） ==========
       const cinProfile = projectData?.cinematographyProfileId
         ? getCinematographyProfile(projectData.cinematographyProfileId)
         : undefined;
@@ -1602,8 +1602,8 @@ export function SplitScenes({ onBack, onGenerateVideos }: SplitScenesProps) {
         mediaType: getMediaType(currentStyleId),
       });
       
-      // 使用用户设置的时长，默认 5 秒
-      // Seedance 1.5 Pro 要求 4-12 秒，强制限制范围
+      // 使用用户设置的时长，默认 5 giây
+      // Seedance 1.5 Pro 要求 4-12 giây，强制限制范围
       const rawDuration = scene.duration || 5;
       const videoDuration = Math.max(4, Math.min(12, rawDuration));
 
@@ -1696,7 +1696,7 @@ export function SplitScenes({ onBack, onGenerateVideos }: SplitScenesProps) {
             return uploadResult.url;
           } else {
             console.warn('[SplitScenes] Image upload failed:', uploadResult.error);
-            throw new Error(uploadResult.error || '图片上传失败');
+            throw new Error(uploadResult.error || 'ảnh上传thất bại');
           }
         } catch (e) {
           console.warn('[SplitScenes] Failed to upload image:', e);
@@ -1720,7 +1720,7 @@ export function SplitScenes({ onBack, onGenerateVideos }: SplitScenesProps) {
         frameLabel: 'First frame',
       });
       if (!firstFrameConverted) {
-        throw new Error('无法获取首帧图片的 HTTP URL，请重新生成图片');
+        throw new Error('无法获取khung đầuảnh的 HTTP URL，请Tạo lạiảnh');
       }
       imageWithRoles.push({ url: firstFrameConverted, role: 'first_frame' });
       console.log('[SplitScenes] First frame HTTP URL:', firstFrameConverted.substring(0, 60));
@@ -1746,7 +1746,7 @@ export function SplitScenes({ onBack, onGenerateVideos }: SplitScenesProps) {
 
       console.log('[SplitScenes] image_with_roles:', imageWithRoles.length, 'images', imageWithRoles.map(i => i.role));
 
-      // 调用统一视频生成 API（自动路由到正确的 MemeFast 端点）
+      // 调用统一videotạo API（自动路由到正确的 MemeFast 端点）
       const videoUrl = await callVideoGenerationApi(
         apiKey,
         fullPrompt,
@@ -1784,9 +1784,9 @@ export function SplitScenes({ onBack, onGenerateVideos }: SplitScenesProps) {
         videoUrl: finalVideoUrl,
         videoMediaId: mediaId,
       });
-      toast.success(`分镜 ${sceneId + 1} 视频生成完成，已保存到素材库`);
+      toast.success(`phân cảnh ${sceneId + 1} videotạohoàn tất，đã lưu vào thư viện tư liệu`);
       
-      // 视觉连续性：仅当分镜需要尾帧时，提取视频最后一帧
+      // 视觉连续性：仅当phân cảnh需要khung cuối时，提取video最后一帧
       const currentScene = splitScenes.find(s => s.id === sceneId);
       const shouldExtractEndFrame = currentScene?.needsEndFrame && !currentScene?.endFrameImageUrl;
       
@@ -1817,8 +1817,8 @@ export function SplitScenes({ onBack, onGenerateVideos }: SplitScenesProps) {
     } catch (error) {
       const err = error as Error;
 
-      // 用户主动取消：abort() 触发的 AbortError 或自定义 '用户已取消'
-      if (err.name === 'AbortError' || err.message === '用户已取消') {
+      // 用户主动Hủy：abort() 触发的 AbortError 或自定义 '用户已Hủy'
+      if (err.name === 'AbortError' || err.message === '用户已Hủy') {
         console.log(`[SplitScenes] Scene ${sceneId} video generation cancelled by user`);
         setIsGenerating(false);
         setCurrentGeneratingId(null);
@@ -1837,7 +1837,7 @@ export function SplitScenes({ onBack, onGenerateVideos }: SplitScenesProps) {
           videoProgress: 0,
           videoError: `MODERATION_SKIPPED:${err.message}`,
         });
-        toast.warning(`分镜 ${sceneId + 1} 因内容审核跳过`);
+        toast.warning(`phân cảnh ${sceneId + 1} 因内容审核跳过`);
         console.log(`[SplitScenes] Scene ${sceneId} skipped due to content moderation`);
       } else {
         // 普通错误
@@ -1846,7 +1846,7 @@ export function SplitScenes({ onBack, onGenerateVideos }: SplitScenesProps) {
           videoProgress: 0,
           videoError: err.message,
         });
-        toast.error(`分镜 ${sceneId + 1} 生成失败: ${err.message}`);
+        toast.error(`phân cảnh ${sceneId + 1} tạothất bại: ${err.message}`);
       }
     }
 
@@ -1858,7 +1858,7 @@ export function SplitScenes({ onBack, onGenerateVideos }: SplitScenesProps) {
   // 复用 handleGenerateSingleVideo 的统一 API 调用逻辑，避免使用不存在的 /api/ai/video 端点
   const handleGenerateVideos = useCallback(async () => {
     if (splitScenes.length === 0) {
-      toast.error("没有可生成的分镜");
+      toast.error("Không có phân cảnh để tạo");
       return;
     }
 
@@ -1873,7 +1873,7 @@ export function SplitScenes({ onBack, onGenerateVideos }: SplitScenesProps) {
       s => !(s.videoPromptZh?.trim() || s.videoPrompt?.trim())
     );
     if (scenesWithoutPrompts.length > 0) {
-      toast.warning(`还有 ${scenesWithoutPrompts.length} 个分镜没有提示词，将使用默认提示词`);
+      toast.warning(`还有 ${scenesWithoutPrompts.length} 个phân cảnh没有提示词，将使用默认提示词`);
     }
 
     // Filter scenes that need generation (idle or failed)
@@ -1882,12 +1882,12 @@ export function SplitScenes({ onBack, onGenerateVideos }: SplitScenesProps) {
     );
 
     if (scenesToGenerate.length === 0) {
-      toast.info("所有分镜已生成或正在生成中");
+      toast.info("Tất cả phân cảnh đã tạo hoặc đang tạo");
       return;
     }
 
     setIsGenerating(true);
-    toast.info(`开始串行生成 ${scenesToGenerate.length} 个视频...每次处理 ${concurrency} 个`);
+    toast.info(`Bật始串行tạo ${scenesToGenerate.length} 个video...每次处理 ${concurrency} 个`);
 
     let successCount = 0;
     const totalCount = scenesToGenerate.length;
@@ -1912,9 +1912,9 @@ export function SplitScenes({ onBack, onGenerateVideos }: SplitScenesProps) {
     setCurrentGeneratingId(null);
     
     if (successCount === totalCount) {
-      toast.success("所有视频生成完成！");
+      toast.success("Tất cả video đã tạo xong！");
     } else if (successCount > 0) {
-      toast.info(`${successCount}/${totalCount} 个视频生成完成，${totalCount - successCount} 个失败`);
+      toast.info(`${successCount}/${totalCount} 个videotạohoàn tất，${totalCount - successCount} 个thất bại`);
     }
   }, [splitScenes, concurrency, handleGenerateSingleVideo]);
 
@@ -1926,26 +1926,26 @@ export function SplitScenes({ onBack, onGenerateVideos }: SplitScenesProps) {
     // 使用服务映射配置 - 不再 fallback 到硬编码
     const featureConfig = getFeatureConfig('character_generation');
     if (!featureConfig) {
-      toast.error('请先在设置中配置图片生成服务映射');
+      toast.error('Vui lòng cấu hình ánh xạ dịch vụ tạo ảnh trong cài đặt');
       return;
     }
     
     const keyManager = featureConfig.keyManager;
     const apiKey = keyManager.getCurrentKey() || '';
     if (!apiKey) {
-      toast.error('请先在设置中配置图片生成服务映射');
+      toast.error('Vui lòng cấu hình ánh xạ dịch vụ tạo ảnh trong cài đặt');
       return;
     }
     const platform = featureConfig.platform;
     const model = featureConfig.models?.[0];
     if (!model) {
-      toast.error('请先在设置中配置图片生成模型');
+      toast.error('Vui lòng cấu hình mô hình tạo ảnh trong cài đặt');
       return;
     }
     
     const imageBaseUrl = featureConfig.baseUrl?.replace(/\/+$/, '');
     if (!imageBaseUrl) {
-      toast.error('请先在设置中配置图片生成服务映射');
+      toast.error('Vui lòng cấu hình ánh xạ dịch vụ tạo ảnh trong cài đặt');
       return;
     }
     
@@ -1955,12 +1955,12 @@ export function SplitScenes({ onBack, onGenerateVideos }: SplitScenesProps) {
     const promptToUse = scene.imagePromptZh?.trim() || scene.imagePrompt?.trim() 
       || scene.videoPromptZh?.trim() || scene.videoPrompt?.trim() || '';
     if (!promptToUse) {
-      toast.warning("请先填写首帧提示词后再生成图片");
+      toast.warning("Vui lòng điềnkhung đầu提示词后再tạoảnh");
       return;
     }
 
     setIsGenerating(true);
-    // 创建本次生成的 AbortController，停止按钮可通过 imageAbortRef.current.abort() 取消
+    // 创建本次tạo的 AbortController，Dừng按钮可通过 imageAbortRef.current.abort() Hủy
     const imageController = new AbortController();
     imageAbortRef.current = imageController;
     const imageSignal = imageController.signal;
@@ -2005,7 +2005,7 @@ export function SplitScenes({ onBack, onGenerateVideos }: SplitScenesProps) {
         referenceImages.push(...storyboardConfig.characterReferenceImages);
       }
       
-      // 3. 添加原始分镜图作为风格参考
+      // 3. 添加原始phân cảnh图作为风格参考
       if (storyboardImage) {
         referenceImages.push(storyboardImage);
       }
@@ -2073,7 +2073,7 @@ export function SplitScenes({ onBack, onGenerateVideos }: SplitScenesProps) {
         const persistResult = await persistSceneImage(apiResult.imageUrl, sceneId, 'first');
         updateSplitSceneImage(sceneId, persistResult.localPath, scene.width, scene.height, persistResult.httpUrl || undefined);
         autoSaveImageToLibrary(sceneId, persistResult.localPath);
-        toast.success(`分镜 ${sceneId + 1} 图片生成完成，已保存到素材库`);
+        toast.success(`phân cảnh ${sceneId + 1} ảnhtạohoàn tất，đã lưu vào thư viện tư liệu`);
         setIsGenerating(false);
         return;
       }
@@ -2123,37 +2123,37 @@ export function SplitScenes({ onBack, onGenerateVideos }: SplitScenesProps) {
             }
             imageUrl = imageUrl || normalizeUrlValue(statusData.output_url) || normalizeUrlValue(statusData.result_url) || normalizeUrlValue(statusData.url);
 
-            if (!imageUrl) throw new Error('任务完成但没有图片 URL');
+            if (!imageUrl) throw new Error('任务hoàn tất但没有ảnh URL');
             
             // 持久化到本地 + 图床
             const persistResult = await persistSceneImage(imageUrl, sceneId, 'first');
             updateSplitSceneImage(sceneId, persistResult.localPath, scene.width, scene.height, persistResult.httpUrl || undefined);
             autoSaveImageToLibrary(sceneId, persistResult.localPath);
-            toast.success(`分镜 ${sceneId + 1} 图片生成完成，已保存到素材库`);
+            toast.success(`phân cảnh ${sceneId + 1} ảnhtạohoàn tất，đã lưu vào thư viện tư liệu`);
             setIsGenerating(false);
             return;
           }
 
           if (status === 'failed' || status === 'error') {
-            const errorMsg = statusData.error || statusData.message || statusData.data?.error || '图片生成失败';
+            const errorMsg = statusData.error || statusData.message || statusData.data?.error || 'ảnhtạothất bại';
             console.error('[SplitScenes] Task failed:', statusData);
             throw new Error(typeof errorMsg === 'string' ? errorMsg : JSON.stringify(errorMsg));
           }
 
           await new Promise<void>((resolve, reject) => {
             const tid = setTimeout(resolve, pollInterval);
-            imageSignal.addEventListener('abort', () => { clearTimeout(tid); reject(new Error('用户已取消')); }, { once: true });
+            imageSignal.addEventListener('abort', () => { clearTimeout(tid); reject(new Error('用户已Hủy')); }, { once: true });
           });
         }
-        throw new Error('图片生成超时');
+        throw new Error('ảnhtạo超时');
       }
 
       throw new Error('Invalid API response: no image URL or task ID');
     } catch (error) {
       const err = error as Error;
 
-      // 用户主动取消：abort() 触发的 AbortError 或自定义 '用户已取消'
-      if (err.name === 'AbortError' || err.message === '用户已取消') {
+      // 用户主动Hủy：abort() 触发的 AbortError 或自定义 '用户已Hủy'
+      if (err.name === 'AbortError' || err.message === '用户已Hủy') {
         console.log(`[SplitScenes] Scene ${sceneId} image generation cancelled by user`);
         setIsGenerating(false);
         return;
@@ -2165,7 +2165,7 @@ export function SplitScenes({ onBack, onGenerateVideos }: SplitScenesProps) {
         imageProgress: 0,
         imageError: err.message,
       });
-      toast.error(`分镜 ${sceneId + 1} 图片生成失败: ${err.message}`);
+      toast.error(`phân cảnh ${sceneId + 1} ảnhtạothất bại: ${err.message}`);
     }
 
     setIsGenerating(false);
@@ -2183,7 +2183,7 @@ export function SplitScenes({ onBack, onGenerateVideos }: SplitScenesProps) {
     processReferenceImagesForApi,
   ]);
 
-  // ===== Utilities for 合并生成（九宫格） =====
+  // ===== Utilities for Tạo gộp（lưới 9 ô） =====
   type Angle = 'Back View' | 'Over-the-Shoulder (OTS)' | 'POV' | 'Low Angle (Heroic)' | 'High Angle (Vulnerable)' | 'Dutch Angle (Tilted)';
 
   const allowedShotFromSize = (shot?: ShotSizeType | null): string => {
@@ -2247,7 +2247,7 @@ export function SplitScenes({ onBack, onGenerateVideos }: SplitScenesProps) {
 
   const buildAnchorPhrase = (styleTokens?: string[]) => {
     const style = styleTokens && styleTokens.length > 0 ? `Artistic style consistent: ${styleTokens.join(', ')}. ` : '';
-    // 强制禁止生成文字，防止出现对话气泡、字幕等
+    // 强制禁止tạo文字，防止出现对话气泡、字幕等
     const noTextConstraint = 'IMPORTANT: NO TEXT, NO WORDS, NO LETTERS, NO CAPTIONS, NO SPEECH BUBBLES, NO DIALOGUE BOXES, NO SUBTITLES, NO WRITING of any kind.';
     return `${style}Keep character appearance, wardrobe and facial features consistent. Keep lighting and color grading consistent. ${noTextConstraint}`;
   };
@@ -2256,12 +2256,12 @@ export function SplitScenes({ onBack, onGenerateVideos }: SplitScenesProps) {
     const base = scene.imagePromptZh?.trim() || scene.imagePrompt?.trim() || scene.videoPromptZh?.trim() || scene.videoPrompt?.trim() || '';
     const shot = allowedShotFromSize(scene.shotSize);
     const vertical = aspect === '9:16' ? 'vertical composition, tighter framing, avoid letterboxing, ' : '';
-    // 禁用相机运动与节奏，仅保留视角/景别/构图
+    // 禁用相机运动与节奏，仅保留góc nhìn/景别/构图
     const cameraPart = `${angle}, ${shot}`;
     const anchor = buildAnchorPhrase(styleTokens);
     const style = styleTokens && styleTokens.length > 0 ? ` Style: ${styleTokens.join(', ')}` : '';
     
-    // 人物数量约束：根据 characterIds 数量明确指定，防止模型生成多余人物
+    // 人物数量约束：根据 characterIds 数量明确指定，防止模型tạo多余人物
     const charCount = scene.characterIds?.length || 0;
     const charCountPhrase = charCount === 0 
       ? 'NO human figures in this frame, empty scene or environment only.' 
@@ -2275,40 +2275,40 @@ export function SplitScenes({ onBack, onGenerateVideos }: SplitScenesProps) {
 
   const handleMergedGenerate = useCallback(async (mode: 'first'|'last'|'both', strategy: 'cluster'|'minimal'|'none' = 'cluster', exemplar: boolean = true) => {
     if (splitScenes.length === 0) {
-      toast.error('没有可生成的分镜');
+      toast.error('Không có phân cảnh để tạo');
       return;
     }
 
-    // 获取图像生成能力 - 使用服务映射配置
+    // 获取图像tạo能力 - 使用服务映射配置
     const featureConfig = getFeatureConfig('character_generation');
     if (!featureConfig) {
-      toast.error('请先在设置中配置图片生成服务映射');
+      toast.error('Vui lòng cấu hình ánh xạ dịch vụ tạo ảnh trong cài đặt');
       return;
     }
     
     const keyManager = featureConfig.keyManager;
     const apiKey = keyManager.getCurrentKey() || '';
     if (!apiKey) {
-      toast.error('请先在设置中配置图片生成服务映射');
+      toast.error('Vui lòng cấu hình ánh xạ dịch vụ tạo ảnh trong cài đặt');
       return;
     }
     const platform = featureConfig.platform;
     const model = featureConfig.models?.[0];
     if (!model) {
-      toast.error('请先在设置中配置图片生成模型');
+      toast.error('Vui lòng cấu hình mô hình tạo ảnh trong cài đặt');
       return;
     }
     const imageBaseUrl = featureConfig.baseUrl?.replace(/\/+$/, '');
     if (!imageBaseUrl) {
-      toast.error('请先在设置中配置图片生成服务映射');
+      toast.error('Vui lòng cấu hình ánh xạ dịch vụ tạo ảnh trong cài đặt');
       return;
     }
     
     console.log('[MergedGen] Using config:', { platform, model, imageBaseUrl });
 
     setIsMergedRunning(true);
-    mergedAbortRef.current = false; // 重置停止标志
-    console.log('[MergedGen] 开始九宫格合并生成, mode:', mode, 'strategy:', strategy, 'exemplar:', exemplar);
+    mergedAbortRef.current = false; // 重置Dừng标志
+    console.log('[MergedGen] Bật始lưới 9 ôTạo gộp, mode:', mode, 'strategy:', strategy, 'exemplar:', exemplar);
 
     const aspect = storyboardConfig.aspectRatio || '9:16';
     const styleTokens = storyboardConfig.styleTokens || [];
@@ -2317,32 +2317,32 @@ export function SplitScenes({ onBack, onGenerateVideos }: SplitScenesProps) {
     const fullStyleNegative = getStyleNegativePrompt(currentStyleId);
     const dedup = (arr: string[]) => Array.from(new Set(arr.filter(Boolean)));
 
-    // === 统一任务列表方案：支持混合九宫格 ===
+    // === 统一任务列表方案：支持混合lưới 9 ô ===
     // 任务类型定义
     type GridTask = { scene: SplitScene; type: 'first' | 'end' };
     
-    // 重要：视频已生成的分镜视为完成，不需要再生成首帧或尾帧
+    // 重要：video已tạo的phân cảnh视为hoàn tất，不需要再tạokhung đầu或khung cuối
     const isSceneCompleted = (s: SplitScene) => s.videoUrl || s.videoStatus === 'completed';
 
     // 构建任务列表（根据用户选择的 mode）
     const tasks: GridTask[] = [];
     for (const scene of splitScenes) {
-      if (isSceneCompleted(scene)) continue; // 视频已完成，跳过
+      if (isSceneCompleted(scene)) continue; // video已hoàn tất，跳过
       
-      // 仅首帧 或 首+尾：检查是否需要首帧
+      // Chỉ khung đầu 或 Đầu+Cuối：检查是否需要khung đầu
       if ((mode === 'first' || mode === 'both') && !scene.imageDataUrl) {
         tasks.push({ scene, type: 'first' });
       }
       
-      // 仅尾帧 或 首+尾：检查是否需要尾帧
+      // Chỉ khung cuối 或 Đầu+Cuối：检查是否需要khung cuối
       if ((mode === 'last' || mode === 'both') && scene.needsEndFrame && !scene.endFrameImageUrl) {
         tasks.push({ scene, type: 'end' });
       }
     }
 
-    // 检查是否有需要生成的
+    // 检查是否有需要tạo的
     if (tasks.length === 0) {
-      toast.info('所有分镜已生成完成，无需重复生成');
+      toast.info('所有phân cảnh已tạohoàn tất，无需重复tạo');
       setIsMergedRunning(false);
       return;
     }
@@ -2351,13 +2351,13 @@ export function SplitScenes({ onBack, onGenerateVideos }: SplitScenesProps) {
     const firstCount = tasks.filter(t => t.type === 'first').length;
     const endCount = tasks.filter(t => t.type === 'end').length;
     const parts: string[] = [];
-    if (firstCount > 0) parts.push(`${firstCount}个首帧`);
-    if (endCount > 0) parts.push(`${endCount}个尾帧`);
+    if (firstCount > 0) parts.push(`${firstCount}个khung đầu`);
+    if (endCount > 0) parts.push(`${endCount}个khung cuối`);
     const completedCount = splitScenes.filter(isSceneCompleted).length;
-    const skipInfo = completedCount > 0 ? `（跳过${completedCount}个已完成视频）` : '';
-    toast.info(`开始九宫格合并生成：${parts.join('、')}${skipInfo}`);
+    const skipInfo = completedCount > 0 ? `（跳过${completedCount}个已hoàn tấtvideo）` : '';
+    toast.info(`Bật始lưới 9 ôTạo gộp：${parts.join('、')}${skipInfo}`);
 
-    // 任务分页（每9个任务一页，混合首帧和尾帧）
+    // 任务分页（每9个任务一页，混合khung đầu和khung cuối）
     const taskPages: GridTask[][] = [];
     for (let i = 0; i < tasks.length; i += 9) {
       taskPages.push(tasks.slice(i, i + 9));
@@ -2380,7 +2380,7 @@ export function SplitScenes({ onBack, onGenerateVideos }: SplitScenesProps) {
       return dedup(refs).slice(0, strategy === 'minimal' ? 2 : 14);
     };
 
-    // 根据分镜数量计算最优网格布局（强制 N x N 以保证比例一致性）
+    // 根据phân cảnh数量计算最优网格布局（强制 N x N 以保证比例一致性）
     const collectOptimizedRefsFromTasks = (pageTasks: GridTask[]): string[] => {
       if (strategy === 'none') return [];
 
@@ -2429,9 +2429,9 @@ export function SplitScenes({ onBack, onGenerateVideos }: SplitScenesProps) {
       // 例如：3x3 布局，每个格子 16:9，整图也是 16:9
       
       if (sceneCount <= 4) {
-        return { cols: 2, rows: 2, paddedCount: 4 }; // 1-4 张 -> 四宫格
+        return { cols: 2, rows: 2, paddedCount: 4 }; // 1-4 张 -> lưới 4 ô
       }
-      return { cols: 3, rows: 3, paddedCount: 9 }; // 5-9 张 -> 九宫格
+      return { cols: 3, rows: 3, paddedCount: 9 }; // 5-9 张 -> lưới 9 ô
     };
     
     // 计算整张大图应该请求的宽高比
@@ -2441,7 +2441,7 @@ export function SplitScenes({ onBack, onGenerateVideos }: SplitScenesProps) {
     };
 
     // 切割大图为 N 个小图（根据布局的行数和列数）
-    // 关键改进：切割时裁剪每个格子到目标宽高比，防止因大图宽高比不精确导致的变形
+    // Tắt键改进：切割时裁剪每个格子到目标宽高比，防止因大图宽高比不精确导致的变形
     const sliceGridImage = async (
       gridImageUrl: string, 
       actualCount: number, 
@@ -2522,12 +2522,12 @@ export function SplitScenes({ onBack, onGenerateVideos }: SplitScenesProps) {
           }
           resolve(results);
         };
-        img.onerror = (e) => reject(new Error('加载九宫格图片失败'));
+        img.onerror = (e) => reject(new Error('加载lưới 9 ôảnhthất bại'));
         img.src = gridImageUrl;
       });
     };
 
-    // 生成九宫格图片并切割（支持混合首帧+尾帧任务）
+    // tạolưới 9 ôảnh并切割（支持混合khung đầu+khung cuối任务）
     const generateGridAndSlice = async (
       pageTasks: GridTask[],
       refs: string[]
@@ -2554,7 +2554,7 @@ export function SplitScenes({ onBack, onGenerateVideos }: SplitScenesProps) {
       const panelAspect = aspect === '16:9' ? '16:9 (horizontal landscape)' : '9:16 (vertical portrait)';
       gridPromptParts.push(`Each individual panel must have a ${panelAspect} aspect ratio.`);
       
-      // 全局视觉风格（前置到指令区，权重最高）
+      // 全局Phong cách hình ảnh（前置到指令区，权重最高）
       if (fullStylePrompt) {
         gridPromptParts.push(`MANDATORY Visual Style for ALL panels: ${fullStylePrompt}`);
       }
@@ -2574,7 +2574,7 @@ export function SplitScenes({ onBack, onGenerateVideos }: SplitScenesProps) {
       // 2. 布局描述 (Layout)
       gridPromptParts.push(`Layout: ${rows} rows, ${cols} columns, reading order left-to-right, top-to-bottom.`);
       
-      // 3. 每个格子的内容描述（根据任务类型选择首帧或尾帧prompt）
+      // 3. 每个格子的内容描述（根据任务类型选择khung đầu或khung cuốiprompt）
       pageTasks.forEach((task, idx) => {
         const s = task.scene;
         const row = Math.floor(idx / cols) + 1;
@@ -2602,7 +2602,7 @@ export function SplitScenes({ onBack, onGenerateVideos }: SplitScenesProps) {
             ? '(1 person)' 
             : `(${charCount} people)`;
         
-        // 标记是首帧还是尾帧
+        // 标记是khung đầu还是khung cuối
         const frameLabel = task.type === 'end' ? '[END FRAME]' : '[FIRST FRAME]';
         // 每格附带风格锚定，防止多面板时模型遗忘全局风格
         const styleAnchor = fullStylePrompt ? ` [same style]` : '';
@@ -2630,7 +2630,7 @@ export function SplitScenes({ onBack, onGenerateVideos }: SplitScenesProps) {
       const gridPrompt = gridPromptParts.join('\n'); // 使用换行符分隔更清晰
       console.log('[MergedGen] Grid prompt:', gridPrompt.substring(0, 200) + '...');
       
-      // 标记所有任务对应的分镜为生成中
+      // 标记所有任务对应的phân cảnh为tạo中
       pageTasks.forEach(task => {
         if (task.type === 'end') {
           updateSplitSceneEndFrameStatus(task.scene.id, { endFrameStatus: 'generating', endFrameProgress: 10 });
@@ -2683,7 +2683,7 @@ export function SplitScenes({ onBack, onGenerateVideos }: SplitScenesProps) {
         return undefined;
       };
       
-      // 调用 API 生成九宫格图片 - 使用智能路由（自动选择 chat completions 或 images/generations）
+      // 调用 API tạolưới 9 ôảnh - 使用智能路由（自动选择 chat completions 或 images/generations）
       console.log('[MergedGen] Calling API with', apiReferenceImages.length, 'reference images, model:', model);
       const apiResult = await submitGridImageRequest({
         model,
@@ -2726,7 +2726,7 @@ export function SplitScenes({ onBack, onGenerateVideos }: SplitScenesProps) {
             headers: { 'Authorization': `Bearer ${apiKey}` },
           });
           
-          if (!statusResp.ok) throw new Error(`查询任务失败: ${statusResp.status}`);
+          if (!statusResp.ok) throw new Error(`查询任务thất bại: ${statusResp.status}`);
           
           const statusData = await statusResp.json();
           console.log(`[MergedGen] Task ${taskId} poll #${attempt}:`, JSON.stringify(statusData, null, 2).substring(0, 500));
@@ -2734,7 +2734,7 @@ export function SplitScenes({ onBack, onGenerateVideos }: SplitScenesProps) {
           const status = (statusData.status ?? statusData.data?.status ?? '').toString().toLowerCase();
           
           if (status === 'completed' || status === 'succeeded' || status === 'success') {
-            // 尝试从多种路径获取图片 URL
+            // 尝试从多种路径获取ảnh URL
             const images = statusData.result?.images ?? statusData.data?.result?.images ?? statusData.images;
             if (images?.[0]) {
               gridImageUrl = normalizeUrl(images[0].url || images[0]);
@@ -2750,7 +2750,7 @@ export function SplitScenes({ onBack, onGenerateVideos }: SplitScenesProps) {
           }
           
           if (status === 'failed' || status === 'error') {
-            const errMsg = statusData.error || statusData.message || statusData.data?.error || '图片生成失败';
+            const errMsg = statusData.error || statusData.message || statusData.data?.error || 'ảnhtạothất bại';
             throw new Error(typeof errMsg === 'string' ? errMsg : JSON.stringify(errMsg));
           }
           
@@ -2759,59 +2759,59 @@ export function SplitScenes({ onBack, onGenerateVideos }: SplitScenesProps) {
       }
       
       if (!gridImageUrl) {
-        console.error('[MergedGen] 无法获取图片 URL, apiResult:', apiResult);
+        console.error('[MergedGen] 无法获取ảnh URL, apiResult:', apiResult);
         if (taskId) {
-          throw new Error(`九宫格生成超时（任务 ${taskId} 在 3 分钟内未完成），API 服务可能繁忙，请稍后重试`);
+          throw new Error(`lưới 9 ôtạo超时（任务 ${taskId} 在 3 分钟内未hoàn tất），API 服务可能繁忙，请稍后重试`);
         }
-        throw new Error('未获取到九宫格图片 URL，请检查 API 响应');
+        throw new Error('未获取到lưới 9 ôảnh URL，请检查 API 响应');
       }
       
       console.log('[MergedGen] Grid image URL:', gridImageUrl.substring(0, 80));
       
-      // 切割九宫格图片（传入布局参数和目标宽高比）
+      // 切割lưới 9 ôảnh（传入布局参数和目标宽高比）
       const slicedImages = await sliceGridImage(gridImageUrl, actualCount, cols, rows, aspect);
       console.log('[MergedGen] Sliced into', slicedImages.length, 'images (from', paddedCount, 'grid cells, target aspect:', aspect, ')');
       
-      // 回填到各分镜并自动保存到素材库
-      // 同时上传切割后的图片到图床，避免视频生成时再次上传
+      // 回填到各phân cảnh并自动保存到素材库
+      // 同时上传切割后的ảnh到图床，避免videotạo时再次上传
       const folderId = getImageFolderId();
       const imageHostConfigured = isImageHostConfigured();
       
-      // 回填：根据任务类型决定更新首帧还是尾帧
-      // 先持久化到本地文件系统（local-image://），避免 base64 被 partialize 清除导致导入后图片丢失
+      // 回填：根据任务类型决定更新khung đầu还是khung cuối
+      // 先持久化到本地文件系统（local-image://），避免 base64 被 partialize 清除导致导入后ảnh丢失
       for (let i = 0; i < pageTasks.length; i++) {
         const task = pageTasks[i];
         const s = task.scene;
         const slicedImage = slicedImages[i];
         if (slicedImage) {
-          // 持久化到本地 + 图床（与单图生成一致）
+          // 持久化到本地 + 图床（与Tạo đơn一致）
           const frameType = task.type === 'end' ? 'end' as const : 'first' as const;
           const persistResultLoop = await persistSceneImage(slicedImage, s.id, frameType);
           const httpUrl = persistResultLoop.httpUrl || undefined;
           const localPath = persistResultLoop.localPath;
           
           if (httpUrl) {
-            console.log(`[MergedGen] 分镜 ${s.id + 1} ${task.type === 'end' ? '尾帧' : '首帧'} 已上传到图床:`, httpUrl.substring(0, 60));
+            console.log(`[MergedGen] phân cảnh ${s.id + 1} ${task.type === 'end' ? 'khung cuối' : 'khung đầu'} 已上传到图床:`, httpUrl.substring(0, 60));
           }
           
           if (task.type === 'end') {
             updateSplitSceneEndFrame(s.id, localPath, 'ai-generated', httpUrl || undefined);
-            // 自动保存尾帧到素材库
+            // 自动保存khung cuối到素材库
             addMediaFromUrl({
               url: localPath,
-              name: `分镜 ${s.id + 1} - 尾帧`,
+              name: `phân cảnh ${s.id + 1} - khung cuối`,
               type: 'image',
               source: 'ai-image',
               folderId,
               projectId: mediaProjectId,
             });
           } else {
-            // 传递 httpUrl，这样视频生成时可以直接使用，不用再上传
+            // 传递 httpUrl，这样videotạo时可以直接使用，不用再上传
             updateSplitSceneImage(s.id, localPath, s.width, s.height, httpUrl);
-            // 自动保存首帧到素材库
+            // 自动保存khung đầu到素材库
             addMediaFromUrl({
               url: localPath,
-              name: `分镜 ${s.id + 1} - 首帧`,
+              name: `phân cảnh ${s.id + 1} - khung đầu`,
               type: 'image',
               source: 'ai-image',
               folderId,
@@ -2835,14 +2835,14 @@ export function SplitScenes({ onBack, onGenerateVideos }: SplitScenesProps) {
       }
     };
 
-    // 第一轮：逐页尝试，失败的页面记录下来继续下一页
+    // 第一轮：逐页尝试，thất bại的页面记录下来继续下一页
     const failedPages: { index: number; pageTasks: GridTask[]; refs: string[]; error: string }[] = [];
     let succeededCount = 0;
 
     for (let p = 0; p < taskPages.length; p++) {
       if (mergedAbortRef.current) {
-        console.log('[MergedGen] 用户停止合并生成');
-        toast.info('合并生成已停止');
+        console.log('[MergedGen] 用户DừngTạo gộp');
+        toast.info('Tạo gộpđã dừng');
         setIsMergedRunning(false);
         return;
       }
@@ -2850,10 +2850,10 @@ export function SplitScenes({ onBack, onGenerateVideos }: SplitScenesProps) {
       const pageTasks = taskPages[p];
       const refs = collectOptimizedRefsFromTasks(pageTasks);
       
-      // 统计当前页的首帧/尾帧数量
+      // 统计当前页的khung đầu/khung cuối数量
       const pageFirstCount = pageTasks.filter(t => t.type === 'first').length;
       const pageEndCount = pageTasks.filter(t => t.type === 'end').length;
-      const pageInfo = [pageFirstCount > 0 ? `${pageFirstCount}首帧` : '', pageEndCount > 0 ? `${pageEndCount}尾帧` : ''].filter(Boolean).join('+');
+      const pageInfo = [pageFirstCount > 0 ? `${pageFirstCount}khung đầu` : '', pageEndCount > 0 ? `${pageEndCount}khung cuối` : ''].filter(Boolean).join('+');
       
       console.log(`[MergedGen] 第 ${p + 1}/${taskPages.length} 页，${pageTasks.length} 个任务（${pageInfo}），${refs.length} 张参考图`);
       
@@ -2861,23 +2861,23 @@ export function SplitScenes({ onBack, onGenerateVideos }: SplitScenesProps) {
         await generateGridAndSlice(pageTasks, refs);
         succeededCount++;
         if (!mergedAbortRef.current) {
-          toast.success(`第 ${p + 1}/${taskPages.length} 页完成（${pageInfo}）`);
+          toast.success(`第 ${p + 1}/${taskPages.length} 页hoàn tất（${pageInfo}）`);
         }
       } catch (e: any) {
         const errorMsg = e.message || String(e);
-        console.error(`[MergedGen] 第 ${p + 1} 页失败:`, errorMsg);
-        // 重置该页分镜状态为 error，不让它们卡在 'generating'
+        console.error(`[MergedGen] 第 ${p + 1} 页thất bại:`, errorMsg);
+        // 重置该页phân cảnh状态为 error，不让它们卡在 'generating'
         resetPageTasksToError(pageTasks, errorMsg);
         failedPages.push({ index: p, pageTasks, refs, error: errorMsg });
-        toast.warning(`第 ${p + 1}/${taskPages.length} 页失败，将自动重试：${errorMsg.substring(0, 60)}`);
+        toast.warning(`第 ${p + 1}/${taskPages.length} 页thất bại，将自动重试：${errorMsg.substring(0, 60)}`);
         // 继续下一页，不中断
       }
     }
 
-    // 第二轮：自动重试失败的页面（延迟 5 秒后重试，给 API 恢复时间）
+    // 第二轮：自动重试thất bại的页面（延迟 5 giây后重试，给 API 恢复时间）
     if (failedPages.length > 0 && !mergedAbortRef.current) {
-      console.log(`[MergedGen] ${failedPages.length} 页失败，5 秒后自动重试...`);
-      toast.info(`${failedPages.length} 页生成失败，5 秒后自动重试...`);
+      console.log(`[MergedGen] ${failedPages.length} 页thất bại，5 giây后自动重试...`);
+      toast.info(`${failedPages.length} 页tạothất bại，5 giây后自动重试...`);
       await new Promise(r => setTimeout(r, 5000));
 
       for (const fp of failedPages) {
@@ -2885,21 +2885,21 @@ export function SplitScenes({ onBack, onGenerateVideos }: SplitScenesProps) {
 
         const pageFirstCount = fp.pageTasks.filter(t => t.type === 'first').length;
         const pageEndCount = fp.pageTasks.filter(t => t.type === 'end').length;
-        const pageInfo = [pageFirstCount > 0 ? `${pageFirstCount}首帧` : '', pageEndCount > 0 ? `${pageEndCount}尾帧` : ''].filter(Boolean).join('+');
+        const pageInfo = [pageFirstCount > 0 ? `${pageFirstCount}khung đầu` : '', pageEndCount > 0 ? `${pageEndCount}khung cuối` : ''].filter(Boolean).join('+');
 
         console.log(`[MergedGen] 自动重试第 ${fp.index + 1} 页（${pageInfo}）`);
         try {
-          // 重新收集参考图（可能在其他页成功后有新的图可用）
+          // 重新收集参考图（可能在其他页thành công后有新的图可用）
           const freshRefs = collectOptimizedRefsFromTasks(fp.pageTasks);
           await generateGridAndSlice(fp.pageTasks, freshRefs);
           succeededCount++;
-          toast.success(`第 ${fp.index + 1} 页重试成功（${pageInfo}）`);
+          toast.success(`第 ${fp.index + 1} 页重试thành công（${pageInfo}）`);
         } catch (retryErr: any) {
           const retryMsg = retryErr.message || String(retryErr);
-          console.error(`[MergedGen] 第 ${fp.index + 1} 页重试仍然失败:`, retryMsg);
+          console.error(`[MergedGen] 第 ${fp.index + 1} 页重试仍然thất bại:`, retryMsg);
           // 再次重置为 error 状态
-          resetPageTasksToError(fp.pageTasks, `重试失败: ${retryMsg}`);
-          toast.error(`第 ${fp.index + 1} 页重试失败: ${retryMsg.substring(0, 80)}`);
+          resetPageTasksToError(fp.pageTasks, `重试thất bại: ${retryMsg}`);
+          toast.error(`第 ${fp.index + 1} 页重试thất bại: ${retryMsg.substring(0, 80)}`);
         }
       }
     }
@@ -2908,11 +2908,11 @@ export function SplitScenes({ onBack, onGenerateVideos }: SplitScenesProps) {
     const totalPages = taskPages.length;
     if (!mergedAbortRef.current) {
       if (succeededCount === totalPages) {
-        toast.success('九宫格合并生成全部完成！');
+        toast.success('lưới 9 ôTạo gộp全部hoàn tất！');
       } else if (succeededCount > 0) {
-        toast.warning(`合并生成部分完成：${succeededCount}/${totalPages} 页成功，${totalPages - succeededCount} 页失败`);
+        toast.warning(`Tạo gộp部分hoàn tất：${succeededCount}/${totalPages} 页thành công，${totalPages - succeededCount} 页thất bại`);
       } else {
-        toast.error(`合并生成全部失败（${totalPages} 页），请检查 API 服务后重试`);
+        toast.error(`Tạo gộp全部thất bại（${totalPages} 页），请检查 API 服务后重试`);
       }
     }
     setIsMergedRunning(false);
@@ -2933,8 +2933,8 @@ export function SplitScenes({ onBack, onGenerateVideos }: SplitScenesProps) {
     mediaProjectId,
   ]);
 
-  // 复用单图生成的 API 路径，封装为通用函数（支持首帧/尾帧）
-  // 合并生成专用：使用预计算参考列表；不降级到单图通道
+  // 复用Tạo đơn的 API 路径，封装为通用函数（支持khung đầu/khung cuối）
+  // Tạo gộp专用：使用Ước tính算参考列表；不降级到单图通道
   const generateImageForSceneMerged = async (
     sceneId: number,
     prompt: string,
@@ -2952,20 +2952,20 @@ export function SplitScenes({ onBack, onGenerateVideos }: SplitScenesProps) {
     // 使用服务映射配置
     const featureConfig = getFeatureConfig('character_generation');
     if (!featureConfig) {
-      throw new Error('请先在设置中配置图片生成服务映射');
+      throw new Error('Vui lòng cấu hình ánh xạ dịch vụ tạo ảnh trong cài đặt');
     }
     const platform = featureConfig.platform;
     const model = featureConfig.models?.[0];
     if (!model) {
-      throw new Error('请先在设置中配置图片生成模型');
+      throw new Error('Vui lòng cấu hình mô hình tạo ảnh trong cài đặt');
     }
     const apiKeyToUse = apiKey || featureConfig.keyManager.getCurrentKey() || '';
     if (!apiKeyToUse) {
-      throw new Error('请先在设置中配置图片生成服务映射');
+      throw new Error('Vui lòng cấu hình ánh xạ dịch vụ tạo ảnh trong cài đặt');
     }
     const imageBaseUrl = featureConfig.baseUrl?.replace(/\/+$/, '');
     if (!imageBaseUrl) {
-      throw new Error('请先在设置中配置图片生成服务映射');
+      throw new Error('Vui lòng cấu hình ánh xạ dịch vụ tạo ảnh trong cài đặt');
     }
 
     // Call image generation API with smart routing
@@ -3005,7 +3005,7 @@ export function SplitScenes({ onBack, onGenerateVideos }: SplitScenesProps) {
     if (!directUrl && taskId) {
       const pollInterval = 2000, maxAttempts = 60;
       for (let attempt = 0; attempt < maxAttempts; attempt++) {
-        // 检查合并生成是否已被用户停止
+        // 检查Tạo gộp是否已被用户Dừng
         if (mergedAbortRef.current) {
           console.log(`[MergedGen] Scene ${sceneId} polling cancelled by user`);
           return;
@@ -3030,7 +3030,7 @@ export function SplitScenes({ onBack, onGenerateVideos }: SplitScenesProps) {
       }
     }
 
-    if (!directUrl) throw new Error('任务完成但没有图片 URL');
+    if (!directUrl) throw new Error('任务hoàn tất但没有ảnh URL');
 
     const frameType = isEndFrame ? 'end' as const : 'first' as const;
     const persistResult = await persistSceneImage(directUrl, sceneId, frameType);
@@ -3053,31 +3053,31 @@ export function SplitScenes({ onBack, onGenerateVideos }: SplitScenesProps) {
     // Must have end frame prompt
     const promptToUse = scene.endFramePromptZh?.trim() || scene.endFramePrompt?.trim() || '';
     if (!promptToUse) {
-      toast.warning("请先填写尾帧提示词后再生成");
+      toast.warning("Vui lòng điềnkhung cuối提示词后再tạo");
       return;
     }
 
     // 使用服务映射配置
     const featureConfig = getFeatureConfig('character_generation');
     if (!featureConfig) {
-      toast.error('请先在设置中配置图片生成服务映射');
+      toast.error('Vui lòng cấu hình ánh xạ dịch vụ tạo ảnh trong cài đặt');
       return;
     }
     const keyManager = featureConfig.keyManager;
     const apiKey = keyManager.getCurrentKey() || '';
     if (!apiKey) {
-      toast.error('请先在设置中配置图片生成服务映射');
+      toast.error('Vui lòng cấu hình ánh xạ dịch vụ tạo ảnh trong cài đặt');
       return;
     }
     const platform = featureConfig.platform;
     const model = featureConfig.models?.[0];
     if (!model) {
-      toast.error('请先在设置中配置图片生成模型');
+      toast.error('Vui lòng cấu hình mô hình tạo ảnh trong cài đặt');
       return;
     }
     const imageBaseUrl = featureConfig.baseUrl?.replace(/\/+$/, '');
     if (!imageBaseUrl) {
-      toast.error('请先在设置中配置图片生成服务映射');
+      toast.error('Vui lòng cấu hình ánh xạ dịch vụ tạo ảnh trong cài đặt');
       return;
     }
     
@@ -3085,7 +3085,7 @@ export function SplitScenes({ onBack, onGenerateVideos }: SplitScenesProps) {
 
     setIsGenerating(true);
 
-    // 创建本次尾帧生成的 AbortController，停止按钮可通过 endFrameAbortRef.current.abort() 取消
+    // 创建本次khung cuốitạo的 AbortController，Dừng按钮可通过 endFrameAbortRef.current.abort() Hủy
     const endFrameController = new AbortController();
     endFrameAbortRef.current = endFrameController;
     const endFrameSignal = endFrameController.signal;
@@ -3111,17 +3111,17 @@ export function SplitScenes({ onBack, onGenerateVideos }: SplitScenesProps) {
       // Collect reference images - include scene background and first frame for consistency
       const referenceImages: string[] = [];
       
-      // 1. 尾帧场景背景参考图（可能与首帧不同，如“张明从沙发走向餐桌”）
+      // 1. khung cuối场景背景参考图（可能与khung đầu不同，如“张明从沙发走向餐桌”）
       if (scene.endFrameSceneReferenceImage) {
         referenceImages.push(scene.endFrameSceneReferenceImage);
         console.log('[SplitScenes] Using end frame scene background reference');
       } else if (scene.sceneReferenceImage) {
-        // 回退到首帧场景背景
+        // 回退到khung đầu场景背景
         referenceImages.push(scene.sceneReferenceImage);
         console.log('[SplitScenes] Using first frame scene background for end frame');
       }
       
-      // 2. 首帧图片作为风格一致性参考
+      // 2. khung đầuảnh作为风格一致性参考
       if (scene.imageDataUrl) {
         referenceImages.push(scene.imageDataUrl);
       }
@@ -3192,17 +3192,17 @@ export function SplitScenes({ onBack, onGenerateVideos }: SplitScenesProps) {
       if (apiResult.imageUrl) {
         const persistResult = await persistSceneImage(apiResult.imageUrl, sceneId, 'end');
         updateSplitSceneEndFrame(sceneId, persistResult.localPath, 'ai-generated', persistResult.httpUrl);
-        // 自动保存尾帧到素材库
+        // 自动保存khung cuối到素材库
         const folderId = getImageFolderId();
         addMediaFromUrl({
           url: persistResult.localPath,
-          name: `分镜 ${sceneId + 1} - 尾帧`,
+          name: `phân cảnh ${sceneId + 1} - khung cuối`,
           type: 'image',
           source: 'ai-image',
           folderId,
           projectId: mediaProjectId,
         });
-        toast.success(`分镜 ${sceneId + 1} 尾帧生成完成，已保存到素材库`);
+        toast.success(`phân cảnh ${sceneId + 1} khung cuốitạohoàn tất，đã lưu vào thư viện tư liệu`);
         setIsGenerating(false);
         return;
       }
@@ -3247,45 +3247,45 @@ export function SplitScenes({ onBack, onGenerateVideos }: SplitScenesProps) {
             }
             imageUrl = imageUrl || normalizeUrlValue(statusData.output_url) || normalizeUrlValue(statusData.url);
 
-            if (!imageUrl) throw new Error('任务完成但没有图片 URL');
+            if (!imageUrl) throw new Error('任务hoàn tất但没有ảnh URL');
             
             // 持久化到本地 + 图床
             const persistResult = await persistSceneImage(imageUrl, sceneId, 'end');
             updateSplitSceneEndFrame(sceneId, persistResult.localPath, 'ai-generated', persistResult.httpUrl);
-            // 自动保存尾帧到素材库
+            // 自动保存khung cuối到素材库
             const folderId = getImageFolderId();
             addMediaFromUrl({
               url: persistResult.localPath,
-              name: `分镜 ${sceneId + 1} - 尾帧`,
+              name: `phân cảnh ${sceneId + 1} - khung cuối`,
               type: 'image',
               source: 'ai-image',
               folderId,
               projectId: mediaProjectId,
             });
-            toast.success(`分镜 ${sceneId + 1} 尾帧生成完成，已保存到素材库`);
+            toast.success(`phân cảnh ${sceneId + 1} khung cuốitạohoàn tất，đã lưu vào thư viện tư liệu`);
             setIsGenerating(false);
             return;
           }
 
           if (status === 'failed' || status === 'error') {
-            const errorMsg = statusData.error || statusData.message || '尾帧生成失败';
+            const errorMsg = statusData.error || statusData.message || 'khung cuốitạothất bại';
             throw new Error(typeof errorMsg === 'string' ? errorMsg : JSON.stringify(errorMsg));
           }
 
           await new Promise<void>((resolve, reject) => {
             const tid = setTimeout(resolve, pollInterval);
-            endFrameSignal.addEventListener('abort', () => { clearTimeout(tid); reject(new Error('用户已取消')); }, { once: true });
+            endFrameSignal.addEventListener('abort', () => { clearTimeout(tid); reject(new Error('用户已Hủy')); }, { once: true });
           });
         }
-        throw new Error('尾帧生成超时');
+        throw new Error('khung cuốitạo超时');
       }
 
       throw new Error('Invalid API response');
     } catch (error) {
       const err = error as Error;
 
-      // 用户主动取消：abort() 触发的 AbortError 或自定义 '用户已取消'
-      if (err.name === 'AbortError' || err.message === '用户已取消') {
+      // 用户主动Hủy：abort() 触发的 AbortError 或自定义 '用户已Hủy'
+      if (err.name === 'AbortError' || err.message === '用户已Hủy') {
         console.log(`[SplitScenes] Scene ${sceneId} end frame generation cancelled by user`);
         setIsGenerating(false);
         return;
@@ -3297,7 +3297,7 @@ export function SplitScenes({ onBack, onGenerateVideos }: SplitScenesProps) {
         endFrameProgress: 0,
         endFrameError: err.message,
       });
-      toast.error(`分镜 ${sceneId + 1} 尾帧生成失败: ${err.message}`);
+      toast.error(`phân cảnh ${sceneId + 1} khung cuốitạothất bại: ${err.message}`);
     }
 
     setIsGenerating(false);
@@ -3320,13 +3320,13 @@ export function SplitScenes({ onBack, onGenerateVideos }: SplitScenesProps) {
     try {
       if (type === 'video') {
         if (!scene.videoUrl) {
-          toast.error("没有可保存的视频");
+          toast.error("没有可保存的video");
           return;
         }
         const folderId = getVideoFolderId();
         addMediaFromUrl({
           url: scene.videoUrl,
-          name: `分镜 ${scene.id + 1} - AI视频`,
+          name: `phân cảnh ${scene.id + 1} - AIvideo`,
           type: 'video',
           source: 'ai-video',
           thumbnailUrl: scene.imageDataUrl,
@@ -3334,26 +3334,26 @@ export function SplitScenes({ onBack, onGenerateVideos }: SplitScenesProps) {
           folderId,
           projectId: mediaProjectId,
         });
-        toast.success(`分镜 ${scene.id + 1} 视频已保存到素材库`);
+        toast.success(`phân cảnh ${scene.id + 1} videođã lưu vào thư viện tư liệu`);
       } else {
         if (!scene.imageDataUrl) {
-          toast.error("没有可保存的图片");
+          toast.error("没有可保存的ảnh");
           return;
         }
         const folderId = getImageFolderId();
         addMediaFromUrl({
           url: scene.imageDataUrl,
-          name: `分镜 ${scene.id + 1} - AI图片`,
+          name: `phân cảnh ${scene.id + 1} - AIảnh`,
           type: 'image',
           source: 'ai-image',
           folderId,
           projectId: mediaProjectId,
         });
-        toast.success(`分镜 ${scene.id + 1} 图片已保存到素材库`);
+        toast.success(`phân cảnh ${scene.id + 1} ảnhđã lưu vào thư viện tư liệu`);
       }
     } catch (error) {
       const err = error as Error;
-      toast.error(`保存失败: ${err.message}`);
+      toast.error(`保存thất bại: ${err.message}`);
     }
   }, [addMediaFromUrl, getImageFolderId, getVideoFolderId, mediaProjectId]);
 
@@ -3364,7 +3364,7 @@ export function SplitScenes({ onBack, onGenerateVideos }: SplitScenesProps) {
         <div className="w-16 h-16 rounded-full bg-muted flex items-center justify-center">
           <ImageIcon className="h-8 w-8 text-muted-foreground" />
         </div>
-        <p className="text-sm text-muted-foreground">暂无切割的分镜</p>
+        <p className="text-sm text-muted-foreground">Chưa có phân cảnh đã tách</p>
       </div>
     );
   }
@@ -3380,40 +3380,40 @@ export function SplitScenes({ onBack, onGenerateVideos }: SplitScenesProps) {
               className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent h-9 px-4"
             >
               <Film className="h-3 w-3 mr-1" />
-              分镜编辑
+              Chỉnh sửa phân cảnh
             </TabsTrigger>
             <TabsTrigger 
               value="trailer" 
               className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent h-9 px-4"
             >
               <Clapperboard className="h-3 w-3 mr-1" />
-              预告片 {trailerScenes.length > 0 ? `(${trailerScenes.length})` : ''}
+              Trailer {trailerScenes.length > 0 ? `(${trailerScenes.length})` : ''}
             </TabsTrigger>
           </TabsList>
         </Tabs>
       </div>
 
-      {/* 预告片 Tab 内容 - 完全复用分镜编辑的功能 */}
+      {/* Trailer Tab 内容 - 完全复用Chỉnh sửa phân cảnh的功能 */}
       {activeTab === "trailer" && (
         <>
           {trailerScenes.length === 0 ? (
             <div className="text-center text-muted-foreground text-sm py-8">
               <Clapperboard className="h-8 w-8 mx-auto mb-2 opacity-50" />
-              <p>预告片功能</p>
-              <p className="text-xs mt-1">请在左侧「剧本」面板中的「预告片」标签页生成预告片</p>
-              <p className="text-xs mt-1">挑选的分镜将在此显示并可进行图片/视频生成</p>
+              <p>Chức năng Trailer</p>
+              <p className="text-xs mt-1">Vui lòng tạo trailer trong tab "Trailer" ở bảng "Kịch bản" bên trái</p>
+              <p className="text-xs mt-1">Phân cảnh đã chọn sẽ hiển thị ở đây và có thể tạo ảnh/video</p>
             </div>
           ) : (
             <>
-              {/* Header - 与分镜编辑一致 */}
+              {/* Header - 与Chỉnh sửa phân cảnh一致 */}
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <span className="text-sm font-medium">预告片分镜</span>
+                  <span className="text-sm font-medium">Trailerphân cảnh</span>
                   <span className="text-xs text-muted-foreground bg-muted px-2 py-0.5 rounded-full">
-                    {trailerScenes.length} 个分镜
+                    {trailerScenes.length} 个phân cảnh
                   </span>
                   <span className="text-xs text-muted-foreground">
-                    预计 {trailerScenes.reduce((sum, s) => sum + (s.duration || 5), 0)} 秒
+                    Ước tính {trailerScenes.reduce((sum, s) => sum + (s.duration || 5), 0)} giây
                   </span>
                 </div>
                 <div className="flex items-center gap-2">
@@ -3429,9 +3429,9 @@ export function SplitScenes({ onBack, onGenerateVideos }: SplitScenesProps) {
                     ) : (
                       <Sparkles className="h-3 w-3 mr-1 text-yellow-500" />
                     )}
-                    AI 自动填写提示词
+                    AI tự điền prompt
                   </Button>
-                  {/* 一键清空预告片分镜 */}
+                  {/* 一键清空Trailerphân cảnh */}
                   <AlertDialog>
                     <AlertDialogTrigger asChild>
                       <Button
@@ -3441,31 +3441,31 @@ export function SplitScenes({ onBack, onGenerateVideos }: SplitScenesProps) {
                         disabled={isGenerating}
                       >
                         <Trash2 className="h-3 w-3 mr-1" />
-                        清空分镜
+                        Xóa phân cảnh
                       </Button>
                     </AlertDialogTrigger>
                     <AlertDialogContent>
                       <AlertDialogHeader>
-                        <AlertDialogTitle>确认清空预告片分镜</AlertDialogTitle>
+                        <AlertDialogTitle>Xác nhận xóa tất cảTrailerphân cảnh</AlertDialogTitle>
                         <AlertDialogDescription>
-                          这将删除所有 {trailerScenes.length} 个预告片分镜（包括已生成的图片和视频）。此操作不可撤销。
+                          这将删除所有 {trailerScenes.length} 个Trailerphân cảnh（包括已tạo的ảnh和video）。此操作不可撤销。
                         </AlertDialogDescription>
                       </AlertDialogHeader>
                       <AlertDialogFooter>
-                        <AlertDialogCancel>取消</AlertDialogCancel>
+                        <AlertDialogCancel>Hủy</AlertDialogCancel>
                         <AlertDialogAction
                           onClick={() => {
-                            // 删除所有预告片分镜
+                            // 删除所有Trailerphân cảnh
                             trailerScenes.forEach(scene => {
                               deleteSplitScene(scene.id);
                             });
-                            // 清空预告片配置
+                            // 清空Trailer配置
                             clearTrailer();
-                            toast.success(`已清空 ${trailerScenes.length} 个预告片分镜`);
+                            toast.success(`已清空 ${trailerScenes.length} 个Trailerphân cảnh`);
                           }}
                           className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
                         >
-                          确认清空
+                          Xác nhận xóa tất cả
                         </AlertDialogAction>
                       </AlertDialogFooter>
                     </AlertDialogContent>
@@ -3473,10 +3473,10 @@ export function SplitScenes({ onBack, onGenerateVideos }: SplitScenesProps) {
                 </div>
               </div>
 
-              {/* Global style and aspect ratio config - 与分镜编辑一致 */}
+              {/* Global style and aspect ratio config - 与Chỉnh sửa phân cảnh一致 */}
               <div className="flex flex-wrap items-center gap-3 p-3 rounded-lg bg-muted/30 border">
                 <div className="flex items-center gap-2">
-                  <span className="text-xs text-muted-foreground whitespace-nowrap">视觉风格:</span>
+                  <span className="text-xs text-muted-foreground whitespace-nowrap">Phong cách hình ảnh:</span>
                   <StylePicker
                     value={currentStyleId || ''}
                     onChange={handleStyleChange}
@@ -3484,7 +3484,7 @@ export function SplitScenes({ onBack, onGenerateVideos }: SplitScenesProps) {
                   />
                 </div>
                 <div className="flex items-center gap-2">
-                  <span className="text-xs text-muted-foreground whitespace-nowrap">画面比例:</span>
+                  <span className="text-xs text-muted-foreground whitespace-nowrap">Tỷ lệ khung hình:</span>
                   <div className="flex rounded-md border overflow-hidden">
                     <button
                       onClick={() => handleAspectRatioChange('16:9')}
@@ -3496,7 +3496,7 @@ export function SplitScenes({ onBack, onGenerateVideos }: SplitScenesProps) {
                       )}
                     >
                       <Monitor className="h-3.5 w-3.5" />
-                      横屏
+                      Ngang
                     </button>
                     <button
                       onClick={() => handleAspectRatioChange('9:16')}
@@ -3508,7 +3508,7 @@ export function SplitScenes({ onBack, onGenerateVideos }: SplitScenesProps) {
                       )}
                     >
                       <Smartphone className="h-3.5 w-3.5" />
-                      竖屏
+                      Dọc
                     </button>
                   </div>
                 </div>
@@ -3517,16 +3517,16 @@ export function SplitScenes({ onBack, onGenerateVideos }: SplitScenesProps) {
                   value={storyboardConfig.resolution || '2K'}
                   onValueChange={(v: '1K' | '2K' | '4K') => {
                     setStoryboardConfig({ resolution: v });
-                    toast.success(`图片分辨率已切换为 ${v}`);
+                    toast.success(`ảnh分辨率已切换为 ${v}`);
                   }}
                 >
                   <SelectTrigger className="w-[130px] h-8 text-xs">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="1K" className="text-xs">标准 (1K)</SelectItem>
-                    <SelectItem value="2K" className="text-xs">高清 (2K)</SelectItem>
-                    <SelectItem value="4K" className="text-xs">超清 (4K)</SelectItem>
+                    <SelectItem value="1K" className="text-xs">Tiêu chuẩn (1K)</SelectItem>
+                    <SelectItem value="2K" className="text-xs">HD (2K)</SelectItem>
+                    <SelectItem value="4K" className="text-xs">Ultra HD (4K)</SelectItem>
                   </SelectContent>
                 </Select>
 
@@ -3535,16 +3535,16 @@ export function SplitScenes({ onBack, onGenerateVideos }: SplitScenesProps) {
                   value={storyboardConfig.videoResolution || '480p'}
                   onValueChange={(v: '480p' | '720p' | '1080p') => {
                     setStoryboardConfig({ videoResolution: v });
-                    toast.success(`视频分辨率已切换为 ${v}`);
+                    toast.success(`video分辨率已切换为 ${v}`);
                   }}
                 >
                   <SelectTrigger className="w-[140px] h-8 text-xs">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="480p" className="text-xs">标准 (480P)</SelectItem>
-                    <SelectItem value="720p" className="text-xs">高清 (720P)</SelectItem>
-                    <SelectItem value="1080p" className="text-xs">高品质 (1080P)</SelectItem>
+                    <SelectItem value="480p" className="text-xs">Tiêu chuẩn (480P)</SelectItem>
+                    <SelectItem value="720p" className="text-xs">HD (720P)</SelectItem>
+                    <SelectItem value="1080p" className="text-xs">Chất lượng cao (1080P)</SelectItem>
                   </SelectContent>
                 </Select>
 
@@ -3553,7 +3553,7 @@ export function SplitScenes({ onBack, onGenerateVideos }: SplitScenesProps) {
                 </div>
               </div>
 
-              {/* Scene list - 完全复用分镜编辑的 SceneCard */}
+              {/* Scene list - 完全复用Chỉnh sửa phân cảnh的 SceneCard */}
               <div className="flex flex-col gap-3">
                 {trailerScenes.map((scene) => (
                   <SceneCard
@@ -3596,16 +3596,16 @@ export function SplitScenes({ onBack, onGenerateVideos }: SplitScenesProps) {
                 ))}
               </div>
 
-              {/* Action buttons - 与分镜编辑一致 */}
+              {/* Action buttons - 与Chỉnh sửa phân cảnh一致 */}
               <div className="flex gap-2 pt-2">
                 <TooltipProvider>
                   <Tooltip>
                     <TooltipTrigger asChild>
                       <Button
                         onClick={() => {
-                          // 仅为预告片分镜生成视频
-                          toast.info(`开始生成 ${trailerScenes.length} 个预告片视频...`);
-                          // 循环调用单个生成
+                          // 仅Tạo video cho phân cảnh trailer
+                          toast.info(`Bật始tạo ${trailerScenes.length} 个Trailervideo...`);
+                          // 循环调用单个tạo
                           trailerScenes.forEach(scene => {
                             if (scene.imageDataUrl && scene.videoStatus !== 'completed') {
                               handleGenerateSingleVideo(scene.id);
@@ -3619,18 +3619,18 @@ export function SplitScenes({ onBack, onGenerateVideos }: SplitScenesProps) {
                         {isGenerating ? (
                           <>
                             <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                            生成中...
+                            Đang tạo...
                           </>
                         ) : (
                           <>
                             <Play className="h-4 w-4 mr-2" />
-                            生成预告片视频 ({trailerScenes.length})
+                            Tạo video trailer ({trailerScenes.length})
                           </>
                         )}
                       </Button>
                     </TooltipTrigger>
                     <TooltipContent>
-                      <p>为预告片分镜生成视频</p>
+                      <p>Tạo video cho phân cảnh trailer</p>
                     </TooltipContent>
                   </Tooltip>
                 </TooltipProvider>
@@ -3638,22 +3638,22 @@ export function SplitScenes({ onBack, onGenerateVideos }: SplitScenesProps) {
 
               {/* Tips */}
               <div className="text-xs text-muted-foreground bg-muted/50 rounded-md p-2">
-                <p>💡 预告片分镜与主分镜共享数据，修改会同步。点击每个分镜下方的文字区域可编辑提示词。</p>
+                <p>💡 Phân cảnh trailer chia sẻ dữ liệu với phân cảnh chính, thay đổi sẽ đồng bộ. Nhấn vào vùng văn bản bên dưới mỗi phân cảnh để chỉnh sửa prompt.</p>
               </div>
             </>
           )}
         </>
       )}
 
-      {/* 分镜编辑 Tab 内容 */}
+      {/* Chỉnh sửa phân cảnh Tab 内容 */}
       {activeTab === "editing" && (
       <>
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <span className="text-sm font-medium">分镜编辑</span>
+          <span className="text-sm font-medium">Chỉnh sửa phân cảnh</span>
           <span className="text-xs text-muted-foreground bg-muted px-2 py-0.5 rounded-full">
-            {splitScenes.length} 个分镜
+            {splitScenes.length} 个phân cảnh
           </span>
         </div>
         <div className="flex items-center gap-2">
@@ -3669,7 +3669,7 @@ export function SplitScenes({ onBack, onGenerateVideos }: SplitScenesProps) {
             ) : (
               <Sparkles className="h-3 w-3 mr-1 text-yellow-500" />
             )}
-            AI 自动填写提示词
+            AI tự điền prompt
           </Button>
           <Button
             variant="text"
@@ -3678,16 +3678,16 @@ export function SplitScenes({ onBack, onGenerateVideos }: SplitScenesProps) {
             className="hidden h-7 px-2 text-xs"
           >
             <ArrowLeft className="h-3 w-3 mr-1" />
-            重新生成
+            Tạo lại
           </Button>
         </div>
       </div>
 
-      {/* Row 1: 基础配置 - 视觉风格 / 画面比例 / 生成方式 */}
+      {/* Row 1: 基础配置 - Phong cách hình ảnh / Tỷ lệ khung hình / tạo方式 */}
       <div className="flex flex-wrap items-center gap-3 p-3 rounded-lg bg-muted/30 border">
         {/* Visual Style Selector */}
         <div className="flex items-center gap-2">
-          <span className="text-xs text-muted-foreground whitespace-nowrap">视觉风格:</span>
+          <span className="text-xs text-muted-foreground whitespace-nowrap">Phong cách hình ảnh:</span>
           <StylePicker
             value={currentStyleId || ''}
             onChange={handleStyleChange}
@@ -3697,7 +3697,7 @@ export function SplitScenes({ onBack, onGenerateVideos }: SplitScenesProps) {
 
         {/* Cinematography Profile Selector */}
         <div className="flex items-center gap-2">
-          <span className="text-xs text-muted-foreground whitespace-nowrap">摄影风格:</span>
+          <span className="text-xs text-muted-foreground whitespace-nowrap">Phong cách quay phim:</span>
           <CinematographyProfilePicker
             value={currentCinProfileId}
             onChange={handleCinProfileChange}
@@ -3708,7 +3708,7 @@ export function SplitScenes({ onBack, onGenerateVideos }: SplitScenesProps) {
 
         {/* Aspect Ratio Selector */}
         <div className="flex items-center gap-2">
-          <span className="text-xs text-muted-foreground whitespace-nowrap">画面比例:</span>
+          <span className="text-xs text-muted-foreground whitespace-nowrap">Tỷ lệ khung hình:</span>
           <div className="flex rounded-md border overflow-hidden">
             <button
               onClick={() => handleAspectRatioChange('16:9')}
@@ -3720,7 +3720,7 @@ export function SplitScenes({ onBack, onGenerateVideos }: SplitScenesProps) {
               )}
             >
               <Monitor className="h-3.5 w-3.5" />
-              横屏
+              Ngang
             </button>
             <button
               onClick={() => handleAspectRatioChange('9:16')}
@@ -3732,7 +3732,7 @@ export function SplitScenes({ onBack, onGenerateVideos }: SplitScenesProps) {
               )}
             >
               <Smartphone className="h-3.5 w-3.5" />
-              竖屏
+              Dọc
             </button>
           </div>
         </div>
@@ -3742,16 +3742,16 @@ export function SplitScenes({ onBack, onGenerateVideos }: SplitScenesProps) {
           value={storyboardConfig.resolution || '2K'}
           onValueChange={(v: '1K' | '2K' | '4K') => {
             setStoryboardConfig({ resolution: v });
-            toast.success(`图片分辨率已切换为 ${v}`);
+            toast.success(`ảnh分辨率已切换为 ${v}`);
           }}
         >
           <SelectTrigger className="w-[130px] h-8 text-xs">
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="1K" className="text-xs">标准 (1K)</SelectItem>
-            <SelectItem value="2K" className="text-xs">高清 (2K)</SelectItem>
-            <SelectItem value="4K" className="text-xs">超清 (4K)</SelectItem>
+            <SelectItem value="1K" className="text-xs">Tiêu chuẩn (1K)</SelectItem>
+            <SelectItem value="2K" className="text-xs">HD (2K)</SelectItem>
+            <SelectItem value="4K" className="text-xs">Ultra HD (4K)</SelectItem>
           </SelectContent>
         </Select>
 
@@ -3760,22 +3760,22 @@ export function SplitScenes({ onBack, onGenerateVideos }: SplitScenesProps) {
           value={storyboardConfig.videoResolution || '480p'}
           onValueChange={(v: '480p' | '720p' | '1080p') => {
             setStoryboardConfig({ videoResolution: v });
-            toast.success(`视频分辨率已切换为 ${v}`);
+            toast.success(`video分辨率已切换为 ${v}`);
           }}
         >
           <SelectTrigger className="w-[140px] h-8 text-xs">
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="480p" className="text-xs">标准 (480P)</SelectItem>
-            <SelectItem value="720p" className="text-xs">高清 (720P)</SelectItem>
-            <SelectItem value="1080p" className="text-xs">高品质 (1080P)</SelectItem>
+            <SelectItem value="480p" className="text-xs">Tiêu chuẩn (480P)</SelectItem>
+            <SelectItem value="720p" className="text-xs">HD (720P)</SelectItem>
+            <SelectItem value="1080p" className="text-xs">Chất lượng cao (1080P)</SelectItem>
           </SelectContent>
         </Select>
 
         {/* Image generation mode toggle */}
         <div className="flex items-center gap-2">
-          <span className="text-xs text-muted-foreground whitespace-nowrap">图片生成方式:</span>
+          <span className="text-xs text-muted-foreground whitespace-nowrap">Cách tạo ảnh:</span>
           <div className="flex rounded-md border overflow-hidden">
             <button
               onClick={() => setImageGenMode('single')}
@@ -3783,14 +3783,14 @@ export function SplitScenes({ onBack, onGenerateVideos }: SplitScenesProps) {
                 "px-3 py-1.5 text-xs",
                 imageGenMode === 'single' ? 'bg-primary text-primary-foreground' : 'bg-background hover:bg-muted'
               )}
-            >单图生成</button>
+            >Tạo đơn</button>
             <button
               onClick={() => setImageGenMode('merged')}
               className={cn(
                 "px-3 py-1.5 text-xs border-l",
                 imageGenMode === 'merged' ? 'bg-primary text-primary-foreground' : 'bg-background hover:bg-muted'
               )}
-            >合并生成</button>
+            >Tạo gộp</button>
           </div>
         </div>
 
@@ -3800,12 +3800,12 @@ export function SplitScenes({ onBack, onGenerateVideos }: SplitScenesProps) {
         </div>
       </div>
 
-      {/* Row 2: 合并生成选项（仅在合并模式下显示） */}
+      {/* Row 2: Tạo gộp选项（仅在合并模式下显示） */}
       {imageGenMode === 'merged' && (
         <div className="flex flex-wrap items-center gap-3 p-3 rounded-lg bg-primary/5 border border-primary/20">
-          {/* 首/尾帧模式 */}
+          {/* 首/khung cuối模式 */}
           <div className="flex items-center gap-2">
-            <span className="text-xs text-muted-foreground whitespace-nowrap">首/尾帧:</span>
+            <span className="text-xs text-muted-foreground whitespace-nowrap">Đầu/Cuối:</span>
             <div className="flex rounded-md border overflow-hidden">
               <button
                 onClick={() => setFrameMode('first')}
@@ -3813,27 +3813,27 @@ export function SplitScenes({ onBack, onGenerateVideos }: SplitScenesProps) {
                   "px-3 py-1.5 text-xs",
                   frameMode === 'first' ? 'bg-primary text-primary-foreground' : 'bg-background hover:bg-muted'
                 )}
-              >仅首帧</button>
+              >Chỉ khung đầu</button>
               <button
                 onClick={() => setFrameMode('last')}
                 className={cn(
                   "px-3 py-1.5 text-xs border-l",
                   frameMode === 'last' ? 'bg-primary text-primary-foreground' : 'bg-background hover:bg-muted'
                 )}
-              >仅尾帧</button>
+              >Chỉ khung cuối</button>
               <button
                 onClick={() => setFrameMode('both')}
                 className={cn(
                   "px-3 py-1.5 text-xs border-l",
                   frameMode === 'both' ? 'bg-primary text-primary-foreground' : 'bg-background hover:bg-muted'
                 )}
-              >首+尾</button>
+              >Đầu+Cuối</button>
             </div>
           </div>
 
           {/* 参考图策略 */}
           <div className="flex items-center gap-2">
-            <span className="text-xs text-muted-foreground whitespace-nowrap">参考图策略:</span>
+            <span className="text-xs text-muted-foreground whitespace-nowrap">Chiến lược ảnh tham chiếu:</span>
             <Select value={refStrategy} onValueChange={v => setRefStrategy(v as any)}>
               <SelectTrigger className="w-[120px] h-8 text-xs">
                 <SelectValue placeholder="选择策略" />
@@ -3847,21 +3847,21 @@ export function SplitScenes({ onBack, onGenerateVideos }: SplitScenesProps) {
             <button
               onClick={() => setUseExemplar(!useExemplar)}
               className={cn("px-2 py-1 text-xs rounded border", useExemplar ? 'bg-primary text-primary-foreground' : 'bg-background hover:bg-muted')}
-              title="同组格引用已生成的范例成片作为锚点"
-            >范例锚图 {useExemplar ? '开' : '关'}</button>
+              title="同组格引用已tạo的范例成片作为锚点"
+            >Ảnh mẫu neo {useExemplar ? 'Bật' : 'Tắt'}</button>
           </div>
 
-          {/* 执行合并生成 - 突出显示 */}
+          {/* Thực hiện tạo gộp - 突出显示 */}
           <div className="ml-auto flex items-center gap-2">
             <Button
               className="h-8 px-4 text-xs font-medium"
               disabled={isGenerating || isMergedRunning || splitScenes.length === 0}
               onClick={() => {
-                console.log('[MergedGenControls] 执行合并生成按钮点击, frameMode:', frameMode, 'refStrategy:', refStrategy, 'useExemplar:', useExemplar);
+                console.log('[MergedGenControls] Thực hiện tạo gộp按钮点击, frameMode:', frameMode, 'refStrategy:', refStrategy, 'useExemplar:', useExemplar);
                 handleMergedGenerate(frameMode, refStrategy, useExemplar);
               }}
             >
-              {isMergedRunning ? (<><Loader2 className="h-3.5 w-3.5 mr-1.5 animate-spin" />合并生成中...</>) : (<><Sparkles className="h-3.5 w-3.5 mr-1.5" />执行合并生成</>)}
+              {isMergedRunning ? (<><Loader2 className="h-3.5 w-3.5 mr-1.5 animate-spin" />Đang tạo gộp...</>) : (<><Sparkles className="h-3.5 w-3.5 mr-1.5" />Thực hiện tạo gộp</>)}
             </Button>
             {isMergedRunning && (
               <Button
@@ -3869,7 +3869,7 @@ export function SplitScenes({ onBack, onGenerateVideos }: SplitScenesProps) {
                 className="h-8 px-3 text-xs"
                 onClick={handleStopMergedGeneration}
               >
-                <Square className="h-3.5 w-3.5 mr-1" />停止
+                <Square className="h-3.5 w-3.5 mr-1" />Dừng
               </Button>
             )}
           </div>
@@ -3881,7 +3881,7 @@ export function SplitScenes({ onBack, onGenerateVideos }: SplitScenesProps) {
         <div className="flex items-start gap-2 p-2 rounded-md bg-yellow-500/10 border border-yellow-500/20">
           <AlertCircle className="h-4 w-4 text-yellow-500 mt-0.5 shrink-0" />
           <div className="text-xs text-yellow-600 dark:text-yellow-400">
-            <p>部分分镜缺少提示词，点击分镜下方的文字区域可编辑。</p>
+            <p>Một số phân cảnh thiếu prompt, nhấn vào vùng văn bản bên dưới để chỉnh sửa.</p>
           </div>
         </div>
       )}
@@ -3928,7 +3928,7 @@ export function SplitScenes({ onBack, onGenerateVideos }: SplitScenesProps) {
           />
         ))}
 
-        {/* 添加空白分镜按钮 */}
+        {/* Thêm phân cảnh trống按钮 */}
         <button
           type="button"
           onClick={addBlankSplitScene}
@@ -3942,7 +3942,7 @@ export function SplitScenes({ onBack, onGenerateVideos }: SplitScenesProps) {
           )}
         >
           <Plus className="h-5 w-5" />
-          <span>添加空白分镜</span>
+          <span>Thêm phân cảnh trống</span>
         </button>
       </div>
 
@@ -3965,21 +3965,21 @@ export function SplitScenes({ onBack, onGenerateVideos }: SplitScenesProps) {
                     {isGenerating ? (
                       <>
                         <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                        生成中...
+                        Đang tạo...
                       </>
                     ) : (
                       <>
                         <Play className="h-4 w-4 mr-2" />
-                        生成视频 ({scenesNeedVideo}/{splitScenes.length})
+                        Tạo video ({scenesNeedVideo}/{splitScenes.length})
                       </>
                     )}
                   </Button>
                 </TooltipTrigger>
                 <TooltipContent>
                   {noImages ? (
-                    <p>请先为分镜生成图片，再生成视频</p>
+                    <p>Vui lòng tạo ảnh cho phân cảnh trước, sau đó tạo video</p>
                   ) : (
-                    <p>{scenesWithImages} 个分镜已有图片，{scenesNeedVideo} 个待生成视频</p>
+                    <p>{scenesWithImages} phân cảnh đã có ảnh, {scenesNeedVideo} đang chờ tạo video</p>
                   )}
                 </TooltipContent>
               </Tooltip>
@@ -3990,7 +3990,7 @@ export function SplitScenes({ onBack, onGenerateVideos }: SplitScenesProps) {
 
       {/* Tips */}
       <div className="text-xs text-muted-foreground bg-muted/50 rounded-md p-2">
-        <p>💡 点击每个分镜下方的文字区域可编辑视频生成提示词。悬停在分镜上可以删除不需要的分镜。</p>
+        <p>💡 Nhấn vào vùng văn bản bên dưới mỗi phân cảnh để chỉnh sửa prompt tạo video. Di chuột vào phân cảnh để xóa phân cảnh không cần thiết.</p>
       </div>
       </>
       )}
@@ -4056,7 +4056,7 @@ export function SplitScenes({ onBack, onGenerateVideos }: SplitScenesProps) {
         result={quadGridResult}
         frameType={quadGridTarget?.type || "start"}
         currentSceneId={quadGridTarget?.sceneId ?? 0}
-        availableScenes={splitScenes.map(s => ({ id: s.id, label: `分镜 ${s.id + 1}` }))}
+        availableScenes={splitScenes.map(s => ({ id: s.id, label: `phân cảnh ${s.id + 1}` }))}
         onApply={handleApplyQuadGrid}
         onCopyToScene={handleCopyQuadGridToScene}
       />

@@ -528,23 +528,23 @@ export const useSceneCount = (): number => {
 // ==================== Preset Time Options ====================
 
 export const TIME_PRESETS = [
-  { id: 'day', label: '白天', prompt: 'daytime, bright sunlight' },
-  { id: 'night', label: '夜晚', prompt: 'nighttime, moonlight, stars' },
-  { id: 'dawn', label: '黎明', prompt: 'dawn, early morning light, soft orange glow' },
-  { id: 'dusk', label: '黄昏', prompt: 'dusk, golden hour, sunset colors' },
-  { id: 'overcast', label: '阴天', prompt: 'overcast sky, soft diffused light' },
-  { id: 'storm', label: '暴风雨', prompt: 'stormy weather, dark clouds, dramatic lighting' },
+  { id: 'day', label: 'Ban ngày', prompt: 'daytime, bright sunlight' },
+  { id: 'night', label: 'Ban đêm', prompt: 'nighttime, moonlight, stars' },
+  { id: 'dawn', label: 'Bình minh', prompt: 'dawn, early morning light, soft orange glow' },
+  { id: 'dusk', label: 'Hoàng hôn', prompt: 'dusk, golden hour, sunset colors' },
+  { id: 'overcast', label: 'Trời âm u', prompt: 'overcast sky, soft diffused light' },
+  { id: 'storm', label: 'Bão tố', prompt: 'stormy weather, dark clouds, dramatic lighting' },
 ] as const;
 
 // ==================== Preset Atmosphere Options ====================
 
 export const ATMOSPHERE_PRESETS = [
-  { id: 'peaceful', label: '平静', prompt: 'peaceful, serene, calm atmosphere' },
-  { id: 'tense', label: '紧张', prompt: 'tense, suspenseful, uneasy atmosphere' },
-  { id: 'romantic', label: '浪漫', prompt: 'romantic, warm, intimate atmosphere' },
-  { id: 'mysterious', label: '神秘', prompt: 'mysterious, enigmatic, foggy atmosphere' },
-  { id: 'cheerful', label: '欢快', prompt: 'cheerful, lively, vibrant atmosphere' },
-  { id: 'melancholic', label: '忧郁', prompt: 'melancholic, sad, somber atmosphere' },
-  { id: 'epic', label: '史诗', prompt: 'epic, grand, majestic atmosphere' },
-  { id: 'horror', label: '恐怖', prompt: 'horror, creepy, unsettling atmosphere' },
+  { id: 'peaceful', label: 'Yên bình', prompt: 'peaceful, serene, calm atmosphere' },
+  { id: 'tense', label: 'Căng thẳng', prompt: 'tense, suspenseful, uneasy atmosphere' },
+  { id: 'romantic', label: 'Lãng mạn', prompt: 'romantic, warm, intimate atmosphere' },
+  { id: 'mysterious', label: 'Bí ẩn', prompt: 'mysterious, enigmatic, foggy atmosphere' },
+  { id: 'cheerful', label: 'Vui tươi', prompt: 'cheerful, lively, vibrant atmosphere' },
+  { id: 'melancholic', label: 'U buồn', prompt: 'melancholic, sad, somber atmosphere' },
+  { id: 'epic', label: 'Sử thi', prompt: 'epic, grand, majestic atmosphere' },
+  { id: 'horror', label: 'Kinh dị', prompt: 'horror, creepy, unsettling atmosphere' },
 ] as const;

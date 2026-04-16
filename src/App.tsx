@@ -123,7 +123,7 @@ function App() {
       <div className="h-screen w-screen flex items-center justify-center bg-background">
         <div className="flex flex-col items-center gap-4">
           <Loader2 className="h-8 w-8 animate-spin text-primary" />
-          <p className="text-muted-foreground">正在初始化...</p>
+          <p className="text-muted-foreground">Đang khởi tạo...</p>
         </div>
       </div>
     );

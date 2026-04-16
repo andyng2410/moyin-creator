@@ -38,10 +38,10 @@ import { getStyleById, getStylePrompt } from "@/lib/constants/visual-styles";
 
 // Character sheet elements that can be included
 const SHEET_ELEMENTS = [
-  { id: 'three-view', label: '三视图', prompt: 'front view, side view, back view, turnaround', default: true },
-  { id: 'expressions', label: '表情设定', prompt: 'expression sheet, multiple facial expressions, happy, sad, angry, surprised', default: true },
-  { id: 'proportions', label: '比例设定', prompt: 'height chart, body proportions, head-to-body ratio reference', default: false },
-  { id: 'poses', label: '动作设定', prompt: 'pose sheet, various action poses, standing, sitting, running', default: false },
+  { id: 'three-view', label: 'Ba góc nhìn', prompt: 'front view, side view, back view, turnaround', default: true },
+  { id: 'expressions', label: 'Thiết kế biểu cảm', prompt: 'expression sheet, multiple facial expressions, happy, sad, angry, surprised', default: true },
+  { id: 'proportions', label: 'Thiết kế tỷ lệ', prompt: 'height chart, body proportions, head-to-body ratio reference', default: false },
+  { id: 'poses', label: 'Thiết kế động tác', prompt: 'pose sheet, various action poses, standing, sitting, running', default: false },
 ] as const;
 
 type SheetElementId = typeof SHEET_ELEMENTS[number]['id'];
@@ -82,18 +82,18 @@ export function CharacterGenerator({ character }: CharacterGeneratorProps) {
   const handleSaveDescription = () => {
     if (description.trim() !== character.description) {
       updateCharacter(character.id, { description: description.trim() });
-      toast.success("描述已保存");
+      toast.success("Đã lưu mô tả");
     }
   };
 
   const handleGenerateSheet = async () => {
     if (!description.trim()) {
-      toast.error("请输入角色描述");
+      toast.error("Vui lòng nhập mô tả nhân vật");
       return;
     }
 
     if (selectedElements.length === 0) {
-      toast.error("请至少选择一个内容");
+      toast.error("Vui lòng chọn ít nhất một nội dung");
       return;
     }
 
@@ -132,11 +132,11 @@ export function CharacterGenerator({ character }: CharacterGeneratorProps) {
       // Show preview instead of saving directly
       setPreviewUrl(result.imageUrl);
       setGenerationStatus('completed');
-      toast.success("图片生成完成，请预览确认");
+      toast.success("Tạo ảnh hoàn tất, vui lòng xem trước và xác nhận");
     } catch (error) {
       const err = error as Error;
       setGenerationStatus('error', err.message);
-      toast.error(`生成失败: ${err.message}`);
+      toast.error(`Tạo thất bại: ${err.message}`);
     } finally {
       setGeneratingCharacter(null);
     }
@@ -147,7 +147,7 @@ export function CharacterGenerator({ character }: CharacterGeneratorProps) {
     if (!previewUrl) return;
 
     // Show saving status
-    toast.loading("正在保存图片到本地...", { id: 'saving-preview' });
+    toast.loading("Đang lưu ảnh vào máy...", { id: 'saving-preview' });
 
     try {
       // Save image to local file storage
@@ -172,7 +172,7 @@ export function CharacterGenerator({ character }: CharacterGeneratorProps) {
       const aiFolderId = getOrCreateCategoryFolder('ai-image');
       addMediaFromUrl({
         url: localPath,
-        name: `角色-${character.name}`,
+        name: `Nhân vật-${character.name}`,
         type: 'image',
         source: 'ai-image',
         folderId: aiFolderId,
@@ -181,10 +181,10 @@ export function CharacterGenerator({ character }: CharacterGeneratorProps) {
 
       setPreviewUrl(null);
       setPreviewPrompt('');
-      toast.success("角色设定图已保存到本地！", { id: 'saving-preview' });
+      toast.success("Đã lưu bản thiết kế nhân vật vào máy!", { id: 'saving-preview' });
     } catch (error) {
       console.error('Failed to save preview:', error);
-      toast.error("保存失败", { id: 'saving-preview' });
+      toast.error("Lưu thất bại", { id: 'saving-preview' });
     }
   };
 
@@ -208,10 +208,10 @@ export function CharacterGenerator({ character }: CharacterGeneratorProps) {
     return (
       <div className="space-y-4">
         <div className="flex items-center justify-between">
-          <h3 className="font-medium text-sm">预览角色设定图</h3>
+          <h3 className="font-medium text-sm">Xem trước bản thiết kế nhân vật</h3>
           <span className="text-xs text-amber-500 flex items-center gap-1">
             <AlertCircle className="h-3 w-3" />
-            待确认
+            Chờ xác nhận
           </span>
         </div>
 
@@ -219,11 +219,11 @@ export function CharacterGenerator({ character }: CharacterGeneratorProps) {
         <div className="relative rounded-lg overflow-hidden border-2 border-amber-500/50 bg-muted">
           <img 
             src={previewUrl} 
-            alt={`${character.name} 角色设定预览`}
+            alt={`${character.name} xem trước thiết kế nhân vật`}
             className="w-full h-auto"
           />
           <div className="absolute top-2 left-2 bg-amber-500 text-white text-xs px-2 py-1 rounded">
-            预览
+            Xem trước
           </div>
         </div>
 
@@ -235,7 +235,7 @@ export function CharacterGenerator({ character }: CharacterGeneratorProps) {
             size="lg"
           >
             <Check className="h-4 w-4 mr-2" />
-            保存设定图
+            Lưu bản thiết kế
           </Button>
           <Button 
             onClick={handleRegenerate}
@@ -243,7 +243,7 @@ export function CharacterGenerator({ character }: CharacterGeneratorProps) {
             size="lg"
           >
             <RotateCcw className="h-4 w-4 mr-2" />
-            重新生成
+            Tạo lại
           </Button>
         </div>
 
@@ -254,13 +254,13 @@ export function CharacterGenerator({ character }: CharacterGeneratorProps) {
           className="w-full text-muted-foreground"
           size="sm"
         >
-          放弃并返回
+          Bỏ qua và quay lại
         </Button>
 
         {/* Prompt info */}
         {previewPrompt && (
           <details className="text-xs text-muted-foreground">
-            <summary className="cursor-pointer hover:text-foreground">查看生成提示词</summary>
+            <summary className="cursor-pointer hover:text-foreground">Xem prompt đã tạo</summary>
             <p className="mt-2 p-2 bg-muted rounded text-xs break-all">{previewPrompt}</p>
           </details>
         )}
@@ -271,11 +271,11 @@ export function CharacterGenerator({ character }: CharacterGeneratorProps) {
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
-        <h3 className="font-medium text-sm">生成角色设定图</h3>
+        <h3 className="font-medium text-sm">Tạo bản thiết kế nhân vật</h3>
         {isGenerating && (
           <span className="text-xs text-muted-foreground flex items-center gap-1">
             <Loader2 className="h-3 w-3 animate-spin" />
-            生成中...
+            Đang tạo...
           </span>
         )}
       </div>
@@ -285,26 +285,26 @@ export function CharacterGenerator({ character }: CharacterGeneratorProps) {
         <div className="relative rounded-lg overflow-hidden border bg-muted">
           <img 
             src={existingSheet.imageUrl} 
-            alt={`${character.name} 角色设定`}
+            alt={`${character.name} thiết kế nhân vật`}
             className="w-full h-auto"
           />
           <div className="absolute top-2 right-2">
             <Check className="h-5 w-5 text-green-500 bg-white rounded-full p-0.5" />
           </div>
           <div className="absolute top-2 left-2 bg-green-500 text-white text-xs px-2 py-1 rounded">
-            已保存
+            Đã lưu
           </div>
         </div>
       )}
 
       {/* Description editor */}
       <div className="space-y-2">
-        <Label className="text-xs">角色描述（用于AI生成）</Label>
+        <Label className="text-xs">Mô tả nhân vật (dùng cho AI tạo ảnh)</Label>
         <Textarea
           value={description}
           onChange={(e) => setDescription(e.target.value)}
           onBlur={handleSaveDescription}
-          placeholder="详细描述角色外观，例如：一只橙色的小猫，有大大的蓝色眼睛，毛茸茸的尾巴，戴着红色铃铛项圈..."
+          placeholder="Mô tả chi tiết ngoại hình nhân vật, ví dụ: Một chú mèo cam nhỏ, mắt xanh to tròn, đuôi xù, đeo vòng cổ chuông đỏ..."
           className="min-h-[80px] text-sm resize-none"
           disabled={isGenerating}
         />
@@ -312,7 +312,7 @@ export function CharacterGenerator({ character }: CharacterGeneratorProps) {
 
       {/* Sheet content selection */}
       <div className="space-y-2">
-        <Label className="text-xs">设定图内容</Label>
+        <Label className="text-xs">Nội dung bản thiết kế</Label>
         <div className="space-y-2">
           {SHEET_ELEMENTS.map((element) => (
             <div
@@ -333,10 +333,10 @@ export function CharacterGenerator({ character }: CharacterGeneratorProps) {
               <div className="flex-1">
                 <span className="text-sm font-medium">{element.label}</span>
                 <p className="text-xs text-muted-foreground">
-                  {element.id === 'three-view' && '正面、侧面、背面三视图结构'}
-                  {element.id === 'expressions' && '多种面部表情展示'}
-                  {element.id === 'proportions' && '身体比例、头身比参考'}
-                  {element.id === 'poses' && '各种常见动作姿势'}
+                  {element.id === 'three-view' && 'Cấu trúc ba góc nhìn: trước, bên, sau'}
+                  {element.id === 'expressions' && 'Hiển thị nhiều biểu cảm khuôn mặt'}
+                  {element.id === 'proportions' && 'Tỷ lệ cơ thể, tham chiếu đầu-thân'}
+                  {element.id === 'poses' && 'Các tư thế động tác phổ biến'}
                 </p>
               </div>
             </div>
@@ -354,12 +354,12 @@ export function CharacterGenerator({ character }: CharacterGeneratorProps) {
         {isGenerating ? (
           <>
             <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-            正在生成角色设定图...
+            Đang tạo bản thiết kế nhân vật...
           </>
         ) : (
           <>
             <FileImage className="h-4 w-4 mr-2" />
-            {existingSheet ? '重新生成设定图' : '生成角色设定图'}
+            {existingSheet ? 'Tạo lại bản thiết kế' : 'Tạo bản thiết kế nhân vật'}
           </>
         )}
       </Button>
@@ -367,27 +367,27 @@ export function CharacterGenerator({ character }: CharacterGeneratorProps) {
       {/* Reference images preview */}
       {character.referenceImages && character.referenceImages.length > 0 && (
         <div className="space-y-2">
-          <Label className="text-xs">参考图片</Label>
+          <Label className="text-xs">Ảnh tham khảo</Label>
           <div className="flex gap-2 flex-wrap">
             {character.referenceImages.map((img, i) => (
               <img
                 key={i}
                 src={img}
-                alt={`参考图 ${i + 1}`}
+                alt={`Ảnh tham khảo ${i + 1}`}
                 className="w-12 h-12 object-cover rounded border"
               />
             ))}
           </div>
           <p className="text-xs text-muted-foreground">
-            AI将参考这些图片生成角色设定图
+            AI sẽ tham khảo các ảnh này để tạo bản thiết kế nhân vật
           </p>
         </div>
       )}
 
       {/* Tips */}
       <div className="text-xs text-muted-foreground space-y-1">
-        <p>💡 生成后可预览确认，满意再保存</p>
-        <p>💡 保存的角色可拖拽到 AI 导演面板使用</p>
+        <p>{"💡 Sau khi tạo có thể xem trước, hài lòng thì lưu"}</p>
+        <p>{"💡 Nhân vật đã lưu có thể kéo thả vào bảng AI Đạo diễn để sử dụng"}</p>
       </div>
     </div>
   );

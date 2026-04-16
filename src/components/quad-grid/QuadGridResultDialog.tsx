@@ -98,10 +98,10 @@ export function QuadGridResultDialog({
         <DialogHeader className="pb-2">
           <DialogTitle className="text-sm text-white flex items-center gap-2">
             <Grid2X2 className="h-4 w-4 text-cyan-400" />
-            四宫格结果 - {frameType === "start" ? "首帧" : "尾帧"}
+            Kết quả lưới 4 ô - {frameType === "start" ? "Khung đầu" : "Khung cuối"}
           </DialogTitle>
           <DialogDescription className="text-xs text-zinc-400">
-            点击选择图片，可应用到当前分镜或复制到其他分镜
+            Nhấp chọn ảnh, có thể áp dụng vào phân cảnh hiện tại hoặc sao chép sang phân cảnh khác
           </DialogDescription>
         </DialogHeader>
 
@@ -110,11 +110,11 @@ export function QuadGridResultDialog({
           <div className="flex gap-4">
             {/* 原图 */}
             <div className="w-1/4">
-              <div className="text-[10px] text-zinc-500 mb-1">锚点原图</div>
+              <div className="text-[10px] text-zinc-500 mb-1">Ảnh neo gốc</div>
               <div className="aspect-video rounded overflow-hidden border border-zinc-700">
                 <img
                   src={result.originalImage}
-                  alt="原图"
+                  alt="Ảnh gốc"
                   className="w-full h-full object-cover"
                 />
               </div>
@@ -123,7 +123,7 @@ export function QuadGridResultDialog({
             {/* 四宫格结果 */}
             <div className="flex-1">
               <div className="text-[10px] text-zinc-500 mb-1">
-                四宫格结果 ({result.variationType})
+                Kết quả lưới 4 ô ({result.variationType})
               </div>
               <div className="grid grid-cols-2 gap-2">
                 {result.images.map((img, index) => (
@@ -147,7 +147,7 @@ export function QuadGridResultDialog({
                     </span>
                     {selectedIndex === index && (
                       <span className="absolute top-1 right-1 text-[9px] bg-cyan-500 text-black px-1 py-0.5 rounded">
-                        已选中
+                        Đã chọn
                       </span>
                     )}
                     {/* 悬停操作 - 下载 */}
@@ -158,7 +158,7 @@ export function QuadGridResultDialog({
                           handleDownload(img, index);
                         }}
                         className="p-1 rounded bg-black/60 text-white hover:bg-blue-600"
-                        title="下载"
+                        title="Tải xuống"
                       >
                         <Download className="h-3 w-3" />
                       </button>
@@ -173,11 +173,11 @@ export function QuadGridResultDialog({
           {otherScenes.length > 0 && (
             <div className="flex items-center gap-2 p-3 rounded bg-zinc-800/50 border border-zinc-700">
               <span className="text-xs text-zinc-400 whitespace-nowrap">
-                复制到:
+                Sao chép đến:
               </span>
               <Select value={copyTargetScene} onValueChange={setCopyTargetScene}>
                 <SelectTrigger className="w-[140px] h-7 text-xs bg-zinc-800 border-zinc-700">
-                  <SelectValue placeholder="选择分镜" />
+                  <SelectValue placeholder="Chọn phân cảnh" />
                 </SelectTrigger>
                 <SelectContent>
                   {otherScenes.map((scene) => (
@@ -192,8 +192,8 @@ export function QuadGridResultDialog({
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="start" className="text-xs">首帧</SelectItem>
-                  <SelectItem value="end" className="text-xs">尾帧</SelectItem>
+                  <SelectItem value="start" className="text-xs">Khung đầu</SelectItem>
+                  <SelectItem value="end" className="text-xs">Khung cuối</SelectItem>
                 </SelectContent>
               </Select>
               <Button
@@ -204,7 +204,7 @@ export function QuadGridResultDialog({
                 className="h-7 text-xs border-zinc-700"
               >
                 <Copy className="h-3 w-3 mr-1" />
-                复制
+                Sao chép
               </Button>
             </div>
           )}
@@ -218,7 +218,7 @@ export function QuadGridResultDialog({
             className="h-8 text-xs border-zinc-700"
           >
             <X className="h-3 w-3 mr-1" />
-            关闭
+            Đóng
           </Button>
           <Button
             size="sm"
@@ -226,7 +226,7 @@ export function QuadGridResultDialog({
             className="h-8 text-xs bg-cyan-500 hover:bg-cyan-600 text-black"
           >
             <Check className="h-3 w-3 mr-1" />
-            应用到{frameType === "start" ? "首帧" : "尾帧"}
+            Áp dụng vào {frameType === "start" ? "Khung đầu" : "Khung cuối"}
           </Button>
         </DialogFooter>
       </DialogContent>

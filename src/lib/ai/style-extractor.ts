@@ -117,13 +117,13 @@ export async function extractStyleTokens(
 ): Promise<StyleExtractionResult> {
   const config = getFeatureConfig('image_understanding');
   if (!config) {
-    throw new Error('请先在设置中为“图片理解”功能绑定 API 提供商');
+    throw new Error('Vui lòng liên kết nhà cung cấp API cho chức năng “Hiểu ảnh” trong cài đặt trước');
   }
 
   const baseUrl = config.baseUrl?.replace(/\/+$/, '');
   const model = config.model || config.models?.[0];
   if (!baseUrl || !model) {
-    throw new Error('图片理解服务缺少 Base URL 或模型配置');
+    throw new Error('Dịch vụ hiểu ảnh thiếu cấu hình Base URL hoặc mô hình');
   }
 
   const contentParts: Array<{ type: string; text?: string; image_url?: { url: string } }> = [];
@@ -203,7 +203,7 @@ export async function extractStyleTokens(
     parsed = JSON.parse(cleanContent);
   } catch {
     console.error('[StyleExtractor] Failed to parse JSON:', content);
-    throw new Error('AI 返回的格式无法解析');
+    throw new Error('Không thể phân tích định dạng phản hồi AI');
   }
 
   const result: StyleExtractionResult = {

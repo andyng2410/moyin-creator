@@ -59,7 +59,7 @@ export function CinematographyProfilePicker({
   trigger,
   className,
   disabled = false,
-  placeholder = "选择摄影风格",
+  placeholder = "Chọn phong cách quay phim",
   styleId,
 }: CinematographyProfilePickerProps) {
   const [hoveredProfile, setHoveredProfile] = useState<CinematographyProfile | null>(null);
@@ -132,8 +132,8 @@ export function CinematographyProfilePicker({
         {/* 媒介适配提示 */}
         {showAdaptHint && (
           <div className="text-xs mb-3 px-2 py-1.5 rounded bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20">
-            ⓘ 当前视觉风格为「{MEDIA_TYPE_LABELS[mediaType]}」媒介，摄影参数将自动适配
-            {isFieldSkipped(mediaType, 'cameraRig') && '（器材/景深/转焦将被跳过）'}
+            ⓘ Phong cách hiện tại là phương tiện「{MEDIA_TYPE_LABELS[mediaType]}」, thông số quay phim sẽ tự động thích ứng
+            {isFieldSkipped(mediaType, 'cameraRig') && ' (Thiết bị/độ sâu trường ảnh/chuyển tiêu cự sẽ được bỏ qua)'}
           </div>
         )}
 
@@ -141,25 +141,25 @@ export function CinematographyProfilePicker({
         <ScrollArea className="flex-1 mb-3">
           <div className="space-y-2 text-xs">
             <ParamRow
-              label="💡 灯光"
+              label="💡 Ánh sáng"
               value={`${previewProfile.defaultLighting.style} · ${previewProfile.defaultLighting.direction} · ${previewProfile.defaultLighting.colorTemperature}`}
             />
             <ParamRow
-              label="🔭 焦点"
+              label="🔭 Tiêu điểm"
               value={`${previewProfile.defaultFocus.depthOfField} · ${previewProfile.defaultFocus.focusTransition}`}
             />
             <ParamRow
-              label="🎥 器材"
+              label="🎥 Thiết bị"
               value={`${previewProfile.defaultRig.cameraRig} · ${previewProfile.defaultRig.movementSpeed}`}
             />
             {previewProfile.defaultAtmosphere.effects.length > 0 && (
               <ParamRow
-                label="🌫️ 氛围"
+                label="🌫️ Bầu không khí"
                 value={`${previewProfile.defaultAtmosphere.effects.join(" + ")} (${previewProfile.defaultAtmosphere.intensity})`}
               />
             )}
             <ParamRow
-              label="⏱️ 速度"
+              label="⏱️ Tốc độ"
               value={previewProfile.defaultSpeed.playbackSpeed}
             />
           </div>
@@ -167,7 +167,7 @@ export function CinematographyProfilePicker({
 
         {/* 参考影片 */}
         <div className="border-t border-border/50 pt-2">
-          <div className="text-xs text-muted-foreground mb-1">🎞️ 参考影片</div>
+          <div className="text-xs text-muted-foreground mb-1">🎞️ Phim tham khảo</div>
           <div className="flex flex-wrap gap-1">
             {previewProfile.referenceFilms.map((film) => (
               <span

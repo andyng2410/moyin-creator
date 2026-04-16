@@ -341,7 +341,7 @@ async function _generateFreedomImageInner(
   );
   if (!config) {
     const msg = getFeatureNotConfiguredMessage('character_generation');
-    toast.error('自由板块图片生成未配置：请在设置中配置「自由板块-图片」或「图片生成」服务映射');
+    toast.error('Chưa cấu hình tạo ảnh bảng tự do: vui lòng cấu hình ánh xạ dịch vụ "Bảng tự do - Ảnh" hoặc "Tạo ảnh" trong cài đặt');
     throw new Error(msg);
   }
   console.log(`[Freedom] Image config source: ${configSource}`);
@@ -425,7 +425,7 @@ async function generateViaChatCompletions(
   const imageUrl = extractChatCompletionsImage(data);
 
   if (!imageUrl) {
-    throw new Error('未能从聊天响应中提取图片 URL');
+    throw new Error('Không thể trích xuất URL ảnh từ phản hồi chat');
   }
 
   const mediaId = saveToMediaLibrary(imageUrl, params.prompt, 'ai-image');
@@ -666,10 +666,10 @@ async function generateViaMidjourneyEndpoint(
   const submitData = await submitResp.json();
   // MJ API 成功时 code === 1；其他值表示 API 层错误（即使 HTTP 200）
   if (submitData.code !== undefined && submitData.code !== 1) {
-    throw new Error(submitData.description || submitData.error || `Midjourney 提交失败 (code=${submitData.code})`);
+    throw new Error(submitData.description || submitData.error || `Midjourney gửi thất bại (code=${submitData.code})`);
   }
   const taskId = submitData.result || submitData.task_id || submitData.id;
-  if (!taskId) throw new Error('Midjourney 返回空任务 ID');
+  if (!taskId) throw new Error('Midjourney trả về ID tác vụ rỗng');
 
   const pollUrl = `${rootBase}/mj/task/${taskId}/fetch`;
   for (let i = 0; i < IMAGE_POLL_MAX_ATTEMPTS; i++) {
@@ -687,16 +687,16 @@ async function generateViaMidjourneyEndpoint(
         pollData.url ||
         pollData.data?.imageUrl ||
         pollData.data?.image_url;
-      if (!imageUrl) throw new Error('Midjourney 成功但未返回图片 URL');
+      if (!imageUrl) throw new Error('Midjourney thành công nhưng không trả về URL ảnh');
       const mediaId = saveToMediaLibrary(imageUrl, params.prompt, 'ai-image');
       return { url: imageUrl, taskId: String(taskId), mediaId };
     }
     if (status === 'failure' || status === 'failed' || status === 'error') {
-      throw new Error(pollData.failReason || pollData.message || 'Midjourney 生成失败');
+      throw new Error(pollData.failReason || pollData.message || 'Midjourney tạo thất bại');
     }
   }
 
-  throw new Error('Midjourney 生成超时');
+  throw new Error('Midjourney tạo quá thời gian');
 }
 
 function toIdeogramAspectRatio(model: string, aspectRatio?: string): string | undefined {
@@ -769,7 +769,7 @@ async function generateViaIdeogramEndpoint(
 
   const data = await response.json();
   const imageUrl = extractImageUrl(data);
-  if (!imageUrl) throw new Error('Ideogram 响应未包含图片 URL');
+  if (!imageUrl) throw new Error('Ideogram phản hồi không chứa URL ảnh');
   const mediaId = saveToMediaLibrary(imageUrl, params.prompt, 'ai-image');
   return { url: imageUrl, mediaId };
 }
@@ -813,7 +813,7 @@ async function generateViaReplicateImageEndpoint(
   }
 
   const predictionId = submitData.id;
-  if (!predictionId) throw new Error('Replicate 返回空 prediction ID');
+  if (!predictionId) throw new Error('Replicate trả về prediction ID rỗng');
 
   const pollUrl = `${rootBase}/replicate/v1/predictions/${predictionId}`;
   for (let i = 0; i < IMAGE_POLL_MAX_ATTEMPTS; i++) {
@@ -826,15 +826,15 @@ async function generateViaReplicateImageEndpoint(
     const status = String(pollData.status || '').toLowerCase();
     if (status === 'succeeded') {
       const imageUrl = extractImageUrl(pollData);
-      if (!imageUrl) throw new Error('Replicate 成功但未返回图片 URL');
+      if (!imageUrl) throw new Error('Replicate thành công nhưng không trả về URL ảnh');
       const mediaId = saveToMediaLibrary(imageUrl, params.prompt, 'ai-image');
       return { url: imageUrl, taskId: String(predictionId), mediaId };
     }
     if (status === 'failed' || status === 'canceled') {
-      throw new Error(pollData.error || 'Replicate 图片生成失败');
+      throw new Error(pollData.error || 'Replicate tạo ảnh thất bại');
     }
   }
-  throw new Error('Replicate 图片生成超时');
+  throw new Error('Replicate tạo ảnh quá thời gian');
 }
 
 // ==================== Video Generation ====================
@@ -856,7 +856,7 @@ async function _generateFreedomVideoInner(
   );
   if (!config) {
     const msg = getFeatureNotConfiguredMessage('video_generation');
-    toast.error('自由板块视频生成未配置：请在设置中配置「自由板块-视频」或「视频生成」服务映射');
+    toast.error('Chưa cấu hình tạo video bảng tự do: vui lòng cấu hình ánh xạ dịch vụ "Bảng tự do - Video" hoặc "Tạo video" trong cài đặt');
     throw new Error(msg);
   }
   console.log(`[Freedom] Video config source: ${configSource}`);
@@ -968,46 +968,46 @@ function validateVeoVideoUploads(
   if (!capability.isVeo) return grouped;
 
   if (capability.mode === 'none') {
-    if (total > 0) throw new Error(`模型 ${model} 不支持上传文件输入`);
+    if (total > 0) throw new Error(`Mô hình ${model} không hỗ trợ tải lên tệp đầu vào`);
     return grouped;
   }
 
   if (capability.mode === 'single') {
     const file = grouped.single || grouped.first;
     if (capability.minFiles > 0 && !file) {
-      throw new Error(`模型 ${model} 需要上传 1 张图片`);
+      throw new Error(`Mô hình ${model} cần tải lên 1 ảnh`);
     }
     if (grouped.references.length > 0 || !!grouped.last || (!!grouped.single && !!grouped.first)) {
-      throw new Error(`模型 ${model} 仅支持 1 张图片输入`);
+      throw new Error(`Mô hình ${model} chỉ hỗ trợ 1 ảnh đầu vào`);
     }
     return grouped;
   }
 
   if (capability.mode === 'first_last') {
     if (grouped.references.length > 0 || !!grouped.single) {
-      throw new Error(`模型 ${model} 仅支持首帧/尾帧输入`);
+      throw new Error(`Mô hình ${model} chỉ hỗ trợ đầu vào khung đầu/khung cuối`);
     }
     if (capability.minFiles > 0 && !grouped.first) {
-      throw new Error(`模型 ${model} 需要上传首帧图片`);
+      throw new Error(`Mô hình ${model} cần tải lên ảnh khung đầu`);
     }
     if (!grouped.first && grouped.last) {
-      throw new Error(`模型 ${model} 仅上传尾帧无效，请先上传首帧`);
+      throw new Error(`Mô hình ${model} chỉ tải lên khung cuối không hợp lệ, vui lòng tải lên khung đầu trước`);
     }
     if (total > capability.maxFiles) {
-      throw new Error(`模型 ${model} 最多支持 2 张图片（首帧/尾帧）`);
+      throw new Error(`Mô hình ${model} hỗ trợ tối đa 2 ảnh (khung đầu/khung cuối)`);
     }
     return grouped;
   }
 
   if (capability.mode === 'multi') {
     if (!!grouped.single || !!grouped.first || !!grouped.last) {
-      throw new Error(`模型 ${model} 仅支持多参考图输入`);
+      throw new Error(`Mô hình ${model} chỉ hỗ trợ đầu vào nhiều ảnh tham chiếu`);
     }
     if (grouped.references.length < capability.minFiles) {
-      throw new Error(`模型 ${model} 至少需要上传 1 张参考图`);
+      throw new Error(`Mô hình ${model} cần tải lên ít nhất 1 ảnh tham chiếu`);
     }
     if (grouped.references.length > capability.maxFiles) {
-      throw new Error(`模型 ${model} 最多支持 ${capability.maxFiles} 张参考图`);
+      throw new Error(`Mô hình ${model} hỗ trợ tối đa ${capability.maxFiles} ảnh tham chiếu`);
     }
     return grouped;
   }
@@ -1022,7 +1022,7 @@ async function toUploadHttpUrl(file: FreedomVideoUploadFile): Promise<string> {
 
 function dataUrlToBlob(dataUrl: string, mimeHint?: string): Blob {
   const match = dataUrl.match(/^data:(.*?);base64,(.*)$/);
-  if (!match) throw new Error('上传文件格式无效，必须是 data URL 或 http(s) URL');
+  if (!match) throw new Error('Định dạng tệp tải lên không hợp lệ, phải là data URL hoặc http(s) URL');
   const mime = match[1] || mimeHint || 'image/png';
   const b64 = match[2];
   const bytes = Uint8Array.from(atob(b64), (c) => c.charCodeAt(0));
@@ -1032,7 +1032,7 @@ function dataUrlToBlob(dataUrl: string, mimeHint?: string): Blob {
 async function toUploadBlob(file: FreedomVideoUploadFile): Promise<Blob> {
   if (/^https?:\/\//i.test(file.dataUrl)) {
     const resp = await fetch(file.dataUrl);
-    if (!resp.ok) throw new Error(`无法下载上传素材：${resp.status}`);
+    if (!resp.ok) throw new Error(`Không thể tải xuống tài liệu: ${resp.status}`);
     return resp.blob();
   }
   return dataUrlToBlob(file.dataUrl, file.mimeType);
@@ -1135,7 +1135,7 @@ async function generateVideoViaOpenAIOfficial(
   const taskId = submitData.id || submitData.video_id;
   const directUrl = extractVideoUrl(submitData);
   if (directUrl) return { url: directUrl, taskId: taskId ? String(taskId) : undefined };
-  if (!taskId) throw new Error('Sora 返回空任务 ID');
+  if (!taskId) throw new Error('Sora trả về ID tác vụ rỗng');
 
   const pollUrl = buildEndpoint(baseUrl, `videos/${taskId}`);
   for (let i = 0; i < VIDEO_POLL_MAX_ATTEMPTS; i++) {
@@ -1151,11 +1151,11 @@ async function generateVideoViaOpenAIOfficial(
       return { url: videoUrl, taskId: String(taskId) };
     }
     if (status === 'failed' || status === 'error') {
-      throw new Error(pollData.error?.message || pollData.error || pollData.message || 'Sora 生成失败');
+      throw new Error(pollData.error?.message || pollData.error || pollData.message || 'Sora tạo thất bại');
     }
   }
 
-  throw new Error('Sora 生成超时');
+  throw new Error('Sora tạo quá thời gian');
 }
 
 async function generateVideoViaUnified(
@@ -1258,7 +1258,7 @@ async function generateVideoViaUnified(
     submitData.output?.id;
   const directUrl = extractVideoUrl(submitData);
   if (directUrl) return { url: directUrl, taskId: taskId ? String(taskId) : undefined };
-  if (!taskId) throw new Error('统一视频接口返回空任务 ID');
+  if (!taskId) throw new Error('Giao diện video thống nhất trả về ID tác vụ rỗng');
 
   // 轮询：直接使用端点类型对应的 URL
   const pollUrl = `${rootBase}${endpointPaths.poll(String(taskId))}`;
@@ -1276,11 +1276,11 @@ async function generateVideoViaUnified(
       if (videoUrl) return { url: videoUrl, taskId: String(taskId) };
     }
     if (status === 'failed' || status === 'error' || status === 'cancelled') {
-      throw new Error(pollData.error?.message || pollData.error || pollData.message || '视频生成失败');
+      throw new Error(pollData.error?.message || pollData.error || pollData.message || 'Tạo video thất bại');
     }
   }
 
-  throw new Error('视频生成超时');
+  throw new Error('Tạo video quá thời gian');
 }
 
 async function generateVideoViaVolc(
@@ -1327,7 +1327,7 @@ async function generateVideoViaVolc(
 
   const submitData = await submitResp.json();
   const taskId = submitData.id;
-  if (!taskId) throw new Error('Volc 返回空任务 ID');
+  if (!taskId) throw new Error('Volc trả về ID tác vụ rỗng');
 
   const pollUrl = `${rootBase}/volc/v1/contents/generations/tasks/${taskId}`;
   for (let i = 0; i < VIDEO_POLL_MAX_ATTEMPTS; i++) {
@@ -1340,15 +1340,15 @@ async function generateVideoViaVolc(
     const status = String(pollData.status || '').toLowerCase();
     if (status === 'succeeded' || status === 'completed' || status === 'success') {
       const videoUrl = pollData.content?.video_url || extractVideoUrl(pollData);
-      if (!videoUrl) throw new Error('Volc 成功但无视频 URL');
+      if (!videoUrl) throw new Error('Volc thành công nhưng không có URL video');
       return { url: videoUrl, taskId: String(taskId) };
     }
     if (status === 'failed' || status === 'expired' || status === 'cancelled' || status === 'error') {
-      throw new Error(pollData.error?.message || pollData.error || 'Volc 视频生成失败');
+      throw new Error(pollData.error?.message || pollData.error || 'Volc tạo video thất bại');
     }
   }
 
-  throw new Error('Volc 视频生成超时');
+  throw new Error('Volc tạo video quá thời gian');
 }
 
 async function generateVideoViaWan(
@@ -1386,7 +1386,7 @@ async function generateVideoViaWan(
 
   const submitData = await submitResp.json();
   const taskId = submitData.output?.task_id;
-  if (!taskId) throw new Error('Wan 返回空任务 ID');
+  if (!taskId) throw new Error('Wan trả về ID tác vụ rỗng');
 
   const pollUrl = `${rootBase}/alibailian/api/v1/tasks/${taskId}`;
   for (let i = 0; i < VIDEO_POLL_MAX_ATTEMPTS; i++) {
@@ -1399,15 +1399,15 @@ async function generateVideoViaWan(
     const status = String(pollData.output?.task_status || '').toUpperCase();
     if (status === 'SUCCEEDED' || status === 'COMPLETED') {
       const videoUrl = pollData.output?.video_url || extractVideoUrl(pollData);
-      if (!videoUrl) throw new Error('Wan 成功但无视频 URL');
+      if (!videoUrl) throw new Error('Wan thành công nhưng không có URL video');
       return { url: videoUrl, taskId: String(taskId) };
     }
     if (status === 'FAILED' || status === 'ERROR' || status === 'CANCELLED') {
-      throw new Error(pollData.output?.message || pollData.output?.error || 'Wan 视频生成失败');
+      throw new Error(pollData.output?.message || pollData.output?.error || 'Wan tạo video thất bại');
     }
   }
 
-  throw new Error('Wan 视频生成超时');
+  throw new Error('Wan tạo video quá thời gian');
 }
 
 // Native Kling endpoint paths (relative to /kling/v1/videos/)
@@ -1475,7 +1475,7 @@ async function generateVideoViaKling(
 
   const submitData = await submitResp.json();
   const taskId = submitData.data?.task_id;
-  if (!taskId) throw new Error('Kling 返回空任务 ID');
+  if (!taskId) throw new Error('Kling trả về ID tác vụ rỗng');
 
   // Poll URL mirrors the submit path: GET /kling/v1/videos/{path}/{task_id}
   const pollUrl = `${rootBase}/kling/v1/videos/${endpointPath}/${taskId}`;
@@ -1492,15 +1492,15 @@ async function generateVideoViaKling(
         pollData.data?.task_result?.videos?.[0]?.url ||
         pollData.data?.task_result?.video_url ||
         extractVideoUrl(pollData);
-      if (!videoUrl) throw new Error('Kling 成功但无视频 URL');
+      if (!videoUrl) throw new Error('Kling thành công nhưng không có URL video');
       return { url: videoUrl, taskId: String(taskId) };
     }
     if (status === 'failed' || status === 'error') {
-      throw new Error(pollData.data?.task_status_msg || pollData.message || 'Kling 视频生成失败');
+      throw new Error(pollData.data?.task_status_msg || pollData.message || 'Kling tạo video thất bại');
     }
   }
 
-  throw new Error('Kling 视频生成超时');
+  throw new Error('Kling tạo video quá thời gian');
 }
 
 /**
@@ -1542,7 +1542,7 @@ async function generateVideoViaReplicate(
   if (directUrl) return { url: directUrl };
 
   const predictionId = submitData.id;
-  if (!predictionId) throw new Error('Replicate 返回空 prediction ID');
+  if (!predictionId) throw new Error('Replicate trả về prediction ID rỗng');
 
   const pollUrl = `${rootBase}/replicate/v1/predictions/${predictionId}`;
   for (let i = 0; i < VIDEO_POLL_MAX_ATTEMPTS; i++) {
@@ -1555,14 +1555,14 @@ async function generateVideoViaReplicate(
     const status = String(pollData.status || '').toLowerCase();
     if (status === 'succeeded') {
       const videoUrl = extractVideoUrl(pollData);
-      if (!videoUrl) throw new Error('Replicate 成功但未返回视频 URL');
+      if (!videoUrl) throw new Error('Replicate thành công nhưng không trả về URL video');
       return { url: videoUrl, taskId: String(predictionId) };
     }
     if (status === 'failed' || status === 'canceled') {
-      throw new Error(pollData.error || 'Replicate 视频生成失败');
+      throw new Error(pollData.error || 'Replicate tạo video thất bại');
     }
   }
-  throw new Error('Replicate 视频生成超时');
+  throw new Error('Replicate tạo video quá thời gian');
 }
 
 // ==================== Helpers ====================

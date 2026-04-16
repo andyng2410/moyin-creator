@@ -38,10 +38,10 @@ export async function submitAngleSwitchTask(
 ): Promise<string> {
   const { referenceImage, anglePrompt, apiKey, baseUrl, appId, instanceType = 'default', usePersonalQueue = false } = params;
   if (!baseUrl) {
-    throw new Error('RunningHub Base URL 未配置');
+    throw new Error('Chưa cấu hình RunningHub Base URL');
   }
   if (!appId) {
-    throw new Error('RunningHub App ID 未配置');
+    throw new Error('Chưa cấu hình RunningHub App ID');
   }
 
   console.log('[RunningHub] Submitting angle switch task:', {
@@ -121,7 +121,7 @@ export async function submitAngleSwitchTask(
     if (error instanceof Error) {
       throw error;
     }
-    throw new Error('提交 RunningHub 任务失败');
+    throw new Error('Gửi tác vụ RunningHub thất bại');
   }
 }
 
@@ -135,7 +135,7 @@ export async function queryTaskStatus(
 ): Promise<RunningHubTaskResult> {
   try {
     if (!baseUrl) {
-      throw new Error('RunningHub Base URL 未配置');
+      throw new Error('Chưa cấu hình RunningHub Base URL');
     }
     const response = await fetch(`${normalizeBaseUrl(baseUrl)}/query`, {
       method: 'POST',
@@ -221,7 +221,7 @@ export async function pollTaskUntilComplete(
     }
   }
 
-  throw new Error('视角切换超时，请重试');
+  throw new Error('Chuyển đổi góc nhìn quá thời gian, vui lòng thử lại');
 }
 
 /**

@@ -55,14 +55,14 @@ export const AI_FEATURES: Array<{
   name: string;
   description: string;
 }> = [
-  { key: 'script_analysis', name: '剧本分析', description: '将故事文本分解为结构化剧本' },
-  { key: 'character_generation', name: '角色生成', description: '生成角色参考图和变体服装' },
-  { key: 'scene_generation', name: '场景生成', description: '生成场景环境参考图' },
-  { key: 'video_generation', name: '视频生成', description: '将图片转换为视频' },
-  { key: 'image_understanding', name: '图片理解', description: '分析图片内容' },
-  { key: 'chat', name: '通用对话', description: 'AI 对话和文本生成' },
-  { key: 'freedom_image', name: '自由板块-图片', description: '自由板块独立的图片生成配置' },
-  { key: 'freedom_video', name: '自由板块-视频', description: '自由板块独立的视频生成配置' },
+  { key: 'script_analysis', name: 'Phân tích kịch bản', description: 'Phân tách văn bản câu chuyện thành kịch bản có cấu trúc' },
+  { key: 'character_generation', name: 'Tạo nhân vật', description: 'Tạo ảnh tham chiếu nhân vật và trang phục biến thể' },
+  { key: 'scene_generation', name: 'Tạo bối cảnh', description: 'Tạo ảnh tham chiếu môi trường bối cảnh' },
+  { key: 'video_generation', name: 'Tạo video', description: 'Chuyển đổi hình ảnh thành video' },
+  { key: 'image_understanding', name: 'Hiểu hình ảnh', description: 'Phân tích nội dung hình ảnh' },
+  { key: 'chat', name: 'Hội thoại chung', description: 'Hội thoại AI và tạo văn bản' },
+  { key: 'freedom_image', name: 'Tự do - Hình ảnh', description: 'Cấu hình tạo hình ảnh riêng cho bảng tự do' },
+  { key: 'freedom_video', name: 'Tự do - Video', description: 'Cấu hình tạo video riêng cho bảng tự do' },
 ];
 
 
@@ -127,7 +127,7 @@ export interface ImageHostProvider {
 export const IMAGE_HOST_PRESETS: Omit<ImageHostProvider, 'id' | 'apiKey'>[] = [
   {
     platform: 'scdn',
-    name: 'SCDN 图床',
+    name: 'SCDN',
     baseUrl: 'https://img.scdn.io',
     uploadPath: '/api/v1.php',
     enabled: true,
@@ -175,7 +175,7 @@ export const IMAGE_HOST_PRESETS: Omit<ImageHostProvider, 'id' | 'apiKey'>[] = [
   },
   {
     platform: 'custom',
-    name: '自定义图床',
+    name: 'Dịch vụ lưu trữ ảnh tùy chỉnh',
     baseUrl: '',
     uploadPath: '',
     enabled: false,
@@ -485,7 +485,7 @@ export interface APIConfigStatus {
  * 2. runninghub - RunningHub，视角切换/多角度生成
  */
 const PROVIDER_INFO: Record<ProviderId, { name: string; services: ServiceType[] }> = {
-  memefast: { name: '魔因API', services: ['chat', 'image', 'video', 'vision'] },
+  memefast: { name: 'Moyin API', services: ['chat', 'image', 'video', 'vision'] },
   runninghub: { name: 'RunningHub', services: ['image', 'vision'] },
   openai: { name: 'OpenAI', services: [] },
   custom: { name: 'Custom', services: [] },
@@ -587,13 +587,13 @@ export const useAPIConfigStore = create<APIConfigStore>()(
 
       syncProviderModels: async (providerId) => {
         const provider = get().providers.find(p => p.id === providerId);
-        if (!provider) return { success: false, count: 0, error: '供应商不存在' };
+        if (!provider) return { success: false, count: 0, error: 'Nhà cung cấp không tồn tại' };
 
         const keys = parseApiKeys(provider.apiKey);
-        if (keys.length === 0) return { success: false, count: 0, error: '请先配置 API Key' };
+        if (keys.length === 0) return { success: false, count: 0, error: 'Vui lòng cấu hình API Key trước' };
 
         const baseUrl = provider.baseUrl?.replace(/\/+$/, '');
-        if (!baseUrl) return { success: false, count: 0, error: 'Base URL 未配置' };
+        if (!baseUrl) return { success: false, count: 0, error: 'Base URL chưa được cấu hình' };
 
         try {
           // 用 Set 收集所有 key 的模型，自动去重
@@ -611,13 +611,13 @@ export const useAPIConfigStore = create<APIConfigStore>()(
 
             const response = await fetch(pricingUrl);
             if (!response.ok) {
-              return { success: false, count: 0, error: `pricing_new API 返回 ${response.status}` };
+              return { success: false, count: 0, error: `pricing_new API trả về ${response.status}` };
             }
 
             const json = await response.json();
             const data: Array<{ model_name: string; model_type?: string; tags?: string; supported_endpoint_types?: string[]; enable_groups?: string[] }> = json.data;
             if (!Array.isArray(data) || data.length === 0) {
-              return { success: false, count: 0, error: '响应格式异常' };
+              return { success: false, count: 0, error: 'Định dạng phản hồi bất thường' };
             }
 
             console.log(`[APIConfig] Fetched ${data.length} models from pricing_new`);
@@ -696,7 +696,7 @@ export const useAPIConfigStore = create<APIConfigStore>()(
                 });
 
                 if (!response.ok) {
-                  lastError = `key#${ki + 1} API 返回 ${response.status}`;
+                  lastError = `key#${ki + 1} API trả về ${response.status}`;
                   console.warn(`[APIConfig] ${lastError}`);
                   continue;
                 }
@@ -719,7 +719,7 @@ export const useAPIConfigStore = create<APIConfigStore>()(
                 }
                 console.log(`[APIConfig] key#${ki + 1} contributed models, total so far: ${allModelIds.size}`);
               } catch (e) {
-                lastError = `key#${ki + 1} 网络请求失败`;
+                lastError = `key#${ki + 1} yêu cầu mạng thất bại`;
                 console.warn(`[APIConfig] ${lastError}:`, e);
               }
             }
@@ -734,13 +734,13 @@ export const useAPIConfigStore = create<APIConfigStore>()(
             }
 
             if (!anySuccess) {
-              return { success: false, count: 0, error: lastError || 'API 返回异常' };
+              return { success: false, count: 0, error: lastError || 'API trả về bất thường' };
             }
           }
 
           const modelIds = Array.from(allModelIds);
           if (modelIds.length === 0) {
-            return { success: false, count: 0, error: '未获取到任何模型' };
+            return { success: false, count: 0, error: 'Không lấy được mô hình nào' };
           }
 
           if (isMemefast) {
@@ -773,7 +773,7 @@ export const useAPIConfigStore = create<APIConfigStore>()(
           return { success: true, count: modelIds.length };
         } catch (error) {
           console.error('[APIConfig] Model sync failed:', error);
-          return { success: false, count: 0, error: '网络请求失败，请检查网络' };
+          return { success: false, count: 0, error: 'Yêu cầu mạng thất bại, vui lòng kiểm tra kết nối mạng' };
         }
       },
 
@@ -1080,8 +1080,8 @@ export const useAPIConfigStore = create<APIConfigStore>()(
           isAllConfigured: missing.length === 0,
           missingKeys: missing,
           friendlyMessage: missing.length === 0
-            ? '所有 API Key 已配置'
-            : `缺少以下 API Key：${missing.join('、')}`,
+            ? 'Tất cả API Key đã được cấu hình'
+            : `Thiếu API Key sau: ${missing.join(', ')}`,
         };
       },
 
@@ -1187,7 +1187,7 @@ export const useAPIConfigStore = create<APIConfigStore>()(
                   {
                     id: generateId(),
                     platform: 'custom',
-                    name: '自定义图床',
+                    name: 'Dịch vụ lưu trữ ảnh tùy chỉnh',
                     baseUrl: legacyConfig.custom.uploadUrl || '',
                     uploadPath: '',
                     apiKey: legacyConfig.custom.apiKey || '',

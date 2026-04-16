@@ -249,7 +249,7 @@ export async function exportProjectFiles(
     onProgress?.({
       current: i + 1,
       total: filesToDownload.length,
-      message: `下载 ${file.filename}`,
+      message: `Đang tải ${file.filename}`,
     });
 
     try {
@@ -266,7 +266,7 @@ export async function exportProjectFiles(
   onProgress?.({
     current: filesToDownload.length,
     total: filesToDownload.length,
-    message: '导出完成',
+    message: 'Xuất hoàn tất',
   });
 }
 
@@ -314,7 +314,7 @@ export async function exportProjectToFolder(
     await manifestWritable.write(JSON.stringify(manifest, null, 2));
     await manifestWritable.close();
     currentFile++;
-    onProgress?.({ current: currentFile, total: totalFiles, message: '已写入 manifest.json' });
+    onProgress?.({ current: currentFile, total: totalFiles, message: 'Đã ghi manifest.json' });
 
     // Download and write images
     if (includeImages && imagesDir) {
@@ -335,7 +335,7 @@ export async function exportProjectToFolder(
         }
         
         currentFile++;
-        onProgress?.({ current: currentFile, total: totalFiles, message: `已保存 ${filename}` });
+        onProgress?.({ current: currentFile, total: totalFiles, message: `Đã lưu ${filename}` });
       }
     }
 
@@ -358,7 +358,7 @@ export async function exportProjectToFolder(
         }
         
         currentFile++;
-        onProgress?.({ current: currentFile, total: totalFiles, message: `已保存 ${filename}` });
+        onProgress?.({ current: currentFile, total: totalFiles, message: `Đã lưu ${filename}` });
       }
     }
 
@@ -516,7 +516,7 @@ export async function exportDirectorToFolder(
     await manifestWritable.write(JSON.stringify(manifest, null, 2));
     await manifestWritable.close();
     currentFile++;
-    onProgress?.({ current: currentFile, total: totalFiles, message: '已写入 manifest.json' });
+    onProgress?.({ current: currentFile, total: totalFiles, message: 'Đã ghi manifest.json' });
 
     // Export images (首帧)
     if (includeImages && imagesDir) {
@@ -525,7 +525,7 @@ export async function exportDirectorToFolder(
         if (!imageUrl) continue;
 
         const filename = `scene_${(scene.id + 1).toString().padStart(3, '0')}.png`;
-        onProgress?.({ current: currentFile, total: totalFiles, message: `导出首帧 ${filename}` });
+        onProgress?.({ current: currentFile, total: totalFiles, message: `Xuất khung đầu ${filename}` });
 
         try {
           const blob = await downloadFile(imageUrl);
@@ -546,7 +546,7 @@ export async function exportDirectorToFolder(
         if (!scene.videoUrl) continue;
 
         const filename = `scene_${(scene.id + 1).toString().padStart(3, '0')}.mp4`;
-        onProgress?.({ current: currentFile, total: totalFiles, message: `导出视频 ${filename}` });
+        onProgress?.({ current: currentFile, total: totalFiles, message: `Xuất video ${filename}` });
 
         try {
           const blob = await downloadFile(scene.videoUrl);
@@ -567,7 +567,7 @@ export async function exportDirectorToFolder(
         if (!scene.endFrameImageUrl) continue;
 
         const filename = `scene_${(scene.id + 1).toString().padStart(3, '0')}_endframe.png`;
-        onProgress?.({ current: currentFile, total: totalFiles, message: `导出尾帧 ${filename}` });
+        onProgress?.({ current: currentFile, total: totalFiles, message: `Xuất khung cuối ${filename}` });
 
         try {
           const blob = await downloadFile(scene.endFrameHttpUrl || scene.endFrameImageUrl);
@@ -650,7 +650,7 @@ export async function exportDirectorFiles(
     onProgress?.({
       current: i + 1,
       total: filesToDownload.length,
-      message: `下载 ${file.filename}`,
+      message: `Đang tải ${file.filename}`,
     });
 
     try {
@@ -665,6 +665,6 @@ export async function exportDirectorFiles(
   onProgress?.({
     current: filesToDownload.length,
     total: filesToDownload.length,
-    message: '导出完成',
+    message: 'Xuất hoàn tất',
   });
 }

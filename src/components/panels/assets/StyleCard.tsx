@@ -23,8 +23,8 @@ const CATEGORY_COLORS: Record<string, string> = {
 const CATEGORY_LABELS: Record<string, string> = {
   '3d': '3D',
   '2d': '2D',
-  'real': '真人',
-  'stop_motion': '定格',
+  'real': 'Thực',
+  'stop_motion': 'Stop Motion',
 };
 
 interface StyleCardProps {
@@ -80,13 +80,13 @@ export function StyleCard({
           </div>
         ) : (
           <div className="w-full h-full flex items-center justify-center text-muted-foreground text-xs">
-            无参考图
+            Không có ảnh tham chiếu
           </div>
         )}
         {/* 自定义标记 */}
         {isCustom && (
           <div className="absolute top-1.5 right-1.5 px-1.5 py-0.5 rounded text-[10px] bg-primary/80 text-primary-foreground">
-            自定义
+            Tùy chỉnh
           </div>
         )}
       </div>

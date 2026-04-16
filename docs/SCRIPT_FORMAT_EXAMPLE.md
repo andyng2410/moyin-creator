@@ -1,260 +1,260 @@
-# 📝 剧本导入格式示例
+# 📝 Ví dụ định dạng nhập kịch bản
 
-> 以下是魔因漫创支持的标准剧本格式，供参考。导入时请按此结构编写剧本。
+> Dưới đây là định dạng kịch bản tiêu chuẩn được Moyin Creator (Mạc Nhân Mạn Sáng) hỗ trợ, để tham khảo. Khi nhập kịch bản, vui lòng viết theo cấu trúc này.
 
 ---
 
-## 格式说明
+## Hướng dẫn định dạng
 
 ```
-标题        →  《剧名》
-大纲        →  一段话概括核心故事
-人物小传    →  角色名（年龄）：身份，性格特征
-集标题      →  第X集：标题
-场景头      →  编号 + 日/夜 + 内/外 + 地点
-出场人物    →  人物：角色A、角色B
-舞台指示    →  △ 开头的动作/环境描写
-对白        →  角色名：台词内容
-表演提示    →  （括号内的语气/动作提示）
-字幕/转场   →  【字幕：时间/地点信息】
+Tiêu đề        →  《Tên phim》
+Đại cương       →  Một đoạn tóm tắt câu chuyện cốt lõi
+Tiểu sử nhân vật →  Tên nhân vật (tuổi): thân phận, đặc điểm tính cách
+Tiêu đề tập    →  Tập X: Tiêu đề
+Đầu cảnh       →  Số thứ tự + Ngày/Đêm + Nội/Ngoại + Địa điểm
+Nhân vật xuất hiện →  Nhân vật: Vai A, Vai B
+Chỉ dẫn sân khấu →  △ Mở đầu mô tả hành động/bối cảnh
+Thoại           →  Tên nhân vật: Nội dung lời thoại
+Gợi ý diễn xuất →  (Gợi ý giọng điệu/hành động trong ngoặc)
+Phụ đề/Chuyển cảnh →  【Phụ đề: Thông tin thời gian/địa điểm】
 ```
 
 ---
 
-## 完整示例：《哥哥》第一集
+## Ví dụ hoàn chỉnh: 《Anh Trai》 Tập 1
 
 ---
 
-**《哥哥》**
+**《Anh Trai》**
 
-**大纲：**
-一个因童年自卑而逃离小镇的青年，在都市创业失败后，意外发现儿时痴迷的火箭模型竟藏有改变电车能源格局的秘密，他必须克服心魔，在资本围剿与技术封锁中，用一场史无前例的「火箭电车」实验，向世界证明「废柴」也能封神。
+**Đại cương:**
+Một chàng trai vì mặc cảm từ thuở nhỏ mà bỏ trốn khỏi thị trấn, sau khi khởi nghiệp thất bại ở thành phố lớn, tình cờ phát hiện mô hình tên lửa mà anh say mê hồi nhỏ lại ẩn chứa bí mật có thể thay đổi cục diện năng lượng xe điện. Anh phải vượt qua nỗi sợ trong lòng, giữa vòng vây của tư bản và phong tỏa công nghệ, dùng một thí nghiệm "tên lửa xe điện" chưa từng có tiền lệ để chứng minh cho thế giới rằng "kẻ vô dụng" cũng có thể trở thành huyền thoại.
 
-**人物小传：**
-林星野（28）：创业失败者/火箭电车技术发现者，自卑敏感，执着坚韧
-陆天擎（45）：天擎能源集团CEO，精明冷酷，掌控欲强
-苏晓（27）：顶尖机械工程师，林星野的合伙人，理性务实，外冷内热
-老陈（65）：小镇火箭模型店老板，林星野的启蒙者，豁达睿智，深藏不露
-
----
-
-**第一集：陨落与归途**
+**Tiểu sử nhân vật:**
+Lâm Tinh Dã (28): Kẻ khởi nghiệp thất bại / Người phát hiện công nghệ tên lửa xe điện, mặc cảm nhạy cảm, kiên trì bền bỉ
+Lục Thiên Kình (45): CEO Tập đoàn Năng Lượng Thiên Kình, tinh ranh lạnh lùng, ham muốn kiểm soát
+Tô Hiểu (27): Kỹ sư cơ khí hàng đầu, đối tác của Lâm Tinh Dã, lý trí thực tế, lạnh ngoài nóng trong
+Lão Trần (65): Chủ cửa hàng mô hình tên lửa ở thị trấn, người khai sáng cho Lâm Tinh Dã, phóng khoáng trí tuệ, thâm sâu khó lường
 
 ---
 
-**1-1 日 内 新沪市**
-人物：林星野、苏晓
-
-△林星野把最后一份文件塞进碎纸机。机器发出干涩的咀嚼声。
-
-苏晓：（站在门口）工商的人下午来封门。
-
-林星野没回头。他盯着碎纸机出口吐出的白色条状物，像一地扯烂的绷带。
-
-△他弯腰，从桌底拖出一个空纸箱。把笔筒、几本旧笔记本、一个掉漆的保温杯扔进去。动作很重。
-
-苏晓：陆总那边……
-
-林星野：说。
-
-苏晓：他要见你。今晚八点，凯悦顶层。
-
-林星野手停了。保温杯在纸箱底滚了半圈，哐当一声撞上箱壁。他盯着杯身上"星驰五周年"那几个褪色的烫金字。
-
-林星野：看我笑话？
-
-苏晓：（走进来，把一张报表放在空荡荡的桌面上）数据不会说谎。清算报告出来了，负债比我们预估的还多百分之三十七点六。
-
-△她手指点在某个数字上，指甲修剪得很干净。林星野没看报表，他看着窗外楼下，搬家公司的货车正把"星驰能源"的铜字招牌吊下来。
-
-招牌在半空晃悠，像片落叶。
-
-林星野：这次……
-
-他嗓子发紧，咳了一声。
-
-林星野：我不会再逃了。
-
-△他抱起纸箱。箱子很轻，里面东西哗啦作响。走到门口时，苏晓侧身让开。她的目光落在他磨破的衬衫袖口上。
-
-苏晓：陆天擎不是要羞辱你。（停顿）他有新项目想让你看。但条件……
-
-林星野：（打断）知道了。
-
-△他抱着箱子走进电梯。金属门合拢前，最后一眼看见的是自己办公室——百叶窗歪斜地垂着，地上散落着几页没来得及碎的纸。
-
-电梯下行。
-
-失重感让他胃里一空。
+**Tập 1: Sụp đổ và đường về**
 
 ---
 
-**1-2 日 内 新沪市**
-人物：林星野、陆天擎、苏晓（旁观）
+**1-1 Ngày Nội Tân Hộ**
+Nhân vật: Lâm Tinh Dã, Tô Hiểu
 
-【字幕：同日 夜】
+△Lâm Tinh Dã nhét tờ tài liệu cuối cùng vào máy hủy giấy. Chiếc máy phát ra tiếng nghiền khô khốc.
 
-△林星野推开会议室玻璃门。
-△陆天擎靠在真皮转椅里，指尖转着万宝龙钢笔。苏晓站在投影仪旁，低头翻文件。
+Tô Hiểu: (đứng ở cửa) Người của sở công thương chiều nay đến niêm phong cửa.
 
-陆天擎：账清了？
+Lâm Tinh Dã không quay đầu. Anh nhìn chằm chằm vào những dải giấy trắng tuôn ra từ máy hủy, như một đống băng gạc bị xé nát trên sàn.
 
-林星野：陆总，再给三个月——
+△Anh cúi người, kéo một chiếc thùng giấy rỗng từ dưới bàn ra. Ném ống bút, mấy cuốn sổ tay cũ, một chiếc bình giữ nhiệt tróc sơn vào trong. Động tác nặng nề.
 
-陆天擎：（钢笔敲桌）咚、咚、咚。听见没？倒计时。
+Tô Hiểu: Bên Lục tổng thì...
 
-△林星野指甲掐进掌心。
+Lâm Tinh Dã: Nói đi.
 
-陆天擎：你那个破实验室，烧了我八百万。知道八百万什么概念吗？
+Tô Hiểu: Ông ấy muốn gặp anh. Tối nay tám giờ, tầng thượng khách sạn Hyatt.
 
-林星野：技术突破就在眼前——
+Tay Lâm Tinh Dã dừng lại. Chiếc bình giữ nhiệt lăn nửa vòng dưới đáy thùng, kêu "cạch" một tiếng va vào thành thùng. Anh nhìn chằm chằm vào mấy chữ dập vàng phai màu "Kỷ niệm 5 năm Tinh Trì" trên thân bình.
 
-陆天擎：眼前？（笑）你眼前只有讨债的。
+Lâm Tinh Dã: Cười nhạo tôi à?
 
-△苏晓把报表推过来。纸张边缘割手。
+Tô Hiểu: (bước vào, đặt một tờ báo cáo lên mặt bàn trống trơn) Số liệu không biết nói dối. Báo cáo thanh lý đã ra rồi, nợ nhiều hơn dự tính của chúng ta ba mươi bảy phẩy sáu phần trăm.
 
-陆天擎：小镇来的吧？读书厉害，做题冠军。（身子前倾）可生意场不考卷面分。
+△Ngón tay cô chỉ vào một con số, móng tay cắt gọn gàng. Lâm Tinh Dã không nhìn báo cáo, anh nhìn ra ngoài cửa sổ phía dưới, xe tải của công ty chuyển nhà đang hạ tấm biển chữ đồng "Tinh Trì Năng Lượng" xuống.
 
-林星野：这次……
+Tấm biển đung đưa giữa không trung, như chiếc lá rụng.
 
-陆天擎：这次什么？不会再逃了？（靠回椅背）你连逃的资格都没有。
+Lâm Tinh Dã: Lần này...
 
-△空调冷风灌进衬衫领口。
+Cổ họng anh nghẹn lại, ho một tiếng.
 
-陆天擎：你那套储能理论，三流期刊都发不了。知道为什么吗？
+Lâm Tinh Dã: Tôi sẽ không bỏ chạy nữa.
 
-△林星野喉结动了动。
+△Anh ôm thùng giấy lên. Thùng rất nhẹ, đồ bên trong kêu lạch cạch. Đi đến cửa, Tô Hiểu nghiêng người nhường đường. Ánh mắt cô rơi xuống cổ tay áo sơ mi sờn rách của anh.
 
-陆天擎：（对苏晓）告诉他。
+Tô Hiểu: Lục Thiên Kình không phải muốn sỉ nhục anh. (ngừng lại) Ông ấy có dự án mới muốn cho anh xem. Nhưng điều kiện...
 
-苏晓：（轻声）同行评审说……理论基础存在根本缺陷。
+Lâm Tinh Dã: (cắt ngang) Biết rồi.
 
-△会议室死寂。投影仪风扇嗡嗡响。
+△Anh ôm thùng bước vào thang máy. Trước khi cánh cửa kim loại khép lại, cái nhìn cuối cùng thấy được là văn phòng của mình — rèm cửa nghiêng ngả buông xuống, trên sàn vương vãi mấy tờ giấy chưa kịp hủy.
 
-陆天擎：规则，由赢家书写。（站起）而你，连参赛证都是借的。
+Thang máy đi xuống.
 
-林星野：我会赔——
-
-陆天擎：拿什么赔？你老家那栋瓦房？（抽出担保协议）看清楚。个人连带责任。
-
-△纸页哗啦抖开。签名处红得刺眼。
-
-陆天擎：给你三天搬出公寓。车钥匙放前台。（走向门口）对了——
-
-△他停在门边，没回头。
-
-陆天擎：别再跟我提理想。你那不叫理想。（拉开门）叫妄想。
-
-△玻璃门缓缓合拢。倒影里林星野站着没动。
-
-【字幕：新沪市 · 星驰能源 破产清算日】
+Cảm giác mất trọng lực khiến dạ dày anh trống rỗng.
 
 ---
 
-**1-3 夜 外 新沪市**
-人物：林星野
+**1-2 Ngày Nội Tân Hộ**
+Nhân vật: Lâm Tinh Dã, Lục Thiên Kình, Tô Hiểu (quan sát)
 
-△林星野把手机揣进兜，走进雨里。雨水顺着他的头发往下滴，在路灯底下拉成细密的银线。
+【Phụ đề: Cùng ngày, Đêm】
 
-△他踢开脚边的易拉罐。铝罐滚进水坑，转了两圈。
+△Lâm Tinh Dã đẩy cửa kính phòng họp.
+△Lục Thiên Kình ngả người trong ghế xoay da thật, đầu ngón tay xoay cây bút Montblanc. Tô Hiểu đứng cạnh máy chiếu, cúi đầu lật tài liệu.
 
-林星野：操。
+Lục Thiên Kình: Thanh toán xong chưa?
 
-△地铁口的风卷着湿气扑过来。他摸烟盒，掏出来是空的。纸盒被他捏成一团，扔进垃圾桶。
+Lâm Tinh Dã: Lục tổng, cho thêm ba tháng nữa —
 
-△站台灯箱的光打在他脸上。广告里的模特举着新款手机笑，牙白得晃眼。
+Lục Thiên Kình: (bút gõ bàn) Cộc, cộc, cộc. Nghe thấy không? Đếm ngược đấy.
 
-林星野：（低声）这次……
+△Móng tay Lâm Tinh Dã bấm sâu vào lòng bàn tay.
 
-△话没说完。手机震了。
+Lục Thiên Kình: Cái phòng thí nghiệm rách nát của anh, đốt của tôi tám triệu. Biết tám triệu là khái niệm gì không?
 
-△他盯着来电显示看了三秒才接。
+Lâm Tinh Dã: Đột phá công nghệ ngay trước mắt —
 
-林星野：喂？
+Lục Thiên Kình: Trước mắt? (cười) Trước mắt anh chỉ có đám đòi nợ thôi.
 
-△听筒里传来堂弟急促的声音。
+△Tô Hiểu đẩy tờ báo cáo sang. Mép giấy cứa tay.
 
-堂弟：（电话音）哥！爷不行了！医院让……让赶紧回来！
+Lục Thiên Kình: Từ thị trấn nhỏ lên phải không? Học giỏi lắm, vô địch giải đề. (nghiêng người về phía trước) Nhưng thương trường không chấm điểm bài thi.
 
-△地铁进站的风把他湿透的衣角掀起来。
+Lâm Tinh Dã: Lần này...
 
-林星野：我马上回。
+Lục Thiên Kình: Lần này cái gì? Không bỏ chạy nữa? (ngả lại lưng ghế) Anh còn không đủ tư cách để chạy.
 
-△电话挂了。他把手机攥得太紧，指节都白了。
+△Gió lạnh máy điều hòa lùa vào cổ áo sơ mi.
 
-△列车门开了又关。他没上去。
+Lục Thiên Kình: Cái lý thuyết tích trữ năng lượng của anh, tạp chí hạng ba cũng không đăng nổi. Biết vì sao không?
 
-△雨水顺着站台边往下滴，在铁轨上砸出一个个小坑。远处高楼的光在雨里糊成一片，像化了的糖浆。
+△Yết hầu Lâm Tinh Dã nhấp nhô.
 
-林星野：（自言自语）不会逃了……
+Lục Thiên Kình: (nói với Tô Hiểu) Nói cho anh ta biết.
 
-△他转身往出口走。鞋底踩过水洼，溅起的水打湿了裤脚。
+Tô Hiểu: (nhẹ giọng) Phản biện đồng nghiệp nói... nền tảng lý thuyết có khiếm khuyết căn bản.
 
-△街角便利店还亮着灯。收银员正低头刷手机，屏幕的蓝光映在玻璃上。
+△Phòng họp chết lặng. Quạt máy chiếu vo vo.
 
-△林星野摸了摸口袋里的车票——昨天买的返程票，原本打算下周去邻市找投资人翻盘。
+Lục Thiên Kình: Luật chơi, do kẻ thắng viết nên. (đứng dậy) Còn anh, ngay cả thẻ dự thi cũng là đi mượn.
 
-△他把票撕了。纸屑混着雨水流进下水道缝里。
+Lâm Tinh Dã: Tôi sẽ bồi thường —
 
-【字幕：三小时后】
+Lục Thiên Kình: Lấy gì bồi thường? Căn nhà ngói ở quê anh à? (rút bản thỏa thuận bảo lãnh ra) Nhìn cho rõ. Trách nhiệm liên đới cá nhân.
 
-△长途汽车站候车厅。塑料椅空了大半。
+△Trang giấy xào xạc mở ra. Chỗ ký tên đỏ chói mắt.
 
-△林星野坐在角落，盯着滚动屏上的班次信息。绿色光标一跳一跳地往前挪。
+Lục Thiên Kình: Cho anh ba ngày dọn khỏi căn hộ. Chìa khóa xe để ở quầy lễ tân. (đi về phía cửa) À đúng rồi —
 
-广播：（电子音）前往青塘镇的旅客请到3号检票口……
+△Ông ta dừng lại ở cửa, không quay đầu.
 
-△他拎起脚边的背包——里面只有两件换洗衣服和一台旧笔记本。
+Lục Thiên Kình: Đừng nhắc lý tưởng với tôi nữa. Cái đó của anh không gọi là lý tưởng. (kéo cửa ra) Gọi là vọng tưởng.
 
-林星野：（对着空气）这次不一样。
+△Cánh cửa kính từ từ khép lại. Trong bóng phản chiếu, Lâm Tinh Dã đứng yên bất động.
 
-△检票口的闸机嘀了一声。他把票塞进去的时候手抖了一下。
-
-△夜班车发动时雨还没停。车窗上水痕一道道交错着，把城市的灯火割成破碎的光斑。
-
-△他靠窗坐下，额头抵着冰凉的玻璃。
+【Phụ đề: Tân Hộ · Tinh Trì Năng Lượng — Ngày thanh lý phá sản】
 
 ---
 
-**1-4 夜 内 高速列车车厢**
-人物：林星野
+**1-3 Đêm Ngoại Tân Hộ**
+Nhân vật: Lâm Tinh Dã
 
-△林星野把脸贴在冰凉的车窗上。
-△窗外，新沪市的霓虹像泼翻的颜料桶，把整片天空染成不真实的紫红色。"瞬充联盟"的巨型全息广告牌立在每栋摩天楼顶，蓝色的闪电标志刺得他眼睛发酸。
+△Lâm Tinh Dã nhét điện thoại vào túi, bước vào mưa. Nước mưa chảy dọc theo tóc anh nhỏ xuống, dưới ánh đèn đường kéo thành những sợi bạc mảnh.
 
-林星野：（低声）这次……
+△Anh đá lon nước ngọt bên chân. Lon nhôm lăn vào vũng nước, xoay hai vòng.
 
-△他喉结动了动，没说完。手指抠进破旧帆布包的带子缝里。
-△车厢广播响起甜腻的女声，报出下一站名——青屿镇。声音在空荡荡的二等座车厢里撞了几下，碎了。
-△前排小孩踢椅背，咚、咚、咚。母亲压着嗓子骂，别闹了。
-△林星野从包里摸出半瓶水，拧开盖时洒了几滴在裤子上。深色水渍在磨白的牛仔裤上慢慢洇开。他盯着那摊污迹看了很久。
+Lâm Tinh Dã: Chết tiệt.
 
-林星野：不会了。
+△Gió ở cửa tàu điện ngầm cuốn hơi ẩm ập tới. Anh sờ hộp thuốc lá, móc ra thì rỗng. Hộp giấy bị anh bóp nát thành một cục, ném vào thùng rác.
 
-△列车钻进隧道。
-△车窗瞬间变成一面模糊的镜子，映出一张胡子拉碴、眼窝深陷的脸。镜子里的人和他对视了三秒，然后被隧道墙壁上飞掠而过的蓝色流光广告撕碎——"瞬充联盟，为您的未来充满可能"。光带快得像抽过来的鞭子。
-△他猛地闭眼。
-△再睁开时，窗外已是沉甸甸的、墨汁般的田野。远处零星灯火像被随手掐灭的烟头。城市的喧嚣和光污染被甩在了身后那片逐渐收缩的光晕里。
-△手机屏幕亮了一下，是银行催缴短信的数字余额：-187,430.59。
-△他把手机反扣在小桌板上，声音有点响。邻座打盹的男人惊醒了片刻，嘟囔着换了个姿势。
+△Ánh sáng hộp đèn quảng cáo trên sân ga chiếu vào mặt anh. Người mẫu trong quảng cáo giơ điện thoại mới cười, răng trắng chói mắt.
 
-林星野：（对着黑掉的屏幕）这次……我不会再逃了。
+Lâm Tinh Dã: (thì thầm) Lần này...
 
-△列车减速进站的摩擦声尖利地刮着耳膜。
-△他抓起包起身，帆布包带子"刺啦"一声裂开更长的口子。
+△Chưa nói hết câu. Điện thoại rung.
 
-【字幕：青屿镇 · 300公里外】
+△Anh nhìn màn hình hiển thị cuộc gọi đến ba giây mới nghe.
+
+Lâm Tinh Dã: A lô?
+
+△Trong ống nghe vọng ra giọng nói gấp gáp của em họ.
+
+Em họ: (giọng điện thoại) Anh ơi! Ông không qua nổi rồi! Bệnh viện bảo... bảo về gấp!
+
+△Gió tàu vào ga thổi tung vạt áo ướt sũng của anh.
+
+Lâm Tinh Dã: Anh về ngay.
+
+△Điện thoại cúp. Anh nắm điện thoại quá chặt, các đốt ngón tay trắng bệch.
+
+△Cửa tàu mở rồi đóng. Anh không lên.
+
+△Nước mưa nhỏ giọt từ mép sân ga xuống, đập thành từng vũng nhỏ trên đường ray. Ánh đèn cao ốc xa xa nhòe thành một mảng trong mưa, như đường mật tan chảy.
+
+Lâm Tinh Dã: (tự nói với mình) Sẽ không bỏ chạy nữa...
+
+△Anh quay người đi về phía lối ra. Đế giày giẫm qua vũng nước, nước bắn lên ướt ống quần.
+
+△Cửa hàng tiện lợi ở góc phố vẫn sáng đèn. Nhân viên thu ngân đang cúi đầu lướt điện thoại, ánh sáng xanh từ màn hình phản chiếu trên kính.
+
+△Lâm Tinh Dã sờ sờ tấm vé xe trong túi — vé khứ hồi mua hôm qua, định tuần sau sang thành phố bên tìm nhà đầu tư lật ngược tình thế.
+
+△Anh xé vé. Mảnh giấy vụn trộn lẫn nước mưa chảy vào kẽ nắp cống.
+
+【Phụ đề: Ba giờ sau】
+
+△Phòng chờ bến xe khách đường dài. Ghế nhựa trống quá nửa.
+
+△Lâm Tinh Dã ngồi ở góc, nhìn chằm chằm thông tin chuyến xe trên bảng điện tử cuộn. Con trỏ xanh lá nhảy nhảy dịch về phía trước.
+
+Loa phát thanh: (giọng điện tử) Hành khách đi Thanh Đường Trấn vui lòng đến cửa soát vé số 3...
+
+△Anh xách chiếc ba lô bên chân — bên trong chỉ có hai bộ quần áo thay và một chiếc laptop cũ.
+
+Lâm Tinh Dã: (nói vào không khí) Lần này sẽ khác.
+
+△Cổng soát vé kêu "bíp" một tiếng. Lúc anh nhét vé vào, tay run một cái.
+
+△Khi xe đêm khởi hành, mưa vẫn chưa tạnh. Vệt nước trên kính xe đan chéo nhau, cắt ánh đèn thành phố thành những đốm sáng vỡ vụn.
+
+△Anh ngồi cạnh cửa sổ, trán tựa vào mặt kính lạnh ngắt.
 
 ---
 
-## 格式要点总结
+**1-4 Đêm Nội Toa tàu cao tốc**
+Nhân vật: Lâm Tinh Dã
 
-| 元素 | 格式 | 示例 |
+△Lâm Tinh Dã áp mặt vào kính cửa sổ lạnh ngắt.
+△Bên ngoài, ánh neon Tân Hộ như thùng sơn bị đổ, nhuộm cả bầu trời thành sắc tím đỏ không thực. Biển quảng cáo hologram khổng lồ của "Liên Minh Sạc Nhanh" dựng trên đỉnh mỗi tòa nhà chọc trời, biểu tượng tia sét xanh làm mắt anh cay xè.
+
+Lâm Tinh Dã: (thì thầm) Lần này...
+
+△Yết hầu anh nhấp nhô, không nói hết câu. Ngón tay cào vào kẽ chỉ dây đeo chiếc túi vải bạt cũ kỹ.
+△Loa toa tàu vang lên giọng nữ ngọt ngào, đọc tên ga tiếp theo — Thanh Dữ Trấn. Âm thanh va vào mấy lần trong toa ghế hạng hai trống vắng rồi tan.
+△Đứa trẻ hàng ghế trước đạp lưng ghế, cộc, cộc, cộc. Mẹ nó nén giọng mắng, đừng nghịch nữa.
+△Lâm Tinh Dã mò trong túi ra nửa chai nước, lúc vặn nắp làm đổ vài giọt lên quần. Vệt nước sẫm từ từ loang trên chiếc quần jean bạc màu. Anh nhìn chằm chằm vết ố đó rất lâu.
+
+Lâm Tinh Dã: Sẽ không nữa.
+
+△Tàu chui vào đường hầm.
+△Kính cửa sổ lập tức biến thành tấm gương mờ, phản chiếu một gương mặt râu ria lởm chởm, hốc mắt trũng sâu. Người trong gương đối mắt với anh ba giây, rồi bị quảng cáo ánh sáng xanh lướt qua trên vách đường hầm xé nát — "Liên Minh Sạc Nhanh, nạp đầy khả năng cho tương lai bạn". Dải sáng nhanh như roi quất tới.
+△Anh nhắm mắt bất chợt.
+△Khi mở mắt ra, ngoài cửa sổ đã là cánh đồng nặng trĩu, đen như mực. Xa xa vài đốm đèn lẻ loi như đầu thuốc lá bị bấm tắt. Ồn ào và ô nhiễm ánh sáng của thành phố bị bỏ lại phía sau trong quầng sáng đang dần thu hẹp.
+△Màn hình điện thoại sáng lên, tin nhắn nhắc nợ ngân hàng với số dư: -187.430,59.
+△Anh úp ngược điện thoại xuống bàn gấp, tiếng hơi to. Người đàn ông ngủ gật ghế bên giật mình, lầm bầm rồi đổi tư thế.
+
+Lâm Tinh Dã: (nhìn vào màn hình tối đen) Lần này... tôi sẽ không bỏ chạy nữa.
+
+△Tiếng ma sát khi tàu giảm tốc vào ga cào sắc vào màng nhĩ.
+△Anh vớ lấy túi đứng dậy, dây đeo túi vải bạt "xoạt" một tiếng rách thêm một đoạn dài.
+
+【Phụ đề: Thanh Dữ Trấn · cách 300 km】
+
+---
+
+## Tóm tắt các điểm chính về định dạng
+
+| Yếu tố | Định dạng | Ví dụ |
 |------|------|------|
-| 场景编号 | `集-场 日/夜 内/外 地点` | `1-3 夜 外 新沪市` |
-| 出场人物 | `人物：角色A、角色B` | `人物：林星野、苏晓` |
-| 舞台指示 | 以 `△` 开头 | `△林星野推开玻璃门。` |
-| 对白 | `角色名：台词` | `林星野：我不会再逃了。` |
-| 表演提示 | `（括号说明）` | `苏晓：（轻声）理论基础存在缺陷。` |
-| 字幕/转场 | `【字幕：内容】` | `【字幕：三小时后】` |
-| 人物小传 | `角色名（年龄）：身份，性格` | `林星野（28）：创业失败者，自卑敏感` |
+| Số cảnh | `Tập-Cảnh Ngày/Đêm Nội/Ngoại Địa điểm` | `1-3 Đêm Ngoại Tân Hộ` |
+| Nhân vật xuất hiện | `Nhân vật: Vai A, Vai B` | `Nhân vật: Lâm Tinh Dã, Tô Hiểu` |
+| Chỉ dẫn sân khấu | Bắt đầu bằng `△` | `△Lâm Tinh Dã đẩy cửa kính.` |
+| Thoại | `Tên nhân vật: Lời thoại` | `Lâm Tinh Dã: Tôi sẽ không bỏ chạy nữa.` |
+| Gợi ý diễn xuất | `(giải thích trong ngoặc)` | `Tô Hiểu: (nhẹ giọng) Nền tảng lý thuyết có khiếm khuyết.` |
+| Phụ đề/Chuyển cảnh | `【Phụ đề: Nội dung】` | `【Phụ đề: Ba giờ sau】` |
+| Tiểu sử nhân vật | `Tên nhân vật (tuổi): Thân phận, Tính cách` | `Lâm Tinh Dã (28): Kẻ khởi nghiệp thất bại, mặc cảm nhạy cảm` |

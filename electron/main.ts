@@ -106,7 +106,7 @@ function getDefaultBaiduCode() {
 async function fetchUpdateManifest() {
   const manifestUrl = getUpdateManifestUrl()
   if (!manifestUrl) {
-    throw new Error('未配置版本清单地址')
+    throw new Error('Chưa cấu hình địa chỉ danh sách phiên bản')
   }
 
   const requestUrl = new URL(manifestUrl)
@@ -114,12 +114,12 @@ async function fetchUpdateManifest() {
 
   const response = await net.fetch(requestUrl.toString())
   if (!response.ok) {
-    throw new Error(`版本清单请求失败 (${response.status})`)
+    throw new Error(`Yêu cầu danh sách phiên bản thất bại (${response.status})`)
   }
 
   const rawManifest = await response.json() as Partial<UpdateManifest>
   if (!isNonEmptyString(rawManifest.version)) {
-    throw new Error('版本清单缺少有效的 version 字段')
+    throw new Error('Danh sách phiên bản thiếu trường version hợp lệ')
   }
 
   return {
@@ -159,7 +159,7 @@ async function resolveAvailableUpdate(currentVersion: string): Promise<Available
 
 function createWindow() {
   win = new BrowserWindow({
-    title: '魔因漫创',
+    title: 'Moyin Creator',
     width: 1400,
     height: 900,
     minWidth: 1200,
@@ -285,10 +285,10 @@ function pathsConflict(source: string, dest: string): string | null {
     return null // Same path is OK, handled elsewhere
   }
   if (isSubdirectory(source, dest)) {
-    return '目标路径不能是当前路径的子目录'
+    return 'Đường dẫn đích không thể là thư mục con của đường dẫn hiện tại'
   }
   if (isSubdirectory(dest, source)) {
-    return '当前路径不能是目标路径的子目录'
+    return 'Đường dẫn hiện tại không thể là thư mục con của đường dẫn đích'
   }
   return null
 }
@@ -610,13 +610,13 @@ async function fetchBuffer(url: string, timeoutMs: number = 45000) {
     })
 
     if (!response.ok) {
-      throw new Error(`请求失败: ${response.status}`)
+      throw new Error(`Yêu cầu thất bại: ${response.status}`)
     }
 
     const arrayBuffer = await response.arrayBuffer()
     const buffer = Buffer.from(arrayBuffer)
     if (buffer.length === 0) {
-      throw new Error('获取到的图片为空')
+      throw new Error('Ảnh nhận được rỗng')
     }
 
     return {
@@ -625,7 +625,7 @@ async function fetchBuffer(url: string, timeoutMs: number = 45000) {
     }
   } catch (error) {
     if (error instanceof Error && error.name === 'AbortError') {
-      throw new Error(`请求超时 (${Math.round(timeoutMs / 1000)}s)`)
+      throw new Error(`Yêu cầu hết thời gian chờ (${Math.round(timeoutMs / 1000)}s)`)
     }
     throw error
   } finally {
@@ -646,11 +646,11 @@ async function readImageSource(imageData: string): Promise<{ buffer: Buffer, mim
   const resolvedPath = resolveImageSourcePath(imageData)
   if (resolvedPath) {
     if (!fs.existsSync(resolvedPath)) {
-      throw new Error('本地图片不存在')
+      throw new Error('Ảnh cục bộ không tồn tại')
     }
     const buffer = fs.readFileSync(resolvedPath)
     if (buffer.length === 0) {
-      throw new Error('本地图片为空文件')
+      throw new Error('Ảnh cục bộ là file rỗng')
     }
     return {
       buffer,
@@ -660,7 +660,7 @@ async function readImageSource(imageData: string): Promise<{ buffer: Buffer, mim
 
   const rawBuffer = Buffer.from(imageData, 'base64')
   if (rawBuffer.length === 0) {
-    throw new Error('图片数据无效')
+    throw new Error('Dữ liệu ảnh không hợp lệ')
   }
   return {
     buffer: rawBuffer,
@@ -684,7 +684,7 @@ async function toBase64Payload(imageData: string) {
   if (imageData.startsWith('data:')) {
     const parsed = parseDataUrl(imageData)
     if (!parsed) {
-      throw new Error('图片数据无效')
+      throw new Error('Dữ liệu ảnh không hợp lệ')
     }
     return parsed.buffer.toString('base64')
   }
@@ -706,7 +706,7 @@ async function uploadImageHostFromMain({
   try {
     const uploadUrl = resolveImageHostUploadUrl(provider)
     if (!uploadUrl) {
-      return { success: false, error: '图床上传地址未配置' }
+      return { success: false, error: 'Chưa cấu hình địa chỉ tải lên máy chủ ảnh' }
     }
 
     const fieldName = provider.imageField || 'image'
@@ -775,7 +775,7 @@ async function uploadImageHostFromMain({
           ? errorMessage
           : typeof messageField === 'string'
             ? messageField
-            : text || `上传失败: ${response.status}`
+            : text || `Tải lên thất bại: ${response.status}`
         return { success: false, error: message }
       }
 
@@ -801,17 +801,17 @@ async function uploadImageHostFromMain({
         platform: provider.platform,
         responsePreview: trimmedText.substring(0, 200),
       })
-      return { success: false, error: `图床 ${provider.name} 上传成功但未返回 URL` }
+      return { success: false, error: `Máy chủ ảnh ${provider.name} tải lên thành công nhưng không trả về URL` }
     } catch (error) {
       if (error instanceof Error && error.name === 'AbortError') {
-        return { success: false, error: '上传超时，请稍后重试' }
+        return { success: false, error: 'Tải lên hết thời gian, vui lòng thử lại sau' }
       }
-      return { success: false, error: error instanceof Error ? error.message : '上传失败' }
+      return { success: false, error: error instanceof Error ? error.message : 'Tải lên thất bại' }
     } finally {
       clearTimeout(timeout)
     }
   } catch (error) {
-    return { success: false, error: error instanceof Error ? error.message : '上传失败' }
+    return { success: false, error: error instanceof Error ? error.message : 'Tải lên thất bại' }
   }
 }
 
@@ -1065,9 +1065,9 @@ ipcMain.handle('storage-select-directory', async () => {
 // Validate if a directory contains valid data (projects/ subfolder with .json files or _p/ dirs)
 ipcMain.handle('storage-validate-data-dir', async (_event, dirPath: string) => {
   try {
-    if (!dirPath) return { valid: false, error: '路径不能为空' }
+    if (!dirPath) return { valid: false, error: 'Đường dẫn không được để trống' }
     const target = normalizePath(dirPath)
-    if (!fs.existsSync(target)) return { valid: false, error: '目录不存在' }
+    if (!fs.existsSync(target)) return { valid: false, error: 'Thư mục không tồn tại' }
     
     // Check for projects/ subfolder with .json files or _p/ per-project dirs
     const projectsDir = path.join(target, 'projects')
@@ -1095,7 +1095,7 @@ ipcMain.handle('storage-validate-data-dir', async (_event, dirPath: string) => {
     }
     
     if (projectCount === 0 && mediaCount === 0) {
-      return { valid: false, error: '该目录不包含有效的数据（需要 projects/ 或 media/ 子目录）' }
+      return { valid: false, error: 'Thư mục không chứa dữ liệu hợp lệ (cần có thư mục con projects/ hoặc media/)' }
     }
     
     return { valid: true, projectCount, mediaCount }
@@ -1107,9 +1107,9 @@ ipcMain.handle('storage-validate-data-dir', async (_event, dirPath: string) => {
 // Link to existing data directory (no data movement)
 ipcMain.handle('storage-link-data', async (_event, dirPath: string) => {
   try {
-    if (!dirPath) return { success: false, error: '路径不能为空' }
+    if (!dirPath) return { success: false, error: 'Đường dẫn không được để trống' }
     const target = normalizePath(dirPath)
-    if (!fs.existsSync(target)) return { success: false, error: '目录不存在' }
+    if (!fs.existsSync(target)) return { success: false, error: 'Thư mục không tồn tại' }
     
     // Validate it has data
     const projectsDir = path.join(target, 'projects')
@@ -1119,7 +1119,7 @@ ipcMain.handle('storage-link-data', async (_event, dirPath: string) => {
     const hasMedia = fs.existsSync(mediaDir)
     
     if (!hasProjects && !hasMedia) {
-      return { success: false, error: '该目录不包含有效的数据（需要 projects/ 或 media/ 子目录）' }
+      return { success: false, error: 'Thư mục không chứa dữ liệu hợp lệ (cần có thư mục con projects/ hoặc media/)' }
     }
     
     // Update config to point to this directory
@@ -1137,7 +1137,7 @@ ipcMain.handle('storage-link-data', async (_event, dirPath: string) => {
 // Move all data to new location (single operation)
 ipcMain.handle('storage-move-data', async (_event, newPath: string) => {
   try {
-    if (!newPath) return { success: false, error: '路径不能为空' }
+    if (!newPath) return { success: false, error: 'Đường dẫn không được để trống' }
     const target = normalizePath(newPath)
     const currentBase = getStorageBasePath()
     
@@ -1202,7 +1202,7 @@ ipcMain.handle('storage-move-data', async (_event, newPath: string) => {
 // Export all data
 ipcMain.handle('storage-export-data', async (_event, targetPath: string) => {
   try {
-    if (!targetPath) return { success: false, error: '路径不能为空' }
+    if (!targetPath) return { success: false, error: 'Đường dẫn không được để trống' }
     const exportDir = path.join(
       normalizePath(targetPath),
       `moyin-data-${new Date().toISOString().replace(/[:.]/g, '-')}`
@@ -1229,7 +1229,7 @@ ipcMain.handle('storage-export-data', async (_event, targetPath: string) => {
 // Import all data (with backup for safety)
 ipcMain.handle('storage-import-data', async (_event, sourcePath: string) => {
   try {
-    if (!sourcePath) return { success: false, error: '路径不能为空' }
+    if (!sourcePath) return { success: false, error: 'Đường dẫn không được để trống' }
     const source = normalizePath(sourcePath)
     
     const sourceProjectsDir = path.join(source, 'projects')
@@ -1239,7 +1239,7 @@ ipcMain.handle('storage-import-data', async (_event, sourcePath: string) => {
     const hasProjects = fs.existsSync(sourceProjectsDir)
     const hasMedia = fs.existsSync(sourceMediaDir)
     if (!hasProjects && !hasMedia) {
-      return { success: false, error: '源目录不包含有效数据（需要 projects/ 或 media/ 子目录）' }
+      return { success: false, error: 'Thư mục nguồn không chứa dữ liệu hợp lệ (cần có thư mục con projects/ hoặc media/)' }
     }
     
     // Create temporary backup for rollback
@@ -1335,16 +1335,16 @@ ipcMain.handle('storage-link-media-data', async (_event, dirPath: string) => {
 })
 
 ipcMain.handle('storage-move-project-data', async () => {
-  return { success: false, error: '请使用新的统一存储路径功能' }
+  return { success: false, error: 'Vui lòng sử dụng tính năng đường dẫn lưu trữ thống nhất mới' }
 })
 ipcMain.handle('storage-move-media-data', async () => {
-  return { success: false, error: '请使用新的统一存储路径功能' }
+  return { success: false, error: 'Vui lòng sử dụng tính năng đường dẫn lưu trữ thống nhất mới' }
 })
 
 ipcMain.handle('storage-export-project-data', async (_event, targetPath: string) => {
   // Redirect to unified export
   try {
-    if (!targetPath) return { success: false, error: '路径不能为空' }
+    if (!targetPath) return { success: false, error: 'Đường dẫn không được để trống' }
     const exportDir = path.join(
       normalizePath(targetPath),
       `moyin-data-${new Date().toISOString().replace(/[:.]/g, '-')}`
@@ -1361,7 +1361,7 @@ ipcMain.handle('storage-export-project-data', async (_event, targetPath: string)
 
 ipcMain.handle('storage-import-project-data', async (_event, sourcePath: string) => {
   try {
-    if (!sourcePath) return { success: false, error: '路径不能为空' }
+    if (!sourcePath) return { success: false, error: 'Đường dẫn không được để trống' }
     const source = normalizePath(sourcePath)
     const projectsDir = path.join(source, 'projects')
     const mediaDir = path.join(source, 'media')
@@ -1424,7 +1424,7 @@ ipcMain.handle('storage-import-project-data', async (_event, sourcePath: string)
 ipcMain.handle('storage-export-media-data', async (_event, targetPath: string) => {
   // Legacy: redirect to unified export
   try {
-    if (!targetPath) return { success: false, error: '路径不能为空' }
+    if (!targetPath) return { success: false, error: 'Đường dẫn không được để trống' }
     const exportDir = path.join(
       normalizePath(targetPath),
       `moyin-data-${new Date().toISOString().replace(/[:.]/g, '-')}`
@@ -1442,7 +1442,7 @@ ipcMain.handle('storage-export-media-data', async (_event, targetPath: string) =
 
 ipcMain.handle('storage-import-media-data', async (_event, sourcePath: string) => {
   try {
-    if (!sourcePath) return { success: false, error: '路径不能为空' }
+    if (!sourcePath) return { success: false, error: 'Đường dẫn không được để trống' }
     const target = getMediaRoot()
     const source = normalizePath(sourcePath)
     if (source === target) return { success: true }
@@ -1533,7 +1533,7 @@ ipcMain.handle('app-updater-check', async (): Promise<UpdateCheckResult> => {
 ipcMain.handle('app-updater-open-link', async (_event, url: string): Promise<OpenExternalResult> => {
   const safeUrl = sanitizeExternalUrl(url)
   if (!safeUrl) {
-    return { success: false, error: '无效下载链接' }
+    return { success: false, error: 'Liên kết tải về không hợp lệ' }
   }
 
   try {

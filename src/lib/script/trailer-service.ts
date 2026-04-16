@@ -56,7 +56,7 @@ export async function selectTrailerShots(
       success: false,
       selectedShots: [],
       shotIds: [],
-      error: '没有可用的分镜',
+      error: 'Không có cảnh quay khả dụng',
     };
   }
 
@@ -166,7 +166,7 @@ ${shotSummaries.map(s =>
     }
     
     if (selectedIndices.length === 0) {
-      throw new Error('AI 返回格式错误，无法解析序号');
+      throw new Error('Định dạng phản hồi AI không hợp lệ, không thể phân tích số thứ tự');
     }
     
     console.log('[TrailerService] Parsed selectedIndices:', selectedIndices);
@@ -190,7 +190,7 @@ ${shotSummaries.map(s =>
       success: true,
       selectedShots: fallbackShots,
       shotIds: fallbackShots.map(s => s.id),
-      error: 'AI 挑选失败，使用规则挑选',
+      error: 'Lựa chọn AI thất bại, sử dụng lựa chọn theo quy tắc',
     };
   }
 }
